@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<project name="KanColleNode" company="" manager="" phase="" project-start="20150303T000000Z" mrproject-version="2" calendar="1">
+  <properties/>
+  <phases/>
+  <calendars>
+    <day-types>
+      <day-type id="0" name="&#x5DE5;&#x4F5C;" description="&#x9ED8;&#x8BA4;&#x5DE5;&#x4F5C;&#x65E5;"/>
+      <day-type id="1" name="&#x65E0;&#x5DE5;&#x4F5C;" description="&#x9ED8;&#x8BA4;&#x7684;&#x4E0D;&#x5DE5;&#x4F5C;&#x65E5;"/>
+      <day-type id="2" name="&#x4F7F;&#x7528;&#x57FA;&#x7840;" description="&#x4F7F;&#x7528;&#x57FA;&#x65E5;&#x5386;&#x7684;&#x5929;"/>
+    </day-types>
+    <calendar id="1" name="&#x9ED8;&#x8BA4;">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0930" end="1200"/>
+          <interval start="1300" end="1700"/>
+          <interval start="2000" end="2200"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+  </calendars>
+  <tasks>
+    <task id="1" name="&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x642D;&#x5EFA;&#x4E0E;&#x9879;&#x76EE;&#x89C4;&#x5212;" note="" work="45000" start="20150303T000000Z" end="20150304T143000Z" work-start="20150303T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="2" name="&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x642D;&#x5EFA;" note="" work="19800" start="20150303T000000Z" end="20150303T160000Z" work-start="20150303T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="3" name="&#x9879;&#x76EE;&#x7BA1;&#x7406;&#x4E0E;&#x6587;&#x6863;&#x5DE5;&#x5177;&#x7684;&#x5B89;&#x88C5;&#x4E0E;&#x719F;&#x6089;" note="" work="7200" start="20150303T160000Z" end="20150303T210000Z" work-start="20150303T160000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="2" type="FS"/>
+        </predecessors>
+      </task>
+      <task id="4" name="&#x9879;&#x76EE;&#x89C4;&#x5212;" note="" work="18000" start="20150303T210000Z" end="20150304T143000Z" work-start="20150303T210000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <predecessors>
+          <predecessor id="1" predecessor-id="3" type="FS"/>
+        </predecessors>
+      </task>
+    </task>
+  </tasks>
+  <resource-groups/>
+  <resources/>
+  <allocations/>
+</project>

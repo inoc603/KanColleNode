@@ -14,7 +14,7 @@ reloading too often.
 
 ##Communication Channel
 
-- **/bind_client** \- Used to bind client with the admiral in its current
+- **/data/bind_client** \- Used to bind client with the admiral in its current
 game.
 
-- **/update/[client_num]** \- Used to listen for update from the server.
+- **/data/[client_num]** \- Used to listen for update from the server.

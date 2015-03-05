@@ -11,8 +11,6 @@ var events = require('events');
 
 var fs = require('fs');
 
-
-
 var app = express();
 
 
@@ -23,24 +21,7 @@ app.set('port', port);
 // Create HTTP server.
 var server = http.createServer(app);
 
-var io = require('socket.io')(server);
-
-io.on('connection', function (socket) {
-  console.log('connected');
-	// socket.emit('news', { hello: 'world' });
-
-  socket.on('test', function (data) {
-    // console.log(data);
-    console.log('test: ', data);
-    // socket.emit('test_good', {message: 'bar'});
-    socket.join(data.message);
-    io.to(data.message).emit('test_good');
-  });
-
-  socket.on('disconnect', function () {
-    console.log('disconnect');
-  })
-});
+var io = require('./lib/socketio')(server);
 
 // Listen on provided port, on all network interfaces.
 server.listen(port);
@@ -113,10 +94,6 @@ var viewRoute = require('./routes/index');
 var kcsapiRoute = require('./routes/kcsapi')(io);
 app.use('/', viewRoute);
 app.use('/kcsapi', kcsapiRoute);
-
-// function isEmptyObject(obj) {
-//   return !Object.keys(obj).length;
-// }
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

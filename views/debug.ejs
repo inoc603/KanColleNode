@@ -10,6 +10,14 @@
 				margin-left: 10px;
 				padding: 10px;
 			}
+			#debug {
+				font-size: 14px;
+				font-weight: normal;
+				resize: none;
+				overflow-y: scroll;
+				max-height: 200px;
+				min-height: 200px;
+			}
 		</style>
 	</head>
 	<body>
@@ -121,6 +129,10 @@
 				<span id="time4">00:00:00</span>
 			</li>
 		</div>
+		<div id="stream">
+			<textarea name="console" id="debug" cols="30" rows="10">
+			</textarea>
+		</div>
 	</body>
 
 	<script src="/javascripts/jquery-2.1.3.min.js"></script>
@@ -128,27 +140,9 @@
 	<script>
 		// var listener_num = {{listener_num}};
 		var is_bind_to_admiral = false;
-		var socket = io.connect('http://localhost:3000');
-		
-	  	socket.on('test_good', function (data) {
-	    	// socket.emit('my other event', { my: 'data' });
-	    	// alert('get!');
-  		});
-  		
-  		socket.on('news', function (data) {
-  			alert('data');
-  			// socket.emit('test', {message : '1'});
-  			// alert('test sent');
-  		});
 
-  		socket.on('port_update', function (data) {
-  			alert(data);
-  		});
-
-  		socket.on('basic_update', function (data) {
-  			
-  		});
 	</script>
+	<script src="/javascripts/socket.js"></script>
 	<script src="/javascripts/listener.js"></script>
 	
 </html>

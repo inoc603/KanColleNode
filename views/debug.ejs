@@ -136,9 +136,17 @@
   		});
   		
   		socket.on('news', function (data) {
-  			// alert('news');
-  			socket.emit('test', {message : '1'});
+  			alert('data');
+  			// socket.emit('test', {message : '1'});
   			// alert('test sent');
+  		});
+
+  		socket.on('port_update', function (data) {
+  			alert(data);
+  		});
+
+  		socket.on('basic_update', function (data) {
+  			
   		});
 	</script>
 	<script src="/javascripts/listener.js"></script>

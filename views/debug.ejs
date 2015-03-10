@@ -15,8 +15,8 @@
 				font-weight: normal;
 				resize: none;
 				overflow-y: scroll;
-				max-height: 200px;
-				min-height: 200px;
+				max-height: 500px;
+				min-height: 500px;
 			}
 		</style>
 	</head>
@@ -60,27 +60,27 @@
 			</p>
 			<p id="ship_number_info">
 				<span>舰娘数量 </span>
-				<span id="current_ship_num">null</span>
+				<span id="current_ship">null</span>
 				<span> / </span>
-				<span id="max_ship_num">null</span>
+				<span id="max_ship">null</span>
 			</p>
 			<p id="equipment_num_info">
 				<span>装备数量 </span>
 				<span id="current_equipment_num">null</span>
 				<span> / </span>
-				<span id="max_equioment_num">null</span>
+				<span id="max_equipment">null</span>
 			</p>
 			<p id="fleet_num_info">
 				<span>舰队数量 </span>
-				<span id="fleet_num">null</span>
+				<span id="fleet_count">null</span>
 			</p>
 			<p id="repair_dock_info">
 				<span>修理渠 </span>
-				<span id="repair_dock_num">null</span>
+				<span id="repair_dock_count">null</span>
 			</p>
 			<p id="build_dock_info">
 				<span>建造渠 </span>
-				<span id="build_dock_num">null</span>
+				<span id="build_dock_count">null</span>
 			</p>
 		</div>
 		<div class="test_division" id="repair">
@@ -130,7 +130,7 @@
 			</li>
 		</div>
 		<div id="stream">
-			<textarea name="console" id="debug" cols="30" rows="10">
+			<textarea name="console" id="debug" cols="80" rows="10">
 			</textarea>
 		</div>
 	</body>
@@ -138,11 +138,10 @@
 	<script src="/javascripts/jquery-2.1.3.min.js"></script>
 	<script src="/javascripts/socket.io.js"></script>
 	<script>
-		// var listener_num = {{listener_num}};
+		var listener_num = <%= listener_num%>;
 		var is_bind_to_admiral = false;
 
 	</script>
-	<script src="/javascripts/socket.js"></script>
 	<script src="/javascripts/listener.js"></script>
-	
+	<script src="/javascripts/socket.js"></script>
 </html>

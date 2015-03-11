@@ -3,6 +3,12 @@ var router = express.Router();
 
 var client_served = 0;
 
+// router.all('*', function (req, res) {
+// 	if (req.url[0] != '/') {
+		
+// 	}
+// })
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
 	res.render('index', { title: 'KanColleNode' });

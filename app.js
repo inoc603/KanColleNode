@@ -23,10 +23,13 @@ var server = http.createServer(app);
 // socket.io used to push
 var io = require('./lib/socketio')(server);
 
+
+
 // Listen on provided port, on all network interfaces.
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
 
 // Normalize a port into a number, string, or false.
 function normalizePort(val) {
@@ -140,5 +143,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
+  
 module.exports = app;

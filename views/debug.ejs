@@ -16,6 +16,20 @@
       .mytab {
         width:60px;
       }
+      .exp_next,  
+      .ship_type {
+        font-size: small;
+      }        
+      .table.fleet_table>tbody>tr:first-child>td {
+        border-top: none;
+      }
+      .table.fleet_table>tbody>tr>td {
+        vertical-align: middle;
+        font-family: 'Microsoft YaHei';
+      }
+      .progress.health_bar {
+        margin-bottom: 0px;
+      }
     </style>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css">
@@ -26,7 +40,7 @@
         <iframe id="game_frame" scrolling="no" width = "900" height = "1200">
         </iframe>
       </div>
-      <div class="col-md-5">
+      <div class="panel panel-default col-md-5" id="info_tabs">
         <ul class="nav nav-pills nav-stacked col-md-2">
           <li class="mytab active"><a href="#tab_a" data-toggle="pill">资源</a></li>
           <li class="mytab"><a href="#tab_fleet" data-toggle="pill">舰队</a></li>
@@ -63,179 +77,30 @@
           <div class="tab-pane" id="tab_fleet">
             <div class="tabable">
               <ul class="nav nav-tabs">
-                <li><a href="#fleet_1" data-toggle="tab">1</a></li>
-                <li><a href="#fleet_2" data-toggle="tab">2</a></li>
-                <li><a href="#fleet_3" data-toggle="tab">3</a></li>
-                <li><a href="#fleet_4" data-toggle="tab">4</a></li>
+                <li class="fleet_tab active"><a href="#fleet_1" data-toggle="tab">1</a></li>
+                <li class="fleet_tab"><a href="#fleet_2" data-toggle="tab">2</a></li>
+                <li class="fleet_tab"><a href="#fleet_3" data-toggle="tab">3</a></li>
+                <li class="fleet_tab"><a href="#fleet_4" data-toggle="tab">4</a></li>
               </ul>
               <div class="tab-content">
-                <!-- (div.tab-pane#fleet_$>table.table>thead>th*3^tbody>(tr>td*3)*6)*4 -->
-                <div class="tab-pane active" id="fleet_1">
-                  <table class="table">
-                    <tbody>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                    </tbody>
+                <div class="tab-pane" id="fleet_1">
+                  <table class="table fleet_table">
+                    <tbody></tbody>
                   </table>
                 </div>
                 <div class="tab-pane" id="fleet_2">
-                  <table class="table">
-                    <tbody>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                    </tbody>
+                  <table class="table fleet_table">
+                    <tbody></tbody>
                   </table>
                 </div>
                 <div class="tab-pane" id="fleet_3">
-                  <table class="table">
-                    <tbody>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                    </tbody>
+                  <table class="table fleet_table">
+                    <tbody></tbody>
                   </table>
                 </div>
                 <div class="tab-pane" id="fleet_4">
-                  <table class="table">
-                    <tbody>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                      <tr>
-                        <td class="ship_name col-md-3"></td>
-                        <td class="ship_level col-md-1"></td>
-                        <td class="ship_exp"></td>
-                        <td class="ship_health col-md-5"></td>
-                      </tr>
-                    </tbody>
+                  <table class="table fleet_table">
+                    <tbody></tbody>
                   </table>
                 </div>
               </div>
@@ -288,11 +153,13 @@
   </body>
 
   <script src="/javascripts/jquery-2.1.3.min.js"></script>
+  <script src="/javascripts/jquery-ui.min.js"></script>
   <script src="javascripts/bootstrap.min.js"></script>
   <script src="/javascripts/socket.io.js"></script>
   <script>
     var listener_num = <%= listener_num%>
     var is_bind_to_admiral = false;
+    $('#info_tabs').draggable({addClasses: false});
 
     $("#load_game").click(function () {
       $("#game_frame").attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");

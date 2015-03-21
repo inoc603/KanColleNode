@@ -32,20 +32,21 @@ function update_fleet (data) {
   console.log(data)
   for (var i in data) {
     fleetNum = parseInt(i)+1
+    $fleetNameSpan = $('.fleet_tab>a[href="#fleet_'+fleetNum+'"]>span:last-child')
+    // console.log($fleetNameSpan)
+    $fleetNameSpan.text(data[i].name)
     $fleetTable = $('#fleet_' + fleetNum + '>table>tbody', '#tab_fleet')
     $fleetTable.html(Array(data[i].ships.length+1).join(fleetTableRowHtml))
     for (var j in data[i].ships) {
       ship = parseInt(j)+1
-      console.log(ship)
       $row = $('tr:nth-child('+ship+')', $fleetTable)
       if (data[i].ships[j]) {
         $('.ship_name', $row).text(data[i].ships[j].name)
         $('.ship_type', $row).text(data[i].ships[j].type)
-        console.log($('.ship_level', $row))
         $('.ship_level', $row).text('LV.'+data[i].ships[j].level)
         $('.exp_next', $row).text('Next: '+data[i].ships[j].exp[1]) 
-        $('.ship_condition', $row).html(getLabelHtml(data[i].ships[j].condition))
-
+        $('.ship_condition', $row).html(
+          getLabelHtml(data[i].ships[j].condition))
         $('.ship_health_number', $row).text('HP: '+data[i].ships[j].current_hp +'/'+data[i].ships[j].max_hp)
         $('.ship_health', $row).html(
           getProgressBarHtml( data[i].ships[j].max_hp
@@ -78,7 +79,6 @@ function getProgressBarHtml (max, now) {
       +     ' style="width:'+percentage+'%;'
       +             'background-image:none;'
       +             'background-color:'+color+'">'
-      // +  now + '/' + max
       + '</div></div>'
   return res
 }

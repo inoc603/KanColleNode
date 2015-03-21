@@ -25,130 +25,90 @@
       }
       .table.fleet_table>tbody>tr>td {
         vertical-align: middle;
-        font-family: 'Microsoft YaHei';
       }
       .progress.health_bar {
         margin-bottom: 0px;
+        height: 10px;
+      }
+      #fleet_panel {
+        padding: 0px;
+      }
+      span.fleet_name_hidden {
+        display: none;
+      }
+      span.fleet_name_shown {
+        display: inline;
+      }
+      html * {
+        font-family: 'Microsoft YaHei';
       }
     </style>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css">
   </head>
   <body>
-    <div class="container-fluid">
-      <div id="game_div" class="col-md-7">
-        <iframe id="game_frame" scrolling="no" width = "900" height = "1200">
-        </iframe>
-      </div>
-      <div class="panel panel-default col-md-5" id="info_tabs">
-        <ul class="nav nav-pills nav-stacked col-md-2">
-          <li class="mytab active"><a href="#tab_a" data-toggle="pill">资源</a></li>
-          <li class="mytab"><a href="#tab_fleet" data-toggle="pill">舰队</a></li>
-          <li class="mytab"><a href="#tab_c" data-toggle="pill">远征</a></li>
-          <li class="mytab"><a href="#tab_basic" data-toggle="pill">基本</a></li>
-        </ul>
-        <div class="tab-content col-md-10">
-          <div class="tab-pane" id="tab_a">
-            <li id="res1">
-              <p><span>油 </span><span class="amount">null</span></p>
+<!--     <div id="game_div" class="container-fluid">
+      <iframe id="game_frame" scrolling="no" width = "900" height = "1200">
+      </iframe>
+    </div>
+    <button id="load_game" class="button">Load</button>
+    <button id="unload_game" class="button">Unload</button> -->
+    <div class="panel panel-default col-md-6" id="fleet_panel">
+      <div class="panel-heading">舰队</div>
+      <div class="panel-body">
+        <div class="tabable" id="tab_fleet">
+          <ul class="nav nav-tabs">
+            <li class="fleet_tab active">
+              <a href="#fleet_1" data-toggle="tab">
+                <span class="fleet_num">1</span>&nbsp;
+                <span class="fleet_name_shown"></span>
+              </a>
             </li>
-            <li id="res2">
-              <p><span>弹 </span><span class="amount">null</span></p>
+            <li class="fleet_tab">
+              <a href="#fleet_2" data-toggle="tab">
+                <span class="fleet_num">2</span>&nbsp;
+                <span class="fleet_name_hidden"></span>
+              </a>
             </li>
-            <li id="res3">
-              <p><span>钢 </span><span class="amount">null</span></p>
+            <li class="fleet_tab">
+              <a href="#fleet_3" data-toggle="tab">
+                <span class="fleet_num">3</span>&nbsp;
+                <span class="fleet_name_hidden"></span>
+              </a>
             </li>
-            <li id="res4">
-              <p><span>铝 </span><span class="amount">null</span></p>
+            <li class="fleet_tab">
+              <a href="#fleet_4" data-toggle="tab">
+                <span class="fleet_num">4</span>&nbsp;
+                <span class="fleet_name_hidden"></span>
+              </a>
             </li>
-            <li id="res5">
-              <p><span>高速建造 </span><span class="amount">null</span></p>
-            </li>
-            <li id="res6">
-              <p><span>高速修复 </span><span class="amount">null</span></p>
-            </li>
-            <li id="res7">
-              <p><span>资材 </span><span class="amount">null</span></p>
-            </li>
-            <li id="res8">
-              <p><span>改修资材 </span><span class="amount">null</span></p>
-            </li>
-          </div>
-          <div class="tab-pane" id="tab_fleet">
-            <div class="tabable">
-              <ul class="nav nav-tabs">
-                <li class="fleet_tab active"><a href="#fleet_1" data-toggle="tab">1</a></li>
-                <li class="fleet_tab"><a href="#fleet_2" data-toggle="tab">2</a></li>
-                <li class="fleet_tab"><a href="#fleet_3" data-toggle="tab">3</a></li>
-                <li class="fleet_tab"><a href="#fleet_4" data-toggle="tab">4</a></li>
-              </ul>
-              <div class="tab-content">
-                <div class="tab-pane" id="fleet_1">
-                  <table class="table fleet_table">
-                    <tbody></tbody>
-                  </table>
-                </div>
-                <div class="tab-pane" id="fleet_2">
-                  <table class="table fleet_table">
-                    <tbody></tbody>
-                  </table>
-                </div>
-                <div class="tab-pane" id="fleet_3">
-                  <table class="table fleet_table">
-                    <tbody></tbody>
-                  </table>
-                </div>
-                <div class="tab-pane" id="fleet_4">
-                  <table class="table fleet_table">
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="fleet_1">
+              <table class="table fleet_table">
+                <tbody></tbody>
+              </table>
             </div>
-          </div>
-          <div class="tab-pane" id="tab_c">
-             
-          </div>
-          <div class="tab-pane" id="tab_basic">
-            <h2 id="name">Name</h2>
-            <p id="admiral_info">
-              <span>lv </span><span id="level">null</span>
-              <span> </span>
-              <span id="rank">null</span>
-              <br>
-              <span>exp </span>
-              <span id="exp">null</span>
-            </p>
-            <p id="ship_number_info">
-              <span>舰娘数量 </span>
-              <span id="current_ship">null</span>
-              <span> / </span>
-              <span id="max_ship">null</span>
-            </p>
-            <p id="equipment_num_info">
-              <span>装备数量 </span>
-              <span id="current_equipment_num">null</span>
-              <span> / </span>
-              <span id="max_equipment">null</span>
-            </p>
-            <p id="fleet_num_info">
-              <span>舰队数量 </span>
-              <span id="fleet_count">null</span>
-            </p>
-            <p id="repair_dock_info">
-              <span>修理渠 </span>
-              <span id="repair_dock_count">null</span>
-            </p>
-            <p id="build_dock_info">
-              <span>建造渠 </span>
-              <span id="build_dock_count">null</span>
-            </p>
+            <div class="tab-pane" id="fleet_2">
+              <table class="table fleet_table">
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="tab-pane" id="fleet_3">
+              <table class="table fleet_table">
+                <tbody></tbody>
+              </table>
+            </div>
+            <div class="tab-pane" id="fleet_4">
+              <table class="table fleet_table">
+                <tbody></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <button id="load_game" class="button">Load</button>
-    <button id="unload_game" class="button">Unload</button>
+    
 
   </body>
 
@@ -159,21 +119,26 @@
   <script>
     var listener_num = <%= listener_num%>
     var is_bind_to_admiral = false;
-    $('#info_tabs').draggable({addClasses: false});
+    $('#fleet_panel').draggable({ addClasses: false
+                                , handle: 'div.panel-heading'
+                                });
 
-    $("#load_game").click(function () {
-      $("#game_frame").attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");
-    });
-    $("#unload_game").click(function () {
-      $("#game_frame").removeAttr("src");
-    });
+    $('a[data-toggle="tab"]' ,'.fleet_tab').on('shown.bs.tab', function (e) {
+      $('span:last-child' ,$(e.target)).attr('class', 'fleet_name_shown')
+      $('span:last-child' ,$(e.relatedTarget)).attr('class', 'fleet_name_hidden')
+    })
 
-    $("#game_div").click(function () {
-      alert('clicked');
-      if (typeof $('#game_frame').attr('src') == 'undefined') {
-        $("#game_frame").attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");
-      };
-    });
+    $(document).ready(function () {
+      console.log($('.fleet_tab a:first'))
+      $('.fleet_tab.active a:first').tab('show')
+    })
+
+    // $("#load_game").click(function () {
+    //   $("#game_frame").attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");
+    // });
+    // $("#unload_game").click(function () {
+    //   $("#game_frame").removeAttr("src");
+    // });
 
   </script>
   <script src="/javascripts/listener.js"></script>

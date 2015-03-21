@@ -8,18 +8,8 @@ socket.on('ready_to_bind', function (data) {
   socket.emit('bind_listener', listener_num)
 })
 
-socket.on('news', function (data) {
-  // alert('data');
-  // socket.emit('test', {message : '1'});
-  // alert('test sent');
-})
-
-socket.on('port_update', function (data) {
-  $('textarea#debug').append(data.toString()+'\n')
-})
-
 socket.on('basic_update', function (data) {
-  update_basic(data)
+  // update_basic(data)
   if (!is_bind_to_admiral)
     if (data['mix_id'])
       socket.emit('bind_listener', {
@@ -33,5 +23,5 @@ socket.on('fleet_update', function (data) {
 })
 
 socket.on('material_update', function (data) {
-  update_material(data)
+  // update_material(data)
 })

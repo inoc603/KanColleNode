@@ -49,14 +49,25 @@ router.all('/*', function (req, res) {
         resp.body += chunk
       })
       resp.on('end', function () {
+        // parse request body
+        temp = req.body.replace(/%5F/g, '_').split('&')
+        reqBody = {}
+        for (var i in temp) {
+          kv = temp[i].split('=')
+          reqBody[kv[0]] = kv[1]
+        }
+        
         // send the response data to dataHandler module
-        token = req.body.split('api%5Ftoken=')[1].slice(0, 40)
-        console.log('token: '+token)
+        token = reqBody.api_token
         if (adFinder.findByToken(token)) 
           ad = adFinder.findByToken(token)
         else
           ad = new Admiral(token)
-        dataHandler.process(resp.body, req._parsedUrl.pathname, ad)
+
+        delete reqBody.api_token
+        delete reqBody.api_verno
+        console.log(reqBody)
+        dataHandler.process(reqBody, resp.body, req._parsedUrl.pathname, ad)
       })
     })
     .on('error', function (err) {

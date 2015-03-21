@@ -19,7 +19,8 @@
       .exp_next,  
       .ship_type {
         font-size: small;
-      }        
+      }
+      .table.repair_table>tbody>tr:first-child>td,
       .table.fleet_table>tbody>tr:first-child>td {
         border-top: none;
       }
@@ -30,6 +31,7 @@
         margin-bottom: 0px;
         height: 10px;
       }
+      #repair_panel,
       #fleet_panel {
         padding: 0px;
       }
@@ -41,6 +43,15 @@
       }
       html * {
         font-family: 'Microsoft YaHei';
+      }
+      .btn_wrapper {
+        text-align: right;
+        display: inline-block;
+        width: 80%;
+      }
+      .panel_title {
+        width: 17%;
+        display: inline-block;
       }
     </style>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
@@ -54,7 +65,13 @@
     <button id="load_game" class="button">Load</button>
     <button id="unload_game" class="button">Unload</button> -->
     <div class="panel panel-default col-md-6" id="fleet_panel">
-      <div class="panel-heading">舰队</div>
+      <div class="panel-heading">
+        <div class="panel_title">舰队</div>
+        <div class="btn_wrapper">
+          <button type="button" class="btn btn-warning btn-sm min_btn">-</button>
+        </div>
+        
+      </div>
       <div class="panel-body">
         <div class="tabable" id="tab_fleet">
           <ul class="nav nav-tabs">
@@ -85,27 +102,78 @@
           </ul>
           <div class="tab-content">
             <div class="tab-pane active" id="fleet_1">
+              <div class="fleet_status alert" role="alert">
+                <span class="status_info">No data</span>&nbsp;
+                <span class="status_detail"></span>
+                <span class="status_timer"></span>
+              </div>
               <table class="table fleet_table">
                 <tbody></tbody>
               </table>
             </div>
             <div class="tab-pane" id="fleet_2">
+              <div class="fleet_status alert" role="alert">
+                <span class="status_info">No data</span>&nbsp;
+                <span class="status_detail"></span>
+                <span class="status_timer"></span>
+              </div>
               <table class="table fleet_table">
                 <tbody></tbody>
               </table>
             </div>
             <div class="tab-pane" id="fleet_3">
+              <div class="fleet_status alert" role="alert">
+                <span class="status_info">No data</span>&nbsp;
+                <span class="status_detail"></span>
+                <span class="status_timer"></span>
+              </div>
               <table class="table fleet_table">
                 <tbody></tbody>
               </table>
             </div>
             <div class="tab-pane" id="fleet_4">
+              <div class="fleet_status alert" role="alert">
+                <span class="status_info">No data</span>&nbsp;
+                <span class="status_detail"></span>
+                <span class="status_timer"></span>
+              </div>
               <table class="table fleet_table">
                 <tbody></tbody>
               </table>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default col-md-2" id="repair_panel">
+      <div class="panel-heading">
+        <div class="panel_title">修理</div>
+        <div class="btn_wrapper">
+          <button type="button" class="btn btn-warning btn-sm min_btn">-</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <table class="table repair_table">
+          <tbody>
+            <tr>
+              <td class="ship">空闲</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td class="ship">空闲</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td class="ship">空闲</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td class="ship">空闲</td>
+              <td class="time"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     
@@ -119,7 +187,7 @@
   <script>
     var listener_num = <%= listener_num%>
     var is_bind_to_admiral = false;
-    $('#fleet_panel').draggable({ addClasses: false
+    $('.panel').draggable({ addClasses: false
                                 , handle: 'div.panel-heading'
                                 });
 
@@ -129,8 +197,16 @@
     })
 
     $(document).ready(function () {
-      console.log($('.fleet_tab a:first'))
       $('.fleet_tab.active a:first').tab('show')
+      $('.status_timer').hide()
+    })
+
+    $('.min_btn').click(function () {
+      $panelBody =  $(this).closest('.panel').children('.panel-body')
+      if ($panelBody.css('display')=='none')
+        $panelBody.show()
+      else
+        $panelBody.hide()
     })
 
     // $("#load_game").click(function () {

@@ -19,7 +19,12 @@ socket.on('basic_update', function (data) {
 })
 
 socket.on('fleet_update', function (data) {
-  update_fleet(data)
+  updateFleet(data)
+})
+
+socket.on('repair_update', function (data) {
+  console.log(data)
+  updateRepair(data)
 })
 
 socket.on('material_update', function (data) {

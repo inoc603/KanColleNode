@@ -20,8 +20,9 @@
       .ship_type {
         font-size: small;
       }
-      .table.repair_table>tbody>tr:first-child>td,
-      .table.fleet_table>tbody>tr:first-child>td {
+      .table.expedition_table>tbody>tr:nth-of-type(1)>td,
+      .table.repair_table>tbody>tr:nth-of-type(1)>td,
+      .table.fleet_table>tbody>tr:nth-of-type(1)>td {
         border-top: none;
       }
       .table.fleet_table>tbody>tr>td {
@@ -32,6 +33,7 @@
         height: 10px;
       }
       #repair_panel,
+      #expedition_panel,
       #fleet_panel {
         padding: 0px;
       }
@@ -67,9 +69,8 @@
     <div class="panel panel-default col-md-6" id="fleet_panel">
       <div class="panel-heading">
         <div class="panel_title">舰队</div>
-        <div class="btn_wrapper">
-          <button type="button" class="btn btn-warning btn-sm min_btn">-</button>
-        </div>
+        <span class="glyphicon glyphicon-triangle-bottom"
+              style="float:right;"></span>
         
       </div>
       <div class="panel-body">
@@ -149,27 +150,52 @@
     <div class="panel panel-default col-md-2" id="repair_panel">
       <div class="panel-heading">
         <div class="panel_title">修理</div>
-        <div class="btn_wrapper">
-          <button type="button" class="btn btn-warning btn-sm min_btn">-</button>
-        </div>
+        <span class="glyphicon glyphicon-triangle-bottom"
+              style="float:right;"></span>
       </div>
       <div class="panel-body">
         <table class="table repair_table">
           <tbody>
             <tr>
-              <td class="ship">空闲</td>
+              <td class="ship">No data</td>
               <td class="time"></td>
             </tr>
             <tr>
-              <td class="ship">空闲</td>
+              <td class="ship">No data</td>
               <td class="time"></td>
             </tr>
             <tr>
-              <td class="ship">空闲</td>
+              <td class="ship">No data</td>
               <td class="time"></td>
             </tr>
             <tr>
-              <td class="ship">空闲</td>
+              <td class="ship">No data</td>
+              <td class="time"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel panel-default col-md-2" id="expedition_panel">
+      <div class="panel-heading">
+        <div class="panel_title">远征</div>
+        <span class="glyphicon glyphicon-triangle-bottom"
+              style="float:right;"></span>
+      </div>
+      <div class="panel-body">
+        <table class="table expedition_table">
+          <tbody>
+            <tr>
+              <td id="fleet_2">2</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td id="fleet_3">3</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td id="fleet_4">4</td>
               <td class="time"></td>
             </tr>
           </tbody>
@@ -188,8 +214,8 @@
     var listener_num = <%= listener_num%>
     var is_bind_to_admiral = false;
     $('.panel').draggable({ addClasses: false
-                                , handle: 'div.panel-heading'
-                                });
+                          , handle: 'div.panel-heading'
+                          });
 
     $('a[data-toggle="tab"]' ,'.fleet_tab').on('shown.bs.tab', function (e) {
       $('span:last-child' ,$(e.target)).attr('class', 'fleet_name_shown')
@@ -201,7 +227,7 @@
       $('.status_timer').hide()
     })
 
-    $('.min_btn').click(function () {
+    $('.glyphicon-triangle-bottom').click(function () {
       $panelBody =  $(this).closest('.panel').children('.panel-body')
       if ($panelBody.css('display')=='none')
         $panelBody.show()

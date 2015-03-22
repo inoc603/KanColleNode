@@ -26,13 +26,14 @@ var fleetTableRowHtml = '<tr>'
                       + '</td>'
                       + '<td class="ship_condition col-md-2"></td>'
                       + '</tr>'
-
+var fleetTimers = {}
+var expeditionTimers = {}
 
 function updateFleet (data) {
-  console.log(data)
   for (var i in data) {
     fleetNum = parseInt(i)+1
-    $fleetNameSpan = $('.fleet_tab>a[href="#fleet_'+fleetNum+'"]>span:last-child')
+    $fleetNameSpan = $( '.fleet_tab>a[href="#fleet_'
+                      + fleetNum + '"]>span:last-child')
 
     // console.log($fleetNameSpan)
     $fleetNameSpan.text(data[i].name)
@@ -40,6 +41,11 @@ function updateFleet (data) {
     $fleetTable.html(Array(data[i].ships.length+1).join(fleetTableRowHtml))
 
     $fleetStatus = $('#fleet_' + fleetNum + '>.fleet_status', '#tab_fleet')
+    
+
+    clearInterval(fleetTimers[i])
+    clearInterval(expeditionTimers[i])
+    $('.status_timer', $fleetStatus).hide()
 
     if (data[i].mission[0] != 0) {
       $('.status_detail', $fleetStatus).text( '#' + data[i].mission[1] 
@@ -49,7 +55,14 @@ function updateFleet (data) {
       if (data[i].mission[0] == 1) {
         $('.status_info', $fleetStatus).text('远征中')
         $fleetStatus.attr('class', 'fleet_status alert alert-info')
-        setTimer($('.status_timer', $fleetStatus), data[i].mission[2])        
+        fleetTimers[i] = setTimer( $('.status_timer', $fleetStatus)
+                                 , data[i].mission[2])
+
+        $eTime = $( '.expedition_table>tbody>tr:nth-child('
+                          + (fleetNum-1)+')>.time')
+        $eTime.hide()
+        expeditionTimers[i] = setTimer($eTime, data[i].mission[2])
+
       }
       else {
         $('.status_info', $fleetStatus).text('远征归来')
@@ -57,15 +70,51 @@ function updateFleet (data) {
       }
     }
     else {
-      danger = 0
+
+      moderate = 0
+      major = 0
       tired = 0
-      recoverTime = null
+      almostTired = 0
+      ok = 0
+      min_cond = 101
       for (var j in data[i].ships) {
         ship = data[i].ships[j]
+
+        if (ship.condition < 49)
+          if (ship.condition < 40)
+            if (ship.condition < 30)
+              tired++
+            else
+              almostTired++
+          else
+            ok++
+
+        if (ship.condition < min_cond)
+          min_cond = ship.condition
+        
+        percentage = ship.current_hp / ship.max_hp
+        if (percentage < 0.25) major++
+      }
+
+      $detail = $('.status_detail', $fleetStatus)
+      if (major  > 0) {
+        $detail.text('船只大破')
+        $fleetStatus.attr('class', 'fleet_status alert alert-danger')
+      }
+      else if (tired > 0 || almostTired > 0 || ok > 0) {
+        $detail.text('疲劳恢复中 -')
+        if (tired > 0 || almostTired > 0)
+          $fleetStatus.attr('class', 'fleet_status alert alert-warning')
+        else
+          $fleetStatus.attr('class', 'fleet_status alert alert-success')
+        d = new Date()
+        fleetTimers[i] = setTimer( $('.status_timer', $fleetStatus)
+                                 , d.getTime()+Math.ceil((49 - min_cond)/3)*180000)
+      } else {
+        $detail.text('可以出击')
+        $fleetStatus.attr('class', 'fleet_status alert alert-success')
       }
       $('.status_info', $fleetStatus).text('母港待命')
-      $('.status_detail', $fleetStatus).text('可以出击')
-      $fleetStatus.attr('class', 'fleet_status alert alert-success')
     }
 
 
@@ -80,7 +129,9 @@ function updateFleet (data) {
         $('.exp_next', $row).text('Next: '+data[i].ships[j].exp[1]) 
         $('.ship_condition', $row).html(
           getLabelHtml(data[i].ships[j].condition))
-        $('.ship_health_number', $row).text('HP: '+data[i].ships[j].current_hp +'/'+data[i].ships[j].max_hp)
+        $('.ship_health_number', $row).text('HP: '
+                                           + data[i].ships[j].current_hp
+                                           + '/' +data[i].ships[j].max_hp)
         $('.ship_health', $row).html(
           getProgressBarHtml( data[i].ships[j].max_hp
                             , data[i].ships[j].current_hp)
@@ -90,17 +141,20 @@ function updateFleet (data) {
   }
 }
 
+var repairTimers = {}
+
 function updateRepair (data) {
-  console.log('in here')
   for (var i in data) {
+    
     $row = $('.repair_table>tbody>tr:nth-child('+i+')')
     $name = $('.ship', $row)
-    console.log($name)
     $time = $('.time', $row)
+    clearInterval(repairTimers[i])
+    $time.hide()
     switch (data[i].state) {
       case 'occupied':
         $name.text(data[i].ship.name)
-        setTimer($time, data[i].complete_time)
+        repairTimers[i] = setTimer($time, data[i].complete_time)
         break;
       case 'empty':
         $name.text('空闲')
@@ -128,6 +182,7 @@ function setTimer ($timer, time) {
     remainStr = [h, m, s].join(':')
     $timer.text(remainStr)
   }, 500)
+  return countdown
 }
 
 function getProgressBarHtml (max, now) {
@@ -168,8 +223,14 @@ function getLabelHtml (cond) {
   else 
     color = 'red'
 
-  res = '<span class="label" style="background-color:'
-      + color
-      + ';">'+cond+'</span>'
+  if (color == 'yellow')
+    textColor = 'orange'
+  else
+    textColor = 'white'
+
+  res = '<span class="label" '
+      +       'style="background-color:' + color + ';'
+      +              'color:' + textColor + ';">'
+      +  cond + '</span>'
   return res
 }

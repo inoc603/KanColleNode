@@ -29,5 +29,8 @@ node_modules
 # temporary data storage
 data
 
+# certificate
+cert
+
 # project management
 task_management

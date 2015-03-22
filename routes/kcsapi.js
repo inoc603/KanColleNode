@@ -1,6 +1,7 @@
 var express = require('express')
   , http = require('http')
   , Admiral = require('../lib/admiral')
+  , querystring = require('querystring')
 
 var io = null
   , dataHandler = null
@@ -50,12 +51,7 @@ router.all('/*', function (req, res) {
       })
       resp.on('end', function () {
         // parse request body
-        temp = req.body.replace(/%5F/g, '_').split('&')
-        reqBody = {}
-        for (var i in temp) {
-          kv = temp[i].split('=')
-          reqBody[kv[0]] = kv[1]
-        }
+        reqBody = querystring.parse(req.body)
         
         // send the response data to dataHandler module
         token = reqBody.api_token

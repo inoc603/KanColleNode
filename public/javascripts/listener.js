@@ -173,7 +173,6 @@ function setTimer ($timer, time) {
     remaining = Math.floor((time - d.getTime())/1000)
     if (remaining <= 0) {
       clearInterval(countdown)
-      $timer.text('完成')
       return
     }
     h = (Math.floor(remaining / 3600) + 100).toString().substr(-2, 2)

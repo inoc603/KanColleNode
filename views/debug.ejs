@@ -13,6 +13,16 @@
         position: relative;
         margin: -78px 0px 0px -86px;
       }
+      #game_wrapper {
+        height: 480;
+        overflow: hidden;
+      }
+      #game_wrapper {
+        padding-top: 0px;
+      }
+      #game_panel {
+        width: 800;
+      }
       .mytab {
         width:60px;
       }
@@ -21,6 +31,7 @@
         font-size: small;
       }
       .table.expedition_table>tbody>tr:nth-of-type(1)>td,
+      .table.build_table>tbody>tr:nth-of-type(1)>td,
       .table.repair_table>tbody>tr:nth-of-type(1)>td,
       .table.fleet_table>tbody>tr:nth-of-type(1)>td {
         border-top: none;
@@ -34,6 +45,8 @@
       }
       #repair_panel,
       #expedition_panel,
+      #game_panel,
+      #build_panel,
       #fleet_panel {
         padding: 0px;
       }
@@ -60,12 +73,22 @@
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css">
   </head>
   <body>
-<!--     <div id="game_div" class="container-fluid">
-      <iframe id="game_frame" scrolling="no" width = "900" height = "1200">
-      </iframe>
+    <div class="panel panel-default" id="game_panel">
+      <div class="panel-heading">
+        <div class="panel_title">Game</div>
+        <span class="my_icons" style="float:right;">
+          <span class="glyphicon glyphicon-triangle-bottom"></span>
+          &nbsp;
+          <span class="glyphicon glyphicon-refresh" id="refresh_game"></span>
+        </span>
+        
+      </div>
+      <div class="panel-body" id="game_wrapper">
+        <iframe id="game_frame" scrolling="no" width = "900" height = "1200">
+        </iframe>
+      </div>
     </div>
-    <button id="load_game" class="button">Load</button>
-    <button id="unload_game" class="button">Unload</button> -->
+
     <div class="panel panel-default col-md-6" id="fleet_panel">
       <div class="panel-heading">
         <div class="panel_title">舰队</div>
@@ -202,6 +225,36 @@
         </table>
       </div>
     </div>
+
+    <div class="panel panel-default col-md-2" id="build_panel">
+      <div class="panel-heading">
+        <div class="panel_title">建造</div>
+        <span class="glyphicon glyphicon-triangle-bottom"
+              style="float:right;"></span>
+      </div>
+      <div class="panel-body">
+        <table class="table build_table">
+          <tbody>
+            <tr>
+              <td class="ship">No data</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td class="ship">No data</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td class="ship">No data</td>
+              <td class="time"></td>
+            </tr>
+            <tr>
+              <td class="ship">No data</td>
+              <td class="time"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     
 
   </body>
@@ -235,13 +288,10 @@
         $panelBody.hide()
     })
 
-    // $("#load_game").click(function () {
-    //   $("#game_frame").attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");
-    // });
-    // $("#unload_game").click(function () {
-    //   $("#game_frame").removeAttr("src");
-    // });
-
+    $("#refresh_game").click(function () {
+      $("#game_frame").attr("src"
+        , "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")
+    })
   </script>
   <script src="/javascripts/listener.js"></script>
   <script src="/javascripts/socket.js"></script>

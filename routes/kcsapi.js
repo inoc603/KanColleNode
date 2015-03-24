@@ -21,26 +21,16 @@ router.all('/*', function (req, res) {
   option.hostname = req.hostname.replace('localhost.', '127.0.0.1')
   option.port = req._parsedUrl.port
   option.path = req._parsedUrl.pathname
-  option.headers = req.headers
-  option.headers.host = option.headers.host.replace('localhost.'
-    , '127.0.0.1')
+
   option.method = req.method
-
-  // replace the lowercase header keys with case-sesitive ones
-  // in order to be recognized by the KanColle server.
-  var hkeys = Object.keys(option.headers)
-  for (var i = 0; i < sensitive.length; i++) {
-    j = hkeys.indexOf(sensitive[i].toLowerCase())
-    if (j != -1)
-      hkeys[j] = sensitive[i]
+  option.headers = {}
+  for (var i = 0; i < req.rawHeaders.length; i+=2) {
+    option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
   }
-  for (var i = 0; i < hkeys.length; i++) {
-    option.headers[hkeys[i]] = 
-      option.headers[hkeys[i].toLowerCase()]
-    delete option.headers[hkeys[i].toLowerCase()]
-  }
+  option.headers['Host'] 
+    = option.headers['Host'].replace('localhost.', '127.0.0.1')
 
-  var proxyRes = http.request(option);
+  var proxyRes = http.request(option)
 
   proxyRes
     .on('response', function (resp) {

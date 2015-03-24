@@ -32,5 +32,8 @@ data
 # certificate
 cert
 
+# pac
+pac
+
 # project management
 task_management

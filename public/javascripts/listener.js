@@ -233,3 +233,30 @@ function getLabelHtml (cond) {
       +  cond + '</span>'
   return res
 }
+
+var buildTimers = {}
+
+function updateBuild (data) {
+  for (var i in data) {
+    $row = $('.build_table>tbody>tr:nth-child('+i+')')
+    $name = $('.ship', $row)
+    $time = $('.time', $row)
+    clearInterval(buildTimers[i])
+    $time.text('')
+    if (data[i]['state'] == -1) {
+      $name.text('未解锁')
+    }
+    else if (data[i]['state'] == 0) {
+      $name.text('空闲')
+    }
+    else if (data[i]['state'] == 3) {
+      $name.text(data[i]['name'])
+      $time.text('完成')
+    }
+    else {
+      console.log(i, data[i]['state'])
+      $name.text(data[i]['name'])
+      buildTimers[i] = setTimer($time, data[i].complete_time)
+    }
+  }
+}

@@ -23,10 +23,14 @@ socket.on('fleet_update', function (data) {
 })
 
 socket.on('repair_update', function (data) {
-  console.log(data)
+  // console.log(data)
   updateRepair(data)
 })
 
 socket.on('material_update', function (data) {
   // update_material(data)
+})
+
+socket.on('kdock_update', function (data) {
+  updateBuild(data)
 })

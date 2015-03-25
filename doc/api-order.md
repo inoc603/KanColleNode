@@ -53,3 +53,20 @@ On ship destory
 ---------------
 
 > /api_req_kousyou/destroyship
+
+On ship get from factory
+------------------------
+
+> /api_req_kousyou/getship
+
+On create item
+--------------
+
+> /api_req_kousyou/createitem
+
+On create ship
+--------------
+
+> /api_req_kousyou/createship
+> /api_get_member/kdock
+> /api_get_member/material

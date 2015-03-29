@@ -44,6 +44,7 @@
         height: 10px;
       }
       #repair_panel,
+      #battle_panel,
       #expedition_panel,
       #game_panel,
       #build_panel,
@@ -68,6 +69,15 @@
         width: 17%;
         display: inline-block;
       }
+      #game_wrapper {
+        display: none;
+      }
+      #battle_panel>.panel-body>table {
+        font-size: small;
+      }
+      .label-caution {
+        background-color: yellow;
+      }
     </style>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css">
@@ -77,8 +87,7 @@
       <div class="panel-heading">
         <div class="panel_title">Game</div>
         <span class="my_icons" style="float:right;">
-          <span class="glyphicon glyphicon-triangle-bottom"></span>
-          &nbsp;
+          <span class="glyphicon glyphicon-triangle-bottom"></span>&nbsp;
           <span class="glyphicon glyphicon-refresh" id="refresh_game"></span>
         </span>
         
@@ -94,7 +103,6 @@
         <div class="panel_title">舰队</div>
         <span class="glyphicon glyphicon-triangle-bottom"
               style="float:right;"></span>
-        
       </div>
       <div class="panel-body">
         <div class="tabable" id="tab_fleet">
@@ -255,13 +263,125 @@
         </table>
       </div>
     </div>
+
+    <div class="panel panel-default col-md-6" id="battle_panel">
+      <div class="panel-heading">
+        <div class="panel_title">战斗</div>
+        <span class="glyphicon glyphicon-triangle-bottom"
+              style="float:right;"></span>
+      </div>
+      <div class="panel-body">
+        <table class="table table-bordered table.condense battle_table_friendly">
+          <tbody>
+            <!-- (tr>(td[rowspan="7"]>p.fleet_name{fleet_name}+p.formation{formation})+th.name+th.day_start{开始}+th.day_end{昼战}+th.night_end{夜战})+(tr>td.name{name}+(td.day_start>span.hp{100/100}+span.status{状态})+(td.day_end>span.hp{100}+span.status{状态})+(td.night_end>span.hp{100}+span.status{状态}))*6 -->
+            <tr>
+              <td rowspan="7">
+                <p class="fleet_name">fleet_name</p>
+                <p class="formation">formation</p>
+              </td>
+              <th class="name"></th>
+              <th class="day_start">开始</th>
+              <th class="day_end">昼战</th>
+              <th class="night_end">夜战</th>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p id="battle_info"><span id="stance"></span></p>
+        <table class="table battle_table_enemy">
+          <tbody>
+            <tr>
+              <td rowspan="7">
+                <p class="fleet_name">fleet_name</p>
+                <p class="formation">formation</p>
+              </td>
+              <th class="name"></th>
+              <th class="day_start">开始</th>
+              <th class="day_end">昼战</th>
+              <th class="night_end">夜战</th>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+            <tr>
+              <td class="name">name</td>
+              <td class="day_start"><span class="hp">100/100</span><span class="status">状态</span></td>
+              <td class="day_end"><span class="hp">100</span><span class="status">状态</span></td>
+              <td class="night_end"><span class="hp">100</span><span class="status">状态</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
     
 
   </body>
 
   <script src="/javascripts/jquery-2.1.3.min.js"></script>
   <script src="/javascripts/jquery-ui.min.js"></script>
-  <script src="javascripts/bootstrap.min.js"></script>
+  <script src="/javascripts/bootstrap.min.js"></script>
   <script src="/javascripts/socket.io.js"></script>
   <script>
     var listener_num = <%= listener_num%>

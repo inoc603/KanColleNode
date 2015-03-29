@@ -128,7 +128,7 @@ function updateFleet (data) {
         $('.ship_level', $row).text('LV.'+data[i].ships[j].level)
         $('.exp_next', $row).text('Next: '+data[i].ships[j].exp[1]) 
         $('.ship_condition', $row).html(
-          getLabelHtml(data[i].ships[j].condition))
+          getConditionLabel(data[i].ships[j].condition))
         $('.ship_health_number', $row).text('HP: '
                                            + data[i].ships[j].current_hp
                                            + '/' +data[i].ships[j].max_hp)
@@ -210,7 +210,7 @@ function getProgressBarHtml (max, now) {
   return res
 }
 
-function getLabelHtml (cond) {
+function getConditionLabel (cond) {
   if (cond > 49)
     color = 'yellow'
   else if (cond > 39)
@@ -258,5 +258,100 @@ function updateBuild (data) {
       $name.text(data[i]['name'])
       buildTimers[i] = setTimer($time, data[i].complete_time)
     }
+  }
+}
+
+function updateDayBattle (data) {
+  fleetDayBattle('.battle_table_friendly', data.friendly)
+  fleetDayBattle('.battle_table_enemy', data.enemy)
+  $('#stance').text(getStance(data.stance))
+}
+
+function getHpLabel (now, max) {
+  var percentage = now/max*100
+  if (percentage == 100) {
+    status = "无伤"
+    decorator = 'label-success'
+  }
+  else if (percentage > 75) {
+    status = "健在"
+    decorator = 'label-success'
+  }
+  else if (percentage > 50) {
+    status = "小破"
+    decorator = 'label-caution'
+  }
+  else if (percentage > 25) {
+    status = "中破"
+    decorator = 'label-warning'
+  }
+  else if (percentage > 0) {
+    status = "大破"
+    decorator = 'label-danger'
+  }
+  else {
+    status = '击沉'
+    decorator = 'label-primary'
+  }
+    
+  var res = '<span class="label '+decorator+'">'+status+'</span>'
+  return res
+}
+
+function getFormation (num) {
+  switch (num) {
+    case 1:
+      return '单纵阵'
+    case 2:
+      return '复纵阵'
+    case 3:
+      return '轮型阵'
+    case 4:
+      return '梯形阵'
+    case 5:
+      return '单横阵'
+    default:
+      return 'unknown'
+  }
+}
+
+function fleetDayBattle (table, fleet) {
+  $fTable = $(table)
+  console.log(fleet)
+  $('.formation', $fTable).text(getFormation(fleet.formation))
+  for (var i = 2; i <= fleet.ships.length+1; i++) {
+    $row = $('tbody>tr:nth-child('+i+')', $fTable)
+    $row.find('span').text(' ')
+    $('td.name', $row).text(fleet.ships[i-2].name)
+    var maxHp = fleet.ships[i-2]['max_hp']
+      , dayStartHp = fleet.ships[i-2]['day_start_hp']
+      , dayEndHp = Math.round(fleet.ships[i-2]['day_end_hp'])
+
+    $('td.day_start>span.hp', $row).text(dayStartHp + '/' + maxHp)
+    $('td.day_start>span.status', $row).html(getHpLabel(dayStartHp, maxHp))
+    $('td.day_end>span.hp', $row).text(dayEndHp)
+    $('td.day_end>span.status', $row).html(getHpLabel(dayEndHp, maxHp))
+
+  }
+  for (var i = fleet.ships.length+2; i<=7; i++) {
+    $row = $('tbody>tr:nth-child('+i+')', $fTable)
+    $row.find('span').text(' ')
+    $('td.name', $row).text(' ')
+  }
+}
+
+function getStance (num) {
+  console.log(num, typeof num)
+  switch (num) {
+    case 1:
+      return '同航战'
+    case 2:
+      return '反航战'
+    case 3:
+      return 'T字有利'
+    case 4:
+      return 'T字不利'
+    default:
+      return 'unknown'
   }
 }

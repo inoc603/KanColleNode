@@ -34,3 +34,7 @@ socket.on('material_update', function (data) {
 socket.on('kdock_update', function (data) {
   updateBuild(data)
 })
+
+socket.on('day_battle_update', function (data) {
+  updateDayBattle(data)
+})

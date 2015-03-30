@@ -294,7 +294,7 @@ function getHpLabel (now, max) {
     decorator = 'label-primary'
   }
     
-  var res = '<span class="label '+decorator+'">'+status+'</span>'
+  var res = '<span class="label hp_label '+decorator+'">'+status+'</span>'
   return res
 }
 
@@ -317,6 +317,8 @@ function getFormation (num) {
 
 function fleetDayBattle (table, fleet) {
   $fTable = $(table)
+  if (typeof fleet.name != 'undefined')
+    $('.fleet_name', $fTable).text(fleet.name)
   console.log(fleet)
   $('.formation', $fTable).text(getFormation(fleet.formation))
   for (var i = 2; i <= fleet.ships.length+1; i++) {
@@ -353,5 +355,26 @@ function getStance (num) {
       return 'T字不利'
     default:
       return 'unknown'
+  }
+}
+
+function updateNightBattle (data) {
+  fleetNightBattle('.battle_table_friendly', data.friendly)
+  fleetNightBattle('.battle_table_enemy', data.enemy)
+}
+
+function fleetNightBattle (table, fleet) {
+  $fTable = $(table)
+  for (var i = 2; i <= fleet.ships.length+1; i++) {
+    $row = $('tbody>tr:nth-child('+i+')', $fTable)
+    var maxHp = fleet.ships[i-2]['max_hp']
+      , nightStartHp = fleet.ships[i-2]['night_start_hp']
+      , nightEndHp = Math.round(fleet.ships[i-2]['night_end_hp'])
+
+    $('td.night_start>span.hp', $row).text(nightStartHp + '/' + maxHp)
+    $('td.night_start>span.status', $row).html(getHpLabel(nightStartHp, maxHp))
+    $('td.night_end>span.hp', $row).text(nightEndHp)
+    $('td.night_end>span.status', $row).html(getHpLabel(nightEndHp, maxHp))
+
   }
 }

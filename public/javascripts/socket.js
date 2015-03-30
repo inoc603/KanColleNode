@@ -38,3 +38,7 @@ socket.on('kdock_update', function (data) {
 socket.on('day_battle_update', function (data) {
   updateDayBattle(data)
 })
+
+socket.on('night_battle_update', function (data) {
+  updateNightBattle(data)
+})

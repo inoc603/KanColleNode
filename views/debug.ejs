@@ -281,11 +281,14 @@
 
     <div class="panel panel-default col-md-6" id="battle_panel">
       <div class="panel-heading">
-        <div class="panel_title">战斗</div>
+        <div class="panel_title">战斗
+          <span id="map"></span><span id="map_point"></span>
+        </div>
         <span class="glyphicon glyphicon-triangle-bottom"
               style="float:right;"></span>
       </div>
       <div class="panel-body">
+        <div id="no_battle"><p>未出击</p></div>
         <table class="table table-bordered table.condense battle_table_friendly">
           <tbody>
             <!-- (tr>(td[rowspan="7"]>p.fleet_name{fleet_name}+p.formation{formation})+th.name+th.day_start{开始}+th.day_end{昼战}+th.night_end{夜战})+(tr>td.name{name}+(td.day_start>span.hp{100/100}+span.status{状态})+(td.day_end>span.hp{100}+span.status{状态})+(td.night_end>span.hp{100}+span.status{状态}))*6 -->
@@ -412,7 +415,8 @@
 
     $(document).ready(function () {
       $('.fleet_tab.active a:first').tab('show')
-      $('.status_timer').hide()
+      $('.status_timer').text('')
+      hideBattleInfo()
     })
 
     $('.glyphicon-triangle-bottom').click(function () {

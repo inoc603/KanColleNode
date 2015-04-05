@@ -42,3 +42,11 @@ socket.on('day_battle_update', function (data) {
 socket.on('night_battle_update', function (data) {
   updateNightBattle(data)
 })
+
+socket.on('map_start', function (data) {
+  mapStart(data)
+})
+
+socket.on('clear_battle', function (data) {
+  hideBattleInfo()
+})

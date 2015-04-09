@@ -8,45 +8,50 @@ socket.on('ready_to_bind', function (data) {
   socket.emit('bind_listener', listener_num)
 })
 
-socket.on('basic_update', function (data) {
-  // update_basic(data)
-  if (!is_bind_to_admiral)
-    if (data['mix_id'])
-      socket.emit('bind_listener', {
-        'listener_num' : listener_num,
-        'mix_id' : data['mix_id']
-      })
-})
+socket
+  .on('basic_update', function (data) {
+    // update_basic(data)
+    if (!is_bind_to_admiral)
+      if (data['mix_id'])
+        socket.emit('bind_listener', {
+          'listener_num' : listener_num,
+          'mix_id' : data['mix_id']
+        })
+  })
 
-socket.on('fleet_update', function (data) {
-  updateFleet(data)
-})
+  .on('fleet_update', function (data) {
+    updateFleet(data)
+  })
 
-socket.on('repair_update', function (data) {
-  // console.log(data)
-  updateRepair(data)
-})
+  .on('repair_update', function (data) {
+    // console.log(data)
+    updateRepair(data)
+  })
 
-socket.on('material_update', function (data) {
-  // update_material(data)
-})
+  .on('material_update', function (data) {
+    // update_material(data)
+  })
 
-socket.on('kdock_update', function (data) {
-  updateBuild(data)
-})
+  .on('kdock_update', function (data) {
+    updateBuild(data)
+  })
 
-socket.on('day_battle_update', function (data) {
-  updateDayBattle(data)
-})
+  .on('day_battle_update', function (data) {
+    updateDayBattle(data)
+  })
 
-socket.on('night_battle_update', function (data) {
-  updateNightBattle(data)
-})
+  .on('night_battle_update', function (data) {
+    updateNightBattle(data)
+  })
 
-socket.on('map_start', function (data) {
-  mapStart(data)
-})
+  .on('map_start', function (data) {
+    mapStart(data)
+  })
 
-socket.on('clear_battle', function (data) {
-  hideBattleInfo()
-})
+  .on('clear_battle', function (data) {
+    hideBattleInfo()
+  })
+
+  .on('map_next', function (data) {
+    mapNext(data)
+  })

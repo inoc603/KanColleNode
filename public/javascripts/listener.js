@@ -331,7 +331,8 @@ function fleetDayBattle (table, fleet) {
       , dayEndHp = Math.round(fleet.ships[i-2]['day_end_hp'])
 
     $('td.day_start>span.hp', $row).text(dayStartHp + '/' + maxHp)
-    $('td.day_start>span.status', $row).html(getHpLabel(dayStartHp, maxHp))
+    if (table != '.battle_table_enemy')
+      $('td.day_start>span.status', $row).html(getHpLabel(dayStartHp, maxHp))
     $('td.day_end>span.hp', $row).text(dayEndHp)
     $('td.day_end>span.status', $row).html(getHpLabel(dayEndHp, maxHp))
 
@@ -383,46 +384,14 @@ function fleetNightBattle (table, fleet) {
 function mapStart (data) {
   console.log(data)
   var map = data['map_area']+'-'+data['map_num']
-    , fleet = data.enemy
+    // , fleet = data.enemy
   $('#map').text(map)
-  $('.battle_table_enemy').show()
-  $fTable = $('.battle_table_enemy')
-
-  console.log(fleet)
-
-  if (typeof fleet.name != 'undefined') {
-    $('.fleet_name', $fTable).text(fleet.name)
-    
-    $('.formation', $fTable).text(getFormation(fleet.formation))
-
-    for (var i = 2; i <= fleet.ships.length+1; i++) {
-      $row = $('tbody>tr:nth-child('+i+')', $fTable)
-      $row.find('span').text(' ')
-      $('td.name', $row).text(fleet.ships[i-2].name)
-      var maxHp = fleet.ships[i-2]['max_hp']
-        , dayStartHp = fleet.ships[i-2]['day_start_hp']
-        , dayEndHp = Math.round(fleet.ships[i-2]['day_end_hp'])
-
-      $('td.day_start>span.hp', $row).text(dayStartHp + '/' + maxHp)
-      $('td.day_start>span.status', $row).html(getHpLabel(dayStartHp, maxHp))
-      $('td.day_end>span.hp', $row).text(dayEndHp)
-      $('td.day_end>span.status', $row).html(getHpLabel(dayEndHp, maxHp))
-
-    }
-    for (var i = fleet.ships.length+2; i<=7; i++) {
-      $row = $('tbody>tr:nth-child('+i+')', $fTable)
-      $row.find('span').text(' ')
-      $('td.name', $row).text(' ')
-    }
-  }
-  else {
-    $('.fleet_name', $fTable).text('敌方舰队No.' + fleet.id)
-    for (var i = 1; i<=7; i++) {
-      $row = $('tbody>tr:nth-child('+i+')', $fTable)
-      $row.find('span').text(' ')
-      $('td.name', $row).text(' ')
-    }
-  }
+  showBattleInfo()
+  netaBattle('.battle_table_friendly', data.fleet)
+  if (data.event == 'battle')
+    netaBattle('.battle_table_enemy', data.enemy)
+  else
+    netaPeace()
   
 }
 
@@ -431,6 +400,7 @@ function showBattleInfo () {
   $('.battle_table_friendly').show()
   $('.battle_table_enemy').show()
   $('p#battle_info').show()
+  $('p#peace').hide()
 }
 
 function hideBattleInfo () {
@@ -438,4 +408,64 @@ function hideBattleInfo () {
   $('.battle_table_friendly').hide()
   $('.battle_table_enemy').hide()
   $('p#battle_info').hide()
+  $('p#peace').hide()
+}
+
+function mapNext (data) {
+  netaBattle('.battle_table_friendly', data.fleet)
+  if (data.event == 'battle')
+    netaBattle('.battle_table_enemy', data.enemy)
+  else
+    netaPeace()
+}
+
+function netaBattle (table, fleet) {
+  $fTable = $(table)
+    
+  console.log(fleet)
+  // $('.formation', $fTable).text(getFormation(fleet.formation))
+
+  if (typeof fleet.name != 'undefined') {
+    $('.fleet_name', $fTable).text(fleet.name)
+    for (var i = 2; i <= fleet.ships.length+1; i++) {
+      $row = $('tbody>tr:nth-child('+i+')', $fTable)
+      $row.find('span').text(' ')
+      $('td.name', $row).text(fleet.ships[i-2].name)
+      
+      if (table != '.battle_table_enemy') {
+        var maxHp = fleet.ships[i-2]['max_hp']
+        , dayStartHp = fleet.ships[i-2]['current_hp']
+
+        $('td.day_start>span.hp', $row).text(dayStartHp + '/' + maxHp)
+        $('td.day_start>span.status', $row).html(getHpLabel(dayStartHp, maxHp))
+      }
+    }
+
+    for (var i = fleet.ships.length+2; i<=7; i++) {
+      $row = $('tbody>tr:nth-child('+i+')', $fTable)
+      $row.find('span').text(' ')
+      $('td.name', $row).text(' ')
+    }
+  }
+  else if (typeof fleet.id != 'undefined') {
+    $('.fleet_name', $fTable).text('敌方舰队No.' + fleet.id)
+    for (var i = 1; i<=7; i++) {
+      $row = $('tbody>tr:nth-child('+i+')', $fTable)
+      $row.find('span').text(' ')
+      $('td.name', $row).text(' ')
+    }
+  }
+}
+
+function netaPeace () {
+  $fTable = $('.battle_table_enemy')
+  for (var i = 1; i<=7; i++) {
+    $row = $('tbody>tr:nth-child('+i+')', $fTable)
+    $row.find('span').text(' ')
+    $('td.name', $row).text(' ')
+  }
+  $('.battle_table_enemy').hide()
+  $('p#battle_info').hide()
+  $('p#peace').show()
+  $('p#peace').text('Love and Peace, baby!')
 }

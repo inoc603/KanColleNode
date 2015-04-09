@@ -27,13 +27,15 @@ build/Release
 node_modules
 
 # temporary data storage
-data
+data/example
+data/enemy.json
+data/expeditions.json
+data/ships.json
+data/ship-types.json
+data/*.csv
 
 # certificate
 cert
 
 # pac
 pac
-
-# project management
-task_management

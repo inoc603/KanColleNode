@@ -12,6 +12,7 @@ var express = require('express')
   // , spc = require('socks5-http-client')
 
 var app = express()
+app.disable('x-powered-by')
 
 // Get port from environment and store in Express.
 var port = normalizePort(process.env.PORT || '3000')
@@ -43,8 +44,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 var viewRoute = require('./routes/index')
   , kcsapiRoute = require('./routes/kcsapi')(io)
 
+  , myAgent = require('socks5-http-client/lib/Agent')
   // , pacProxyAgent = require('pac-proxy-agent')
   // , myAgent = new pacProxyAgent('pac+file:///e:/Projects/KanColleNode/pac/proxy.pac')
+
+
 
 app.use('/kcsapi', kcsapiRoute)
 
@@ -60,14 +64,41 @@ app.use('*', function (req, res, next) {
   }
   option.headers['Host'] 
     = option.headers['Host'].replace('localhost.', '127.0.0.1')
+  // console.log(typeof req.body)
+  if (typeof req.body == 'string')
+    option.body = req.body
+  if (typeof req.body == 'object') {
+    if (Object.keys(req.body).length > 0)
+      option.body = JSON.stringify(req.body)
+  }
+  else {
+    if (typeof req.body != 'string')
+      console.log('new type', typeof req.body)
+  }
 
-  // option.agent = myAgent
+  // console.log(Object.keys(req))
+  // console.log(req.headers)
 
-  req.pipe(request(option))
-     .on('error', function (err) {
-       console.log(err, option.method, option.url)
-     })
-     .pipe(res)
+  option.agentClass = myAgent
+  option.agentOptions = {
+    socksHost: '127.0.0.1', // Defaults to 'localhost'.
+    socksPort: 8889 // Defaults to 1080.
+  }
+
+  // console.log(option)
+
+  // console.log(option.headers)
+
+  // req.pipe(request(option))
+  //    .on('error', function (err) {
+  //      console.log(err, option.method, option.url)
+  //    })
+  //    .pipe(res)
+  request(option)
+    .on('error', function (err) {
+      console.log('proxy error', err)
+    })
+    .pipe(res)
 
 })
 

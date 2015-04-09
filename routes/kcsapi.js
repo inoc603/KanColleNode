@@ -20,7 +20,7 @@ router.all('/*', function (req, res) {
   var option = {}
   option.hostname = req.hostname.replace('localhost.', '127.0.0.1')
   option.port = req._parsedUrl.port
-  option.path = req._parsedUrl.pathname
+  option.path = req.baseUrl + req._parsedUrl.pathname
 
   option.method = req.method
   option.headers = {}
@@ -29,6 +29,8 @@ router.all('/*', function (req, res) {
   }
   option.headers['Host'] 
     = option.headers['Host'].replace('localhost.', '127.0.0.1')
+
+  // console.log(req)
 
   var proxyRes = http.request(option)
 

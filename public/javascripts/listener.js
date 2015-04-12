@@ -254,7 +254,7 @@ function updateBuild (data) {
       $time.text('完成')
     }
     else {
-      console.log(i, data[i]['state'])
+      // console.log(i, data[i]['state'])
       $name.text(data[i]['name'])
       buildTimers[i] = setTimer($time, data[i].complete_time)
     }
@@ -263,8 +263,10 @@ function updateBuild (data) {
 
 function updateDayBattle (data) {
   showBattleInfo()
+  console.log(data.air)
   fleetDayBattle('.battle_table_friendly', data.friendly)
   fleetDayBattle('.battle_table_enemy', data.enemy)
+  
   $('#stance').text(getStance(data.stance))
 }
 
@@ -320,12 +322,17 @@ function fleetDayBattle (table, fleet) {
   $fTable = $(table)
   if (typeof fleet.name != 'undefined')
     $('.fleet_name', $fTable).text(fleet.name)
-  console.log(fleet)
+  // console.log(fleet)
   $('.formation', $fTable).text(getFormation(fleet.formation))
+  $('span.casualty', $fTable).text(Math.round(fleet.casualty*100, -2))
   for (var i = 2; i <= fleet.ships.length+1; i++) {
     $row = $('tbody>tr:nth-child('+i+')', $fTable)
     $row.find('span').text(' ')
-    $('td.name', $row).text(fleet.ships[i-2].name)
+    if (table == '.battle_table_friendly')
+      suffix = '-LV.' + fleet.ships[i-2].level
+    else
+      suffix = (fleet.ships[i-2].yomi == '-'?'':' '+fleet.ships[i-2].yomi)
+    $('td.name', $row).text( fleet.ships[i-2].name + suffix)
     var maxHp = fleet.ships[i-2]['max_hp']
       , dayStartHp = fleet.ships[i-2]['day_start_hp']
       , dayEndHp = Math.round(fleet.ships[i-2]['day_end_hp'])
@@ -345,7 +352,6 @@ function fleetDayBattle (table, fleet) {
 }
 
 function getStance (num) {
-  console.log(num, typeof num)
   switch (num) {
     case 1:
       return '同航战'
@@ -382,11 +388,12 @@ function fleetNightBattle (table, fleet) {
 }
 
 function mapStart (data) {
-  console.log(data)
+  // console.log(data)
   var map = data['map_area']+'-'+data['map_num']
     // , fleet = data.enemy
   $('#map').text(map)
   showBattleInfo()
+  $('p#battle_info>span').text(' ')
   netaBattle('.battle_table_friendly', data.fleet)
   if (data.event == 'battle')
     netaBattle('.battle_table_enemy', data.enemy)
@@ -412,8 +419,9 @@ function hideBattleInfo () {
 }
 
 function mapNext (data) {
+  $('p#battle_info>span').text(' ')
   netaBattle('.battle_table_friendly', data.fleet)
-  if (data.event == 'battle')
+  if (data.event == 'battle' || data.event == 'air_battle')
     netaBattle('.battle_table_enemy', data.enemy)
   else
     netaPeace()
@@ -422,23 +430,34 @@ function mapNext (data) {
 function netaBattle (table, fleet) {
   $fTable = $(table)
     
-  console.log(fleet)
-  // $('.formation', $fTable).text(getFormation(fleet.formation))
+  // console.log(fleet)
+  showBattleInfo()
+
+  if (table == '.battle_table_friendly')
+    $('.formation', $fTable).text(' ')
+  else
+    $('.formation', $fTable).text(getFormation(fleet.formation))
 
   if (typeof fleet.name != 'undefined') {
     $('.fleet_name', $fTable).text(fleet.name)
     for (var i = 2; i <= fleet.ships.length+1; i++) {
       $row = $('tbody>tr:nth-child('+i+')', $fTable)
       $row.find('span').text(' ')
-      $('td.name', $row).text(fleet.ships[i-2].name)
       
+      
+        
       if (table != '.battle_table_enemy') {
         var maxHp = fleet.ships[i-2]['max_hp']
-        , dayStartHp = fleet.ships[i-2]['current_hp']
+          , dayStartHp = fleet.ships[i-2]['current_hp']
 
+        suffix = '-LV.' + fleet.ships[i-2].level
         $('td.day_start>span.hp', $row).text(dayStartHp + '/' + maxHp)
         $('td.day_start>span.status', $row).html(getHpLabel(dayStartHp, maxHp))
       }
+      else {
+        suffix = (fleet.ships[i-2].yomi == '-'?'':' '+fleet.ships[i-2].yomi)
+      }
+      $('td.name', $row).text(fleet.ships[i-2].name + suffix)
     }
 
     for (var i = fleet.ships.length+2; i<=7; i++) {
@@ -457,6 +476,7 @@ function netaBattle (table, fleet) {
   }
 }
 
+// preview non-battle points
 function netaPeace () {
   $fTable = $('.battle_table_enemy')
   for (var i = 1; i<=7; i++) {

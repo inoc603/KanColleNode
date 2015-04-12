@@ -20,6 +20,8 @@ socket
   })
 
   .on('fleet_update', function (data) {
+    globalFleet = data
+    // console.log('[globalFleet]', data)
     updateFleet(data)
   })
 

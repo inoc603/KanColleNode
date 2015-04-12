@@ -69,6 +69,6 @@ router.all('/*', function (req, res) {
 
 module.exports = function (socket) {
   io = socket;
-  dataHandler = require('../lib/dataHandler')(io);
+  dataHandler = require('../lib/data-handler')(io);
   return router;
 };

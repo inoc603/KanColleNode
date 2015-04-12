@@ -2,6 +2,10 @@
   <head>
     <title>Listener</title>
     <style type="text/css">
+      #exp_now_level,
+      #exp_target_level {
+        width: 50px;
+      }
       #game_div {
         position:relative;
         width:800px;
@@ -46,7 +50,8 @@
       #expedition_panel,
       #game_panel,
       #build_panel,
-      #fleet_panel {
+      #fleet_panel,
+      #exp_panel {
         padding: 0px;
       }
       span.fleet_name_hidden {
@@ -64,7 +69,7 @@
         width: 80%;
       }
       .panel_title {
-        width: 17%;
+        /*width: 17%;*/
         display: inline-block;
       }
       #game_wrapper {
@@ -96,12 +101,15 @@
     </style>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap-formhelpers.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap-select.min.css">
   </head>
   <body>
     <div class="panel panel-default" id="game_panel">
       <div class="panel-heading">
         <div class="panel_title">Game</div>
         <span class="my_icons" style="float:right;">
+          <span class="glyphicon glyphicon-cog" id="config_app" data-toggle="modal" data-target="#setting_modal"></span>&nbsp;
           <span class="glyphicon glyphicon-triangle-bottom"></span>&nbsp;
           <span class="glyphicon glyphicon-refresh" id="refresh_game"></span>
         </span>
@@ -279,6 +287,8 @@
       </div>
     </div>
 
+
+
     <div class="panel panel-default col-md-6" id="battle_panel">
       <div class="panel-heading">
         <div class="panel_title">战斗
@@ -296,6 +306,11 @@
               <td rowspan="7">
                 <p class="fleet_name">fleet_name</p>
                 <p class="formation">formation</p>
+                <p class="air_fight">
+                  stage_1&nbsp;<span class="stage_1"></span>
+                  &nbsp;stage_1&nbsp;<span class="stage_2"></span>
+                </p>
+                <p class="casualty">损伤率&nbsp;<span class="casualty"></span>%</p>
               </td>
               <th class="name"></th>
               <th class="day_start">开始</th>
@@ -348,6 +363,11 @@
               <td rowspan="7">
                 <p class="fleet_name">fleet_name</p>
                 <p class="formation">formation</p>
+                <p class="air_fight">
+                  stage_1&nbsp;<span class="stage_1"></span>
+                  &nbsp;stage_2&nbsp;<span class="stage_2"></span>
+                </p>
+                <p class="casualty">损伤率&nbsp;<span class="casualty"></span>%</p>
               </td>
               <th class="name"></th>
               <th class="day_start">开始</th>
@@ -394,6 +414,112 @@
         </table>
       </div>
     </div>
+
+        <div class="panel panel-default col-md-4" id="exp_panel">
+      <div class="panel-heading">
+        <div class="panel_title">经验计算器</div>
+        <span class="glyphicon glyphicon-triangle-bottom"
+              style="float:right;"></span>
+      </div>
+      <div class="panel-body">
+        <form>
+<!--           <div class="input-group" id="exp_ship_select">
+            <span class="input-group-addon" id="basic-addon1">舰娘</span>
+            <input type="text" class="form-control" aria-label="...">
+            <div class="input-group-btn">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">&nbsp;<span class="caret"></span></button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Separated link</a></li>
+              </ul>
+            </div>
+          </div> --><!-- /input-group -->
+          <span>舰娘</span>
+          <select name="ship" class="selectpicker" id="ship_select_picker">
+            <option value="a">1</option>
+            <option value="a">2</option>
+            <option value="a">3</option>
+            <option value="a">4</option>
+            <option value="a">5</option>
+          </select>
+        </form>
+        
+        <form class="form-inline">
+          <span>现在等级</span>
+          <input id="exp_now_level" type="text" class="form-control bfh-number" data-min="1" data-max="150">
+          <span>exp</span>
+          <input type="text" class="form-control" id="exp_now">
+        </form>
+
+        <form class="form-inline">
+          <span>目标等级</span>
+          <input type="text" id="exp_target_level" class="form-control bfh-number" data-min="1" data-max="150">
+          <span>exp</span>
+          <input type="text" class="form-control" id="exp_target">
+        </form>
+        <form class="form-inline">
+          <span>海域</span>
+          <select name="map_area">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+          <span>-</span>
+          <select name="map">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+          <span>评价</span>
+          <select name="rank">
+            <option value="s">S</option>
+            <option value="a">A</option>
+            <option value="b">B</option>
+            <option value="c">C</option>
+            <option value="d">D</option>
+          </select>
+          <input type="checkbox" aria-label="..."><span>旗舰</span>
+          <input type="checkbox" aria-label="..."><span>MVP</span>
+        </form>
+
+        <hr>
+
+        <span>战斗回数</span><span id="turns_left"></span>
+        
+        
+      </div>
+    </div>
+
+    <div class="modal fade" id="setting_modal" tabindex="-1" role="dialog" 
+         aria-labelledby="setting_modal_label" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" 
+                    aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="setting_modal_label">设置</h4>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
     
 
   </body>
@@ -401,10 +527,15 @@
   <script src="/javascripts/jquery-2.1.3.min.js"></script>
   <script src="/javascripts/jquery-ui.min.js"></script>
   <script src="/javascripts/bootstrap.min.js"></script>
+  <script src="/javascripts/bootstrap-formhelpers.js"></script>
   <script src="/javascripts/socket.io.js"></script>
+  <script src="/javascripts/bootstrap-select.min.js"></script>
   <script>
     var listener_num = <%= listener_num%>
-    var is_bind_to_admiral = false;
+      , is_bind_to_admiral = false
+      , globalFleet = {}
+      , levelExp = [0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500, 6600, 7800, 9100, 10500, 12000, 13600, 15300, 17100, 19000, 21000, 23100, 25300, 27600, 30000, 32500, 35100, 37800, 40600, 43500, 46500, 49600, 52800, 56100, 59500, 63000, 66600, 70300, 74100, 78000, 82000, 86100, 90300, 94600, 99000, 103500, 108100, 112800, 117600, 122500, 127500, 132700, 138100, 143700, 149500, 155500, 161700, 168100, 174700, 181500, 188500, 195800, 203400, 211300, 219500, 228000, 236800, 245900, 255300, 265000, 275000, 285400, 296200, 307400, 319000, 331000, 343400, 356200, 369400, 383000, 397000, 411500, 426500, 442000, 458000, 474500, 491500, 509000, 527000, 545500, 564500, 584500, 606500, 631500, 661500, 701500, 761500, 851500, 1000000, 1000000, 1010000, 1011000, 1013000, 1016000, 1020000, 1025000, 1031000, 1038000, 1046000, 1055000, 1065000, 1077000, 1091000, 1107000, 1125000, 1145000, 1168000, 1194000, 1223000, 1255000, 1290000, 1329000, 1372000, 1419000, 1470000, 1525000, 1584000, 1647000, 1714000, 1785000, 1860000, 1940000, 2025000, 2115000, 2210000, 2310000, 2415000, 2525000, 2640000, 2760000, 2887000, 3021000, 3162000, 3310000, 3465000, 3628000, 3799000, 3978000, 4165000, 4360000]
+
     $('.panel').draggable({ addClasses: false
                           , handle: 'div.panel-heading'
                           });
@@ -418,6 +549,15 @@
       $('.fleet_tab.active a:first').tab('show')
       $('.status_timer').text('')
       hideBattleInfo()
+    })
+
+    $('#exp_now_level').change(function () {
+      console.log($('#exp_now_level').val())
+      $('#exp_target_level').attr('data-min', $('#exp_now_level').val())
+    })
+
+    $('#exp_target_level').change(function () {
+      $('#exp_target').val(levelExp[$(this).val()-1])
     })
 
     $('.glyphicon-triangle-bottom').click(function () {

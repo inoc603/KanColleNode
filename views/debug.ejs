@@ -422,31 +422,18 @@
               style="float:right;"></span>
       </div>
       <div class="panel-body">
-        <form>
-<!--           <div class="input-group" id="exp_ship_select">
-            <span class="input-group-addon" id="basic-addon1">舰娘</span>
-            <input type="text" class="form-control" aria-label="...">
-            <div class="input-group-btn">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">&nbsp;<span class="caret"></span></button>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Separated link</a></li>
-              </ul>
-            </div>
-          </div> --><!-- /input-group -->
+        <form style="display:inline-block">
           <span>舰娘</span>
-          <select name="ship" class="selectpicker" id="ship_select_picker">
+          <select class="selectpicker" id="ship_select_picker" data-size="5">
             <option value="a">1</option>
             <option value="a">2</option>
             <option value="a">3</option>
             <option value="a">4</option>
             <option value="a">5</option>
           </select>
+          
         </form>
-        
+        <button class="btn btn-default" id="update_ship">更新</button>
         <form class="form-inline">
           <span>现在等级</span>
           <input id="exp_now_level" type="text" class="form-control bfh-number" data-min="1" data-max="150">
@@ -462,39 +449,40 @@
         </form>
         <form class="form-inline">
           <span>海域</span>
-          <select name="map_area">
+          <select id="map_area">
             <option value="1">1</option>
             <option value="2">2</option>
-            <option value="3">3</option>
+            <option value="3" selected="true">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
             <option value="6">6</option>
           </select>
           <span>-</span>
-          <select name="map">
+          <select id="map">
             <option value="1">1</option>
-            <option value="2">2</option>
+            <option value="2" selected="true">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-            <option value="6">6</option>
           </select>
           <span>评价</span>
-          <select name="rank">
+          <select id="rank">
             <option value="s">S</option>
             <option value="a">A</option>
             <option value="b">B</option>
             <option value="c">C</option>
             <option value="d">D</option>
           </select>
-          <input type="checkbox" aria-label="..."><span>旗舰</span>
-          <input type="checkbox" aria-label="..."><span>MVP</span>
+          <input type="checkbox" aria-label="..." id="flagship">
+          <span>旗舰</span>
+          <input type="checkbox" aria-label="..." id="mvp">
+          <span>MVP</span>
         </form>
 
         <hr>
-
-        <span>战斗回数</span><span id="turns_left"></span>
-        
+        <span>单次经验</span>&nbsp;<span id="one_turn"></span>
+        <br>
+        <span>战斗次数</span>&nbsp;<span id="turns_left"></span>
         
       </div>
     </div>
@@ -534,30 +522,25 @@
     var listener_num = <%= listener_num%>
       , is_bind_to_admiral = false
       , globalFleet = {}
-      , levelExp = [0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500, 6600, 7800, 9100, 10500, 12000, 13600, 15300, 17100, 19000, 21000, 23100, 25300, 27600, 30000, 32500, 35100, 37800, 40600, 43500, 46500, 49600, 52800, 56100, 59500, 63000, 66600, 70300, 74100, 78000, 82000, 86100, 90300, 94600, 99000, 103500, 108100, 112800, 117600, 122500, 127500, 132700, 138100, 143700, 149500, 155500, 161700, 168100, 174700, 181500, 188500, 195800, 203400, 211300, 219500, 228000, 236800, 245900, 255300, 265000, 275000, 285400, 296200, 307400, 319000, 331000, 343400, 356200, 369400, 383000, 397000, 411500, 426500, 442000, 458000, 474500, 491500, 509000, 527000, 545500, 564500, 584500, 606500, 631500, 661500, 701500, 761500, 851500, 1000000, 1000000, 1010000, 1011000, 1013000, 1016000, 1020000, 1025000, 1031000, 1038000, 1046000, 1055000, 1065000, 1077000, 1091000, 1107000, 1125000, 1145000, 1168000, 1194000, 1223000, 1255000, 1290000, 1329000, 1372000, 1419000, 1470000, 1525000, 1584000, 1647000, 1714000, 1785000, 1860000, 1940000, 2025000, 2115000, 2210000, 2310000, 2415000, 2525000, 2640000, 2760000, 2887000, 3021000, 3162000, 3310000, 3465000, 3628000, 3799000, 3978000, 4165000, 4360000]
+      , globalMixId = ''
+      , globalShips = {}
+      , gameSrc="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
+      
 
     $('.panel').draggable({ addClasses: false
                           , handle: 'div.panel-heading'
                           });
 
     $('a[data-toggle="tab"]' ,'.fleet_tab').on('shown.bs.tab', function (e) {
-      $('span:last-child' ,$(e.target)).attr('class', 'fleet_name_shown')
-      $('span:last-child' ,$(e.relatedTarget)).attr('class', 'fleet_name_hidden')
+      $('span:last-child', $(e.target)).attr('class', 'fleet_name_shown')
+      $('span:last-child', $(e.relatedTarget)).attr( 'class'
+                                                   , 'fleet_name_hidden')
     })
 
     $(document).ready(function () {
       $('.fleet_tab.active a:first').tab('show')
       $('.status_timer').text('')
       hideBattleInfo()
-    })
-
-    $('#exp_now_level').change(function () {
-      console.log($('#exp_now_level').val())
-      $('#exp_target_level').attr('data-min', $('#exp_now_level').val())
-    })
-
-    $('#exp_target_level').change(function () {
-      $('#exp_target').val(levelExp[$(this).val()-1])
     })
 
     $('.glyphicon-triangle-bottom').click(function () {
@@ -569,10 +552,10 @@
     })
 
     $("#refresh_game").click(function () {
-      $("#game_frame").attr("src"
-        , "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")
+      $("#game_frame").attr("src", gameSrc)
     })
   </script>
+  <script src="/javascripts/exp-calculator.js"></script>
   <script src="/javascripts/listener.js"></script>
   <script src="/javascripts/socket.js"></script>
 </html>

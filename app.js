@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Routers setup
 var viewRoute = require('./routes/index')
   , kcsapiRoute = require('./routes/kcsapi')(io)
-
+  , restRoute = require('./routes/rest')
   , myAgent = require('socks5-http-client/lib/Agent')
   // , pacProxyAgent = require('pac-proxy-agent')
   // , myAgent = new pacProxyAgent('pac+file:///e:/Projects/KanColleNode/pac/proxy.pac')
@@ -51,7 +51,7 @@ var viewRoute = require('./routes/index')
 
 
 app.use('/kcsapi', kcsapiRoute)
-
+app.use('/rest', restRoute)
 app.use('/', viewRoute)
 
 app.use('*', function (req, res, next) {

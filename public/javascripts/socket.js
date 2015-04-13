@@ -12,11 +12,15 @@ socket
   .on('basic_update', function (data) {
     // update_basic(data)
     if (!is_bind_to_admiral)
-      if (data['mix_id'])
+      if (data['mix_id']) {
         socket.emit('bind_listener', {
           'listener_num' : listener_num,
           'mix_id' : data['mix_id']
         })
+        globalMixId = data['mix_id']
+      }
+        
+
   })
 
   .on('fleet_update', function (data) {

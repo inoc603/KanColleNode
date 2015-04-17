@@ -61,3 +61,7 @@ socket
   .on('map_next', function (data) {
     mapNext(data)
   })
+
+  .on('quest_update', function (data) {
+    questUpdate(data)
+  })

@@ -47,12 +47,23 @@
       }
       #repair_panel,
       #battle_panel,
+      #general_panel,
       #expedition_panel,
       #game_panel,
       #build_panel,
       #fleet_panel,
-      #exp_panel {
+      #exp_panel,
+      #quest_panel {
         padding: 0px;
+      }
+      .quest_table>tbody>tr>td {
+        font-size: small;
+      }
+      .quest_table>tbody>tr>td.type {
+        width: 10px !important;
+      }
+      .quest_table>tbody>tr>td.quest_progress {
+        width: 20px;
       }
       span.fleet_name_hidden {
         display: none;
@@ -90,19 +101,39 @@
         width: 100px;
         padding-bottom: 0px !important;
       }
-      th.name,
-      td.name {
+      .battle_table_friendly>tbody>tr>th.name,
+      .battle_table_friendly>tbody>tr>td.name,
+      .battle_table_enemy>tbody>tr>th.name,
+      .battle_table_enemy>tbody>tr>td.name {
         width: 150px;
         padding-bottom: 0px !important; 
       }
       span.status {
         float:right;
       }
+      td.time {
+        text-align: center;
+      }
+      #fleet_panel {
+        width: 420px;
+      }
+      #fleet_panel_wrapper {
+        display: inline-block;
+      }
+      .fleet_table {
+        overflow: scroll;
+      }
+/*      #fleet_panel {
+        height: 100%;
+      }*/
     </style>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
     <link rel="stylesheet" href="stylesheets/bootstrap-theme.min.css">
     <link rel="stylesheet" href="stylesheets/bootstrap-formhelpers.min.css">
     <link rel="stylesheet" href="stylesheets/bootstrap-select.min.css">
+    <link rel="stylesheet" href="stylesheets/jquery-ui.min.css">
+    <link rel="stylesheet" href="stylesheets/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="stylesheets/jquery-ui.theme.min.css">
   </head>
   <body>
     <div class="panel panel-default" id="game_panel">
@@ -121,173 +152,241 @@
       </div>
     </div>
 
-    <div class="panel panel-default col-md-6" id="fleet_panel">
+    <div class="panel panel-default col-md-11" id="general_panel">
       <div class="panel-heading">
-        <div class="panel_title">舰队</div>
-        <span class="glyphicon glyphicon-triangle-bottom"
-              style="float:right;"></span>
+        <div class="panel_title">General Info</div>
+        <span class="my_icons" style="float:right;">
+          <span class="glyphicon glyphicon-triangle-bottom"></span>
+        </span>       
       </div>
       <div class="panel-body">
-        <div class="tabable" id="tab_fleet">
-          <ul class="nav nav-tabs">
-            <li class="fleet_tab active">
-              <a href="#fleet_1" data-toggle="tab">
-                <span class="fleet_num">1</span>&nbsp;
-                <span class="fleet_name_shown"></span>
-              </a>
-            </li>
-            <li class="fleet_tab">
-              <a href="#fleet_2" data-toggle="tab">
-                <span class="fleet_num">2</span>&nbsp;
-                <span class="fleet_name_hidden"></span>
-              </a>
-            </li>
-            <li class="fleet_tab">
-              <a href="#fleet_3" data-toggle="tab">
-                <span class="fleet_num">3</span>&nbsp;
-                <span class="fleet_name_hidden"></span>
-              </a>
-            </li>
-            <li class="fleet_tab">
-              <a href="#fleet_4" data-toggle="tab">
-                <span class="fleet_num">4</span>&nbsp;
-                <span class="fleet_name_hidden"></span>
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content">
-            <div class="tab-pane active" id="fleet_1">
-              <div class="fleet_status alert" role="alert">
-                <span class="status_info">No data</span>&nbsp;
-                <span class="status_detail"></span>
-                <span class="status_timer"></span>
+        <div id="fleet_panel_wrapper">
+        <div class="panel panel-default" id="fleet_panel">
+          <div class="panel-heading">
+            <div class="panel_title">舰队</div>
+            <span class="glyphicon glyphicon-triangle-bottom"
+                  style="float:right;"></span>
+          </div>
+          <div class="panel-body">
+            <div class="tabable" id="tab_fleet">
+              <ul class="nav nav-tabs">
+                <li class="fleet_tab active">
+                  <a href="#fleet_1" data-toggle="tab">
+                    <span class="fleet_num">1</span>&nbsp;
+                    <span class="fleet_name_shown"></span>
+                  </a>
+                </li>
+                <li class="fleet_tab">
+                  <a href="#fleet_2" data-toggle="tab">
+                    <span class="fleet_num">2</span>&nbsp;
+                    <span class="fleet_name_hidden"></span>
+                  </a>
+                </li>
+                <li class="fleet_tab">
+                  <a href="#fleet_3" data-toggle="tab">
+                    <span class="fleet_num">3</span>&nbsp;
+                    <span class="fleet_name_hidden"></span>
+                  </a>
+                </li>
+                <li class="fleet_tab">
+                  <a href="#fleet_4" data-toggle="tab">
+                    <span class="fleet_num">4</span>&nbsp;
+                    <span class="fleet_name_hidden"></span>
+                  </a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="fleet_1">
+                  <div class="fleet_status alert" role="alert">
+                    <span class="status_info">No data</span>&nbsp;
+                    <span class="status_detail"></span>
+                    <span class="status_timer"></span>
+                  </div>
+                  <table class="table fleet_table">
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="fleet_2">
+                  <div class="fleet_status alert" role="alert">
+                    <span class="status_info">No data</span>&nbsp;
+                    <span class="status_detail"></span>
+                    <span class="status_timer"></span>
+                  </div>
+                  <table class="table fleet_table">
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="fleet_3">
+                  <div class="fleet_status alert" role="alert">
+                    <span class="status_info">No data</span>&nbsp;
+                    <span class="status_detail"></span>
+                    <span class="status_timer"></span>
+                  </div>
+                  <table class="table fleet_table">
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <div class="tab-pane" id="fleet_4">
+                  <div class="fleet_status alert" role="alert">
+                    <span class="status_info">No data</span>&nbsp;
+                    <span class="status_detail"></span>
+                    <span class="status_timer"></span>
+                  </div>
+                  <table class="table fleet_table">
+                    <tbody></tbody>
+                  </table>
+                </div>
               </div>
-              <table class="table fleet_table">
-                <tbody></tbody>
-              </table>
-            </div>
-            <div class="tab-pane" id="fleet_2">
-              <div class="fleet_status alert" role="alert">
-                <span class="status_info">No data</span>&nbsp;
-                <span class="status_detail"></span>
-                <span class="status_timer"></span>
-              </div>
-              <table class="table fleet_table">
-                <tbody></tbody>
-              </table>
-            </div>
-            <div class="tab-pane" id="fleet_3">
-              <div class="fleet_status alert" role="alert">
-                <span class="status_info">No data</span>&nbsp;
-                <span class="status_detail"></span>
-                <span class="status_timer"></span>
-              </div>
-              <table class="table fleet_table">
-                <tbody></tbody>
-              </table>
-            </div>
-            <div class="tab-pane" id="fleet_4">
-              <div class="fleet_status alert" role="alert">
-                <span class="status_info">No data</span>&nbsp;
-                <span class="status_detail"></span>
-                <span class="status_timer"></span>
-              </div>
-              <table class="table fleet_table">
-                <tbody></tbody>
-              </table>
             </div>
           </div>
+        </div> <!-- fleet_panel -->
+        </div>
+        <div class="col-md-2" id="repair_panel_wrapper">
+        <div class="panel panel-default" id="repair_panel">
+          <div class="panel-heading">
+            <div class="panel_title">修理</div>
+            <span class="glyphicon glyphicon-triangle-bottom"
+                  style="float:right;"></span>
+          </div>
+          <table class="table repair_table">
+            <tbody>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- repair_panel -->
+        </div>
+        <div class="col-md-2" id="expedition_panel_wrapper">
+        <div class="panel panel-default" id="expedition_panel">
+          <div class="panel-heading">
+            <div class="panel_title">远征</div>
+            <span class="glyphicon glyphicon-triangle-bottom"
+                  style="float:right;"></span>
+          </div>
+          <table class="table expedition_table">
+            <tbody>
+              <tr>
+                <td id="fleet_2">2</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td id="fleet_3">3</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td id="fleet_4">4</td>
+                <td class="time"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- expedition_panel -->
+        </div>
+        <div class="col-md-2" id="build_panel_wrapper">
+        <div class="panel panel-default" id="build_panel">
+          <div class="panel-heading">
+            <div class="panel_title">建造</div>
+            <span class="glyphicon glyphicon-triangle-bottom"
+                  style="float:right;"></span>
+          </div>
+          <table class="table build_table">
+            <tbody>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+              <tr>
+                <td class="ship">No data</td>
+                <td class="time"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- build_panel -->
+        </div>
+        <div class="col-md-4" id="quest_panel_wrapper">
+        <div class="panel panel-default" id="quest_panel">
+          <div class="panel-heading">
+            <div class="panel_title">任务</div>
+            <span class="glyphicon glyphicon-triangle-bottom"
+                  style="float:right;"></span>
+          </div>
+          <div class="panel-body">
+            <div class="tabable" id="quest_tab">
+              <ul class="nav nav-tabs">
+                <li><a href="#active_quest" data-toggle="tab">当前</a></li>
+                <li><a href="#daily_quest" data-toggle="tab">日常</a></li>
+                <li><a href="#weekly_quest" data-toggle="tab">周常</a></li>
+                <li><a href="#monthly_quest" data-toggle="tab">月常</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="active_quest">
+                  <table class="table quest_table">
+                    <tbody>
+                      <tr>
+                        <td class="type"></td>
+                        <td class="name"></td>
+                        <td class="quest_progress"></td>
+                      </tr>
+                      <tr>
+                        <td class="type"></td>
+                        <td class="name"></td>
+                        <td class="quest_progress"></td>
+                      </tr>
+                      <tr>
+                        <td class="type"></td>
+                        <td class="name"></td>
+                        <td class="quest_progress"></td>
+                      </tr>
+                      <tr>
+                        <td class="type"></td>
+                        <td class="name"></td>
+                        <td class="quest_progress"></td>
+                      </tr>
+                      <tr>
+                        <td class="type"></td>
+                        <td class="name"></td>
+                        <td class="quest_progress"></td>
+                      </tr>
+                      <tr>
+                        <td class="type"></td>
+                        <td class="name"></td>
+                        <td class="quest_progress"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div> <!-- active_quest -->
+                <div class="tab-pane" id="daily_quest"></div>
+                <div class="tab-pane" id="weekly_quest"></div>
+                <div class="tab-pane" id="monthly_quest"></div>
+              </div>
+            </div>
+
+          </div>
+        </div> <!-- quest_panel -->
         </div>
       </div>
     </div>
-
-    <div class="panel panel-default col-md-2" id="repair_panel">
-      <div class="panel-heading">
-        <div class="panel_title">修理</div>
-        <span class="glyphicon glyphicon-triangle-bottom"
-              style="float:right;"></span>
-      </div>
-      <div class="panel-body">
-        <table class="table repair_table">
-          <tbody>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="panel panel-default col-md-2" id="expedition_panel">
-      <div class="panel-heading">
-        <div class="panel_title">远征</div>
-        <span class="glyphicon glyphicon-triangle-bottom"
-              style="float:right;"></span>
-      </div>
-      <div class="panel-body">
-        <table class="table expedition_table">
-          <tbody>
-            <tr>
-              <td id="fleet_2">2</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td id="fleet_3">3</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td id="fleet_4">4</td>
-              <td class="time"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="panel panel-default col-md-2" id="build_panel">
-      <div class="panel-heading">
-        <div class="panel_title">建造</div>
-        <span class="glyphicon glyphicon-triangle-bottom"
-              style="float:right;"></span>
-      </div>
-      <div class="panel-body">
-        <table class="table build_table">
-          <tbody>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-            <tr>
-              <td class="ship">No data</td>
-              <td class="time"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-
 
     <div class="panel panel-default col-md-6" id="battle_panel">
       <div class="panel-heading">
@@ -415,7 +514,7 @@
       </div>
     </div>
 
-        <div class="panel panel-default col-md-4" id="exp_panel">
+    <div class="panel panel-default col-md-4" id="exp_panel">
       <div class="panel-heading">
         <div class="panel_title">经验计算器</div>
         <span class="glyphicon glyphicon-triangle-bottom"
@@ -447,6 +546,7 @@
           <span>exp</span>
           <input type="text" class="form-control" id="exp_target">
         </form>
+        
         <form class="form-inline">
           <span>海域</span>
           <select id="map_area">
@@ -487,6 +587,8 @@
       </div>
     </div>
 
+
+
     <div class="modal fade" id="setting_modal" tabindex="-1" role="dialog" 
          aria-labelledby="setting_modal_label" aria-hidden="true">
       <div class="modal-dialog">
@@ -508,7 +610,6 @@
         </div>
       </div>
     </div>
-    
 
   </body>
 
@@ -525,11 +626,10 @@
       , globalMixId = ''
       , globalShips = {}
       , gameSrc="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
-      
+    
+    // $('#general_panel').resizable()
 
-    $('.panel').draggable({ addClasses: false
-                          , handle: 'div.panel-heading'
-                          });
+
 
     $('a[data-toggle="tab"]' ,'.fleet_tab').on('shown.bs.tab', function (e) {
       $('span:last-child', $(e.target)).attr('class', 'fleet_name_shown')
@@ -541,6 +641,11 @@
       $('.fleet_tab.active a:first').tab('show')
       $('.status_timer').text('')
       hideBattleInfo()
+      $('.panel').draggable({ addClasses: false
+                          , handle: 'div.panel-heading'
+                          })
+      $('#general_panel').resizable()
+      $('#fleet_panel').resizable({minWidth:420, alsoResize:'#fleet_panel_wrapper'})
     })
 
     $('.glyphicon-triangle-bottom').click(function () {

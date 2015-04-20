@@ -83,9 +83,7 @@
       .panel_title {
         display: inline-block;
       }
-/*      #game_wrapper {
-        display: none;
-      }*/
+
       #battle_panel>.panel-body>table {
         font-size: small;
       }
@@ -202,7 +200,7 @@
       </ul>
       <!-- Tab panes -->
       <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="fleet_pill">
+        <div role="tabpanel" class="tab-pane droppable_pane active" id="fleet_pill" content='fleet_panel_wrapper'>
           <div id="fleet_panel_wrapper" class="panel_wrapper">
           <div class="panel panel-default" id="fleet_panel">
             <div class="panel-heading">
@@ -287,7 +285,7 @@
           </div> <!-- fleet_panel -->
           </div>          
         </div>
-        <div role="tabpanel" class="tab-pane" id="timers_pill">
+        <div role="tabpanel" class="tab-pane droppable_pane" id="timers_pill">
           <div id="timer_panel_wrapper" class="panel_wrapper">
           <div class="panel panel-default" id="timer_panel">
             <div class="panel-heading">
@@ -366,7 +364,7 @@
           </div>
           </div>          
         </div>
-        <div role="tabpanel" class="tab-pane" id="quest_pill">
+        <div role="tabpanel" class="tab-pane droppable_pane" id="quest_pill" content='quest_panel_wrapper'>
           <div id="quest_panel_wrapper" class="panel_wrapper">
             <div class="panel panel-default" id="quest_panel">
               <div class="panel-heading">
@@ -429,7 +427,7 @@
             </div> <!-- quest_panel -->
           </div>
         </div>
-        <div role="tabpanel" class="tab-pane" id="battle_pill">
+        <div role="tabpanel" class="tab-pane droppable_pane" id="battle_pill">
           <div class="panel_wrapper" id="battle_panel_wrapper">
           <div class="panel panel-default" id="battle_panel">
             <div class="panel-heading">
@@ -558,7 +556,7 @@
           </div>           
           </div>
         </div>
-        <div class="tab-pane" id="exp_cal_pill" role="tabpanel">
+        <div class="tab-pane droppable_pane" id="exp_cal_pill" role="tabpanel">
           <div class="panel_wrapper" id="exp_panel_wrapper">
           <div class="panel panel-default" id="exp_panel">
             <div class="panel-heading">
@@ -649,11 +647,31 @@
             <h4 class="modal-title" id="setting_modal_label">设置</h4>
           </div>
           <div class="modal-body">
-            ...
+            <form class="form">
+              <div class="form-group">
+                <input type="checkbox" id="proxy_state">&nbsp;
+                <label for="proxy_ip">代理设置</label>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <div class="input-group-addon">IP</div>
+                      <input type="text" id="proxy_ip" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <div class="input-group-addon">端口</div>
+                      <input type="text" id="proxy_port" class="form-control">
+                    </div> 
+                  </div>
+                </div>
+                
+              </div>
+            </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" id="submit_setting">确定</button>
           </div>
         </div>
       </div>
@@ -667,6 +685,7 @@
   <script src="/javascripts/bootstrap-formhelpers.js"></script>
   <script src="/javascripts/socket.io.js"></script>
   <script src="/javascripts/bootstrap-select.min.js"></script>
+  <script src="/javascripts/purl.js"></script>
   <script>
     var listener_num = <%= listener_num%>
       , is_bind_to_admiral = false
@@ -674,6 +693,25 @@
       , globalMixId = ''
       , globalShips = {}
       , gameSrc="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
+      , config = {}
+      , tempConfig = {}
+
+    function getSetting () {
+      $.get('/setting', function (data) {
+        config = data
+      })
+    }
+
+    function getProxy () {
+      var ip = $('#proxy_ip').val()
+        , port = $('#proxy_port').val()
+      if ($('#proxy_state').is(':checked'))
+        tempConfig.proxy = 'http://'+ip+':'+port
+      console.log(tempConfig)
+    }
+
+    getSetting()
+    
     
     $('a[data-toggle="tab"]' ,'.fleet_tab').on('shown.bs.tab', function (e) {
       $('span:last-child', $(e.target)).attr('class', 'fleet_name_shown')
@@ -689,12 +727,13 @@
                           , handle: 'ul#disp_main_pills'
                           })
       function revertOutside (dropObj) {
+        console.log('outside')
         if (!dropObj[0]) return true
         if (dropObj[0].localName == 'body') {
-          console.log('changed')
           return false
         }
-        else if (dropObj[0].id == 'fleet_pill') {
+        else if (dropObj.hasClass('droppable_pane')) {
+          console.log('revert function changed')
           $(this).draggable('option', 'revert', revertInside)
           return false
         }
@@ -709,20 +748,20 @@
         else return true
       }
       $('.panel_wrapper').draggable({ addClasses: false
-                          , handle: 'div.panel-heading'
-                          , revert: revertInside
-                          , stack: '.panel'
-                          })
-      $('#timer_panel').resizable({minWidth:220
+                                    , handle: 'div.panel-heading'
+                                    , revert: revertInside
+                                    , stack: '.panel'
+                                    })
+      $('#timer_panel').resizable({ minWidth:220
                                   , alsoResize:'#timer_panel_wrapper'})
       $('#fleet_panel').resizable({ alsoResize:'#fleet_panel_wrapper'
                                   , minWidth:420})
-      $('#quest_panel').resizable({minWidth:420
+      $('#quest_panel').resizable({ minWidth:420
                                   , alsoResize:'#quest_panel_wrapper'})
-      $('#exp_panel').resizable({minWidth:500
-                                  , alsoResize:'#exp_panel_wrapper'})
-      $('#battle_panel').resizable({minWidth:530
-                                  , alsoResize:'#battle_panel_wrapper'})
+      $('#exp_panel').resizable({ minWidth:500
+                                , alsoResize:'#exp_panel_wrapper'})
+      $('#battle_panel').resizable({ minWidth:530
+                                   , alsoResize:'#battle_panel_wrapper'})
 
     })
 
@@ -745,16 +784,38 @@
         $panelBody.hide()
     })
 
+    $('#setting_modal').on('shown.bs.modal', function (event) {
+      console.log('update')
+      tempConfig = $.extend(true, {}, config)
+      if (tempConfig.proxy) {
+        $('#proxy_state', $(this)).attr('checked', true)
+        var proxy = $.url(tempConfig.proxy)
+        $('#proxy_ip', $(this)).val(proxy.attr('host'))
+        $('#proxy_port', $(this)).val(proxy.attr('port'))
+      }
+      else {
+        $('#proxy_state', $(this)).attr('checked', false)
+      }
+    })
+
     $('.hide_panel').click(function () {
-      console.log($(this).parents('.tab-pane').length)
-      console.log(wrapperId = $(this).parents('.panel_wrapper')[0].id)
-      console.log($('a[aria-controls='+wrapperId+']'))
+      var wrapperId = $(this).parents('.panel_wrapper')[0].id
+      $wrapper = $('#'+wrapperId)
+      $pillPane = $('div[content='+wrapperId+']')
+      if ($wrapper.hasClass('outside_panel')) {
+        $wrapper.removeClass('outside_panel')
+        $wrapper.detach().appendTo($pillPane)
+      }
+      // pillId = $pillPane[0].id
+      var targetLink = $('a[aria-controls='+$pillPane[0].id+']')
+      targetLink.css('display', 'none')
+      targetLink.parent().next().children('a').tab('show')
     })
 
     $("#refresh_game").click(function () {
       $("#game_frame").attr("src", gameSrc)
     })
-    $('#fleet_pill').droppable({
+    $('.droppable_pane').droppable({
       drop: function (event, ui) {
         console.log('dropped')
       }
@@ -768,15 +829,15 @@
     $('body').droppable({
       drop: function (event, ui) {
         console.log('dropped outside')
-        console.log(ui.draggable)
+        // console.log(ui.draggable)
         if (ui.draggable.hasClass('panel_wrapper')) {
           var wrapperId = ui.draggable[0].id
           if (!ui.draggable.hasClass('outside_panel')) {
             var pillId = ui.draggable.parent()[0].id
-            var targetLink = $('a[aria-controls='+pillId+']')
+              , targetLink = $('a[aria-controls='+pillId+']')
             targetLink.css('display', 'none')
 
-            console.log(targetLink.parent().next().children('a').tab('show'))
+            targetLink.parent().next().children('a').tab('show')
             ui.draggable.addClass('outside_panel')
             ui.draggable.detach().insertAfter($('#game_panel'))
             w = $('#'+wrapperId).children('.panel')
@@ -784,14 +845,44 @@
             console.log(w)
             $('#'+wrapperId).css('width', w)
             pos = $('#'+wrapperId).position()
+            parentPos = $('#disp_main_panel').offset()
+            // parentPos = $('#disp_main_panel>.tab-content').offset()
+            console.log(pos, parentPos)
+            pos.left += parentPos.left
+            pos.top += parentPos.top
             console.log(pos)
-            $('#'+wrapperId).css('position', 'absolute').css('left', pos.left).css('top', pos.top)      
+            $('#'+wrapperId).css('position', 'absolute')
+            // .css('left', pos.left).css('top', pos.top)  
+            $('#'+wrapperId).offset(pos)
           }
         }
       }
       , greedy: true
       // , accept: '.outside_draggable'
     })
+
+    $('#submit_setting').click(function () {
+      $.post('/setting', JSON.stringify(tempConfig), function (data) {
+        // config = data
+        console.log(data)
+        if (data='success')
+          config = tempConfig
+        else
+          getSetting()
+      })
+    })
+
+    $('#proxy_state').change(function () {
+      if (this.checked) {
+
+      }
+      else {
+        delete tempConfig.proxy
+      }
+    })
+
+    $('#proxy_ip').change(getProxy)
+    $('#proxy_port').change(getProxy)
   </script>
   <script src="/javascripts/exp-calculator.js"></script>
   <script src="/javascripts/listener.js"></script>

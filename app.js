@@ -9,7 +9,7 @@ var express = require('express')
   , request = require('request')
   , events = require('events')
   , fs = require('fs')
-  // , spc = require('socks5-http-client')
+  , config = require('./lib/config')
 
 var app = express()
 app.disable('x-powered-by')
@@ -44,11 +44,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 var viewRoute = require('./routes/index')
   , kcsapiRoute = require('./routes/kcsapi')(io)
   , restRoute = require('./routes/rest')
-  , myAgent = require('socks5-http-client/lib/Agent')
-  // , pacProxyAgent = require('pac-proxy-agent')
-  // , myAgent = new pacProxyAgent('pac+file:///e:/Projects/KanColleNode/pac/proxy.pac')
-
-
 
 app.use('/kcsapi', kcsapiRoute)
 app.use('/rest', restRoute)
@@ -76,24 +71,9 @@ app.use('*', function (req, res, next) {
       console.log('new type', typeof req.body)
   }
 
-  // console.log(Object.keys(req))
-  // console.log(req.headers)
+  if (config.config.proxy)
+    option.proxy = config.config.proxy
 
-  option.agentClass = myAgent
-  option.agentOptions = {
-    socksHost: '127.0.0.1', // Defaults to 'localhost'.
-    socksPort: 8889 // Defaults to 1080.
-  }
-
-  // console.log(option)
-
-  // console.log(option.headers)
-
-  // req.pipe(request(option))
-  //    .on('error', function (err) {
-  //      console.log(err, option.method, option.url)
-  //    })
-  //    .pipe(res)
   request(option)
     .on('error', function (err) {
       console.log('proxy error', err)
@@ -102,7 +82,7 @@ app.use('*', function (req, res, next) {
 
 })
 
-app.use(favicon(__dirname + '/public/favicon.ico'))
+// app.use(favicon(__dirname + '/public/favicon.ico'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

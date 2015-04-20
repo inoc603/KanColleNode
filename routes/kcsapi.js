@@ -30,6 +30,8 @@ router.all('/*', function (req, res) {
   option.headers['Host'] 
     = option.headers['Host'].replace('localhost.', '127.0.0.1')
 
+  option.proxy = 'http://127.0.0.1:8889'
+
   // console.log(req)
 
   var proxyRes = http.request(option)

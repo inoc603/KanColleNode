@@ -4,8 +4,35 @@ function update_material (data) {
 }
 
 function update_basic (data) {
-  for (key in data)
-    $('#'+key, '#tab_basic').text(data[key])    
+  // for (key in data)
+  //   $('#'+key, '#tab_basic').text(data[key])
+  console.log(data)
+  if (data.name)
+    if ($('span#admiral_name').text() == '') {
+      $('span#admiral_name').text(data.name)
+      $('span#admiral_lv').text('lv.'+data.level)
+      $('span#admiral_rank').text(getRank(data.rank))
+    }
+    else if (data.name == $('span#admiral_name').text()) {
+      $('span#admiral_lv').text('lv.'+data.level)
+      $('span#admiral_rank').text(getRank(data.rank))
+    }
+}
+
+function getRank (num) {
+  switch (num) {
+    case 1: return '元帅'; break
+    case 2: return '大将'; break
+    case 3: return '中将'; break
+    case 4: return '少将'; break
+    case 5: return '大佐'; break
+    case 6: return '中佐'; break
+    case 7: return '新米中佐'; break
+    case 8: return '少佐'; break
+    case 9: return '中坚少佐'; break
+    case 10: return '新米少佐'; break
+    default: return num; break
+  }
 }
 
 var fleetTableRowHtml = '<tr>'
@@ -372,6 +399,34 @@ function getStance (num) {
 }
 
 function updateNightBattle (data) {
+  if ($('#peace').css('display') != 'none') {
+    $('#peace').hide()
+    // $('#battle_info').
+    $('.battle_table_enemy').show()
+  }
+  if (data.special) {
+    $fTable = $('.battle_table_enemy')
+    var fleet = data.enemy
+    for (var i = 2; i <= fleet.ships.length+1; i++) {
+      $row = $('tbody>tr:nth-child('+i+')', $fTable)
+      $row.find('span').text(' ')
+      suffix = (fleet.ships[i-2].yomi == '-'?'':' '+fleet.ships[i-2].yomi)
+      $('td.name', $row).text( fleet.ships[i-2].name + suffix)
+      var maxHp = fleet.ships[i-2]['max_hp']
+        , dayStartHp = fleet.ships[i-2]['night_start_hp']
+        , dayEndHp = Math.round(fleet.ships[i-2]['night_end_hp'])
+
+      $('td.day_start>span.hp', $row).text(dayStartHp + '/' + maxHp)
+      // $('td.day_end>span.hp', $row).text(dayEndHp)
+      // $('td.day_end>span.status', $row).html(getHpLabel(dayEndHp, maxHp))
+
+    }
+    for (var i = fleet.ships.length+2; i<=7; i++) {
+      $row = $('tbody>tr:nth-child('+i+')', $fTable)
+      $row.find('span').text(' ')
+      $('td.name', $row).text(' ')
+    }
+  }
   fleetNightBattle('.battle_table_friendly', data.friendly)
   fleetNightBattle('.battle_table_enemy', data.enemy)
 }
@@ -426,7 +481,7 @@ function hideBattleInfo () {
 function mapNext (data) {
   $('p#battle_info>span').text(' ')
   netaBattle('.battle_table_friendly', data.fleet)
-  if (data.event == 'battle' || data.event == 'air_battle')
+  if (data.event == 'battle' || data.event == 'air_battle' || data.event == 'night_battle')
     netaBattle('.battle_table_enemy', data.enemy)
   else
     netaPeace()

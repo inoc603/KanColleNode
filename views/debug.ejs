@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Listener</title>
+    <title>Develope</title>
     <style type="text/css">
       #exp_now_level,
       #exp_target_level {
@@ -142,8 +142,8 @@
         display: block !important;
         visibility: visible !important;
       }
-      #fleet_panel_wrapper {
-        border: solid;
+      table#ship_full_list>thead {
+        background-color: grey;
       }
     </style>
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
@@ -153,11 +153,17 @@
     <link rel="stylesheet" href="stylesheets/jquery-ui.min.css">
     <link rel="stylesheet" href="stylesheets/jquery-ui.structure.min.css">
     <link rel="stylesheet" href="stylesheets/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="stylesheets/jquery.dynatable.css">
+    <link rel="stylesheet" href="stylesheets/jquery.tablescroll.css">
   </head>
   <body>
     <div class="panel panel-default" id="game_panel" style="display:inline-block;">
       <div class="panel-heading">
-        <div class="panel_title">Game</div>
+        <div class="panel_title" id="admiral_name">
+          <span id="admiral_name"></span>&nbsp;
+          <span id="admiral_lv"></span>&nbsp;
+          <span id="admiral_rank"></span>&nbsp;
+        </div>
         <span class="my_icons" style="float:right;">
           <div class="dropdown" style="display:inline-block;">
             <span class="glyphicon glyphicon-menu-hamburger dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true"></span>
@@ -187,6 +193,7 @@
         <li role="presentation"><a href="#quest_pill" aria-controls="quest_pill" role="tab" data-toggle="tab">任务</a></li>
         <li role="presentation"><a href="#battle_pill" aria-controls="battle_pill" role="tab" data-toggle="tab">出击</a></li>
         <li role="presentation"><a href="#exp_cal_pill" aria-controls="exp_cal_pill" role="tab" data-toggle="tab">经验计算</a></li>
+        <li role="presentation"><a href="#flist_pill" aria-controls="flist_pill" role="tab" data-toggle="tab">舰娘一览</a></li>
         <div class="dropdown" style="float:right;height:40px;">
           <button class="btn btn-default" id="add_pill" data-toggle="dropdown" aria-expanded="true" style="vertical-align:middle;height:100%">
               <span class="glyphicon glyphicon-plus"></span>
@@ -630,7 +637,29 @@
             </div>
           </div>
           </div>
-          
+        </div>
+        <div role="tabpanel" class="tab-pane droppable_pane" id="flist_pill" content='flist_panel_wrapper'>
+          <div class="panel_wrapper" id="flist_panel_wrapper">
+          <div class="panel panel-default" id="flist_panel">
+            <div class="panel-heading">
+              <span>舰娘一览</span>
+            </div>
+            <div class="panel-body">
+              <button class="btn btn-default" id="update_ship_list">更新</button>
+            </div>
+            <table id="ship_full_list" class="table">
+              <thead>
+                <tr>
+                  <th data-dynatable-type="number">ID</th>
+                  <th>Name</th>
+                  <th data-dynatable-type="number">Level</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -686,6 +715,8 @@
   <script src="/javascripts/socket.io.js"></script>
   <script src="/javascripts/bootstrap-select.min.js"></script>
   <script src="/javascripts/purl.js"></script>
+  <script src="/javascripts/jquery.dynatable.js"></script>
+  <script src="/javascripts/jquery.tablescroll.js"></script>
   <script>
     var listener_num = <%= listener_num%>
       , is_bind_to_admiral = false
@@ -695,6 +726,7 @@
       , gameSrc="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
       , config = {}
       , tempConfig = {}
+      , shipDynatable = {}
 
     function getSetting () {
       $.get('/setting', function (data) {
@@ -718,6 +750,27 @@
       $('span:last-child', $(e.relatedTarget)).attr( 'class'
                                                    , 'fleet_name_hidden')
     })
+    function revertOutside (dropObj) {
+      console.log('outside')
+      if (!dropObj[0]) return true
+      if (dropObj[0].localName == 'body') {
+        return false
+      }
+      else if (dropObj.hasClass('droppable_pane')) {
+        console.log('revert function changed')
+        $(this).draggable('option', 'revert', revertInside)
+        return false
+      }
+      else return true
+    }
+    function revertInside (dropObj) {
+      if (!dropObj[0]) return true
+      if (dropObj[0].localName == 'body') {
+        $(this).draggable('option', 'revert', revertOutside)
+        return false
+      }
+      else return true
+    }
 
     $(document).ready(function () {
       $('.fleet_tab.active a:first').tab('show')
@@ -726,27 +779,7 @@
       $('#disp_main_panel').draggable({ addClasses: false
                           , handle: 'ul#disp_main_pills'
                           })
-      function revertOutside (dropObj) {
-        console.log('outside')
-        if (!dropObj[0]) return true
-        if (dropObj[0].localName == 'body') {
-          return false
-        }
-        else if (dropObj.hasClass('droppable_pane')) {
-          console.log('revert function changed')
-          $(this).draggable('option', 'revert', revertInside)
-          return false
-        }
-        else return true
-      }
-      function revertInside (dropObj) {
-        if (!dropObj[0]) return true
-        if (dropObj[0].localName == 'body') {
-          $(this).draggable('option', 'revert', revertOutside)
-          return false
-        }
-        else return true
-      }
+
       $('.panel_wrapper').draggable({ addClasses: false
                                     , handle: 'div.panel-heading'
                                     , revert: revertInside
@@ -762,7 +795,24 @@
                                 , alsoResize:'#exp_panel_wrapper'})
       $('#battle_panel').resizable({ minWidth:530
                                    , alsoResize:'#battle_panel_wrapper'})
-
+      $('#flist_panel').resizable({ minWidth:530
+                                   , alsoResize:'#flist_panel_wrapper'})
+      shipDynatable = $('#ship_full_list').dynatable({
+        readers: {
+          'level': function(el, record) {
+            return Number(el.innerHTML) || 0
+          },
+          'id': function (el, record) {
+            return Number(el.innerHTML) || 0
+          }
+        },
+        features: {
+          paginate: true,
+          search: false,
+          recordCount: false,
+          perPageSelect: false
+        }
+      }).data('dynatable')
     })
 
     $('.glyphicon-triangle-bottom.minify_panel').click(function () {
@@ -883,6 +933,34 @@
 
     $('#proxy_ip').change(getProxy)
     $('#proxy_port').change(getProxy)
+
+    $('#update_ship_list').click(function () {
+      $.get('/rest/ships/'+globalMixId, function (data) {
+        // console.log(data)
+        $tbody = $('#ship_full_list>tbody')
+        $tbody.html('')
+        for (var i in data) {
+          $tbody.append(getShipListRow(data[i]))
+        }
+        // shipDynatable.settings.dataset.originalRecords = data
+        newRecords = shipDynatable.records.getFromTable()
+        console.log(newRecords)
+        // shipDynatable.records.updateFromJson(data)
+        shipDynatable.settings.dataset.originalRecords = newRecords
+        console.log(shipDynatable.settings.dataset.originalRecords)
+        shipDynatable.process()
+        shipDynatable.dom.update()
+      })
+    })
+
+    function getShipListRow (ship) {
+      var res = '<tr>'
+              +   '<td class="ship_id">'+ship.id+'</td>'
+              +   '<td class="ship_name">'+ship.name+'</td>'
+              +   '<td class="ship_level">'+ship.level+'</td>'
+              + '</tr>'
+      return res
+    }
   </script>
   <script src="/javascripts/exp-calculator.js"></script>
   <script src="/javascripts/listener.js"></script>

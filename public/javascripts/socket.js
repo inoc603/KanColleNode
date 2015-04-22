@@ -10,7 +10,7 @@ socket.on('ready_to_bind', function (data) {
 
 socket
   .on('basic_update', function (data) {
-    // update_basic(data)
+    update_basic(data)
     if (!is_bind_to_admiral)
       if (data['mix_id']) {
         socket.emit('bind_listener', {
@@ -19,7 +19,6 @@ socket
         })
         globalMixId = data['mix_id']
       }
-        
 
   })
 

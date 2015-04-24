@@ -8,6 +8,10 @@
   "webkit": {
     "plugin": true
   },
+  "window": {
+    "frame": false
+  },
+  "nodre-remote":"127.0.0.1",
 
   "scripts": {
     "start": "node ./bin/www"

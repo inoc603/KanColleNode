@@ -9,9 +9,10 @@
     "plugin": true
   },
   "window": {
-    "frame": false
+    "frame": false,
+    "toolbar":false
   },
-  "nodre-remote":"127.0.0.1",
+  "node-remote":"127.0.0.1",
 
   "scripts": {
     "start": "node ./bin/www"

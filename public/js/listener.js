@@ -356,11 +356,11 @@ function fleetDayBattle (table, fleet) {
     $('.fleet_name', $fTable).text(fleet.name)
   // console.log(fleet)
   $('.formation', $fTable).text(getFormation(fleet.formation))
-  $('span.casualty', $fTable).text(Math.round(fleet.casualty*100, -2))
+  $('span.casualty', $fTable).text(Math.round(fleet.casualty*100, -2)+'%')
   for (var i = 2; i <= fleet.ships.length+1; i++) {
     $row = $('tbody>tr:nth-child('+i+')', $fTable)
     $row.find('span').text(' ')
-    if (table == '.battle_table_friendly')
+    if (table == '.battle_table_friendly' || table == '.battle_table_combined')
       suffix = '-LV.' + fleet.ships[i-2].level
     else
       suffix = (fleet.ships[i-2].yomi == '-'?'':' '+fleet.ships[i-2].yomi)
@@ -474,6 +474,7 @@ function hideBattleInfo () {
   $('div#no_battle').show()
   $('.battle_table_friendly').hide()
   $('.battle_table_enemy').hide()
+  $('.battle_table_combined').hide()
   $('p#battle_info').hide()
   $('p#peace').hide()
 }
@@ -612,4 +613,15 @@ function getQuestProgress (state, progress) {
   }
   var res = '<span class="label '+labelClass+'">'+text+'</span>'
   return res
+}
+
+function updateDayBattleCombined (data) {
+  showBattleInfo()
+  $('.battle_table_combined').show()
+  console.log(data)
+  fleetDayBattle('.battle_table_friendly', data.friendly.back)
+  fleetDayBattle('.battle_table_combined', data.friendly.front)
+  fleetDayBattle('.battle_table_enemy', data.enemy)
+  
+  $('#stance').text(getStance(data.stance))
 }

@@ -2,6 +2,7 @@ var express = require('express')
   , http = require('http')
   , Admiral = require('../lib/admiral')
   , querystring = require('querystring')
+  , config = require('../lib/config')
 
 var io = null
   , dataHandler = null
@@ -27,10 +28,11 @@ router.all('/*', function (req, res) {
   for (var i = 0; i < req.rawHeaders.length; i+=2) {
     option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
   }
-  option.headers['Host'] 
+  option.headers['Host']
     = option.headers['Host'].replace('localhost.', '127.0.0.1')
 
-  option.proxy = 'http://127.0.0.1:8889'
+  if (config.config.proxy)
+    option.proxy = config.config.proxy
 
   // console.log(req)
 

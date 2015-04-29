@@ -12,7 +12,7 @@ var express = require('express')
   , config = require('./lib/config')
 
 var app = express()
-app.disable('x-powered-by')
+// app.disable('x-powered-by')
 
 // Get port from environment and store in Express.
 var port = normalizePort(process.env.PORT || '3000')
@@ -46,41 +46,54 @@ var viewRoute = require('./routes/index')
   , restRoute = require('./routes/rest')
 
 app.use('/kcsapi', kcsapiRoute)
+app.use('*', function (req, res, next) {
+  var isLocal = ( req.hostname == '127.0.0.1' || 
+                  req.hostname == 'localhost' ||
+                  req.hostname == 'localhost.'
+                )
+    , isRightPort = (parseInt(req.headers.host.split(':')[1])==3000)
+
+  if (isLocal && isRightPort && req.baseUrl != '/socket.io') {
+    console.log(req.body)
+    next()
+  }
+  else {
+    var option = {}
+    option.url = req.originalUrl.replace('localhost.', '127.0.0.1')
+    option.method = req.method
+    option.headers = {}
+    for (var i = 0; i < req.rawHeaders.length; i+=2) {
+      option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
+    }
+    option.headers['Host'] 
+      = option.headers['Host'].replace('localhost.', '127.0.0.1')
+    // console.log(typeof req.body)
+    if (typeof req.body == 'string')
+      option.body = req.body
+    if (typeof req.body == 'object') {
+      if (Object.keys(req.body).length > 0)
+        option.body = JSON.stringify(req.body)
+    }
+    else {
+      if (typeof req.body != 'string')
+        console.log('new type', typeof req.body)
+    }
+
+    if (config.config.proxy)
+      option.proxy = config.config.proxy
+
+    request(option)
+      .on('error', function (err) {
+        console.log(req.method, req.rawHeaders)
+        console.log('proxy error', err)
+      })
+      .pipe(res)
+  }
+})
 app.use('/rest', restRoute)
 app.use('/', viewRoute)
 
-app.use('*', function (req, res, next) {
-  var option = {}
-  option.url = req.originalUrl.replace('localhost.', '127.0.0.1')
-  option.method = req.method
-  option.headers = {}
-  for (var i = 0; i < req.rawHeaders.length; i+=2) {
-    option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
-  }
-  option.headers['Host'] 
-    = option.headers['Host'].replace('localhost.', '127.0.0.1')
-  // console.log(typeof req.body)
-  if (typeof req.body == 'string')
-    option.body = req.body
-  if (typeof req.body == 'object') {
-    if (Object.keys(req.body).length > 0)
-      option.body = JSON.stringify(req.body)
-  }
-  else {
-    if (typeof req.body != 'string')
-      console.log('new type', typeof req.body)
-  }
 
-  if (config.config.proxy)
-    option.proxy = config.config.proxy
-
-  request(option)
-    .on('error', function (err) {
-      console.log('proxy error', err)
-    })
-    .pipe(res)
-
-})
 
 // app.use(favicon(__dirname + '/public/favicon.ico'))
 

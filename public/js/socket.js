@@ -68,3 +68,7 @@ socket
   .on('day_combined_battle_update', function (data) {
     updateDayBattleCombined(data)
   })
+
+  .on('combined_night_battle_update', function (data) {
+    updateNightBattleCombined(data)
+  })

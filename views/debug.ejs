@@ -2,8 +2,19 @@
   <head>
     <title>Develope</title>
     <style type="text/css">
-      .battle_table_friendly {
+      .battle_table_friendly,
+      .battle_table_combined {
         margin-bottom: 0 !important;
+      }
+      p#battle_info {
+        margin-top: 10px;
+      }
+      span.status {
+        display: inline-block !important;
+        margin-top: 3.5px !important;
+      }
+      #page_nav {
+        min-height: 30px;
       }
       button.frame_btn {
         padding: 6px 6px !important;
@@ -14,11 +25,6 @@
       }
       .fleet_statics {
         background-color: blue;
-      }
-      body { 
-        padding-top: 50px;
-        background-color: red !important;
-        overflow: hidden;
       }
       #exp_now_level,
       #exp_target_level {
@@ -115,7 +121,8 @@
       td.night_end,
       td.day_start {
         width: 100px;
-        padding-bottom: 0px !important;
+        padding-bottom: 2px !important;
+        padding-top: 2px !important;
       }
       .battle_table_friendly>tbody>tr>th.name,
       .battle_table_friendly>tbody>tr>td.name,
@@ -124,7 +131,14 @@
       .battle_table_enemy>tbody>tr>th.name,
       .battle_table_enemy>tbody>tr>td.name {
         width: 150px;
-        padding-bottom: 0px !important; 
+        padding-bottom: 2px !important; 
+        padding-top: 2px !important;
+      }
+      .battle_table_friendly>thead>tr>td,
+      .battle_table_combined>thead>tr>td,
+      .battle_table_enemy>thead>tr>td {
+        padding-bottom: 2px !important;
+        padding-top: 2px !important;
       }
       span.status {
         float:right;
@@ -497,8 +511,8 @@
                   <tr>
                     <th class="name"></th>
                     <th class="day_start">开始</th>
-                    <th class="day_end">昼战</th>
-                    <th class="night_end">夜战</th>
+                    <th class="day_end">昼战结束</th>
+                    <th class="night_end">夜战结束</th>
                   </tr>
                   <tr>
                     <td class="name">name</td>
@@ -540,7 +554,7 @@
               </table>
               <table class="table table-bordered table-condense battle_table_combined" style="display:none;">
                 <thead>
-                  <tr>
+                  <tr style="display:none;">
                     <td colspan="4"><span class="fleet_name">fleet name</span>&nbsp;<span class="formation">formation</span>&nbsp;<span class="casualty"></span></td>
                   </tr>
                 </thead>
@@ -548,8 +562,8 @@
                   <tr style="display:none;">
                     <th class="name"></th>
                     <th class="day_start">开始</th>
-                    <th class="day_end">昼战</th>
-                    <th class="night_end">夜战</th>
+                    <th class="day_end">昼战结束</th>
+                    <th class="night_end">夜战结束</th>
                   </tr>
                   <tr>
                     <td class="name">name</td>
@@ -601,8 +615,8 @@
                   <tr>
                     <th class="name"></th>
                     <th class="day_start">开始</th>
-                    <th class="day_end">昼战</th>
-                    <th class="night_end">夜战</th>
+                    <th class="day_end">昼战结束</th>
+                    <th class="night_end">夜战结束</th>
                   </tr>
                   <tr>
                     <td class="name">name</td>

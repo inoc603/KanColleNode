@@ -2,11 +2,22 @@
   <head>
     <title>Develope</title>
     <style type="text/css">
+      .fleet_footer span.cell_like {
+        display: table-cell;
+        width: 20%;
+      }
+      .fleet_footer {
+        position:absolute;
+        bottom:0;
+        width:100%;
+        display: table;
+      }
       .battle_table_friendly,
       .battle_table_combined {
         margin-bottom: 0 !important;
       }
-      p#battle_info {
+      p#battle_info,
+      p#peace {
         margin-top: 10px;
       }
       span.status {
@@ -236,11 +247,9 @@
         <iframe id="game_frame" scrolling="no" width = "1200" height = "1200">
         </iframe>
       </div>
-
     </div>
 
     <div role="tabpanel" id="disp_main_panel">
-      <!-- Nav tabs -->
       <ul class="nav nav-pills" role="tablist" id="disp_main_pills">
         <li role="presentation" class="active"><a href="#fleet_pill" aria-controls="fleet_pill" role="tab" data-toggle="tab">舰队</a></li>
         <li role="presentation"><a href="#timers_pill" aria-controls="timers_pill" role="tab" data-toggle="tab">时间</a></li>
@@ -259,7 +268,6 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
         </div>
       </ul>
-      <!-- Tab panes -->
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane droppable_pane active" id="fleet_pill" content='fleet_panel_wrapper'>
           <div id="fleet_panel_wrapper" class="panel_wrapper">
@@ -343,7 +351,60 @@
                 </div>
               </div>
             </div>
-            <div class="panel-footer" style="position:absolute;bottom:0;width:100%;"><span>制空</span><span id="fleet_anti_air">unkown</span><span>索敌</span><span>平均等级</span><span>总等级</span><span>速度</span></div>
+            <div class="panel-footer fleet_footer"  id="fleet_footer_1">
+              <span class="cell_like">
+                <span>制空</span>&nbsp;<span class="fleet_anti_air"></span>
+              </span>
+              <span class="cell_like">
+                <span>索敌</span>&nbsp;<span class="fleet_tracking"></span>
+              </span>
+              <span class="cell_like">
+                <span>平均等级</span>&nbsp;<span class="fleet_avg_lv"></span>
+              </span>              
+              <span class="cell_like">
+                <span>总等级</span>&nbsp;<span class="fleet_total_lv"></span>
+              </span>
+              <span class="cell_like fleet_speed">舰队速度</span>
+            </div>
+            <div class="panel-footer fleet_footer" style="display:none" id="fleet_footer_2">
+              <span class="cell_like">
+                <span>制空</span>&nbsp;<span class="fleet_anti_air"></span></span>
+              <span class="cell_like">
+                <span>索敌</span>&nbsp;<span class="fleet_tracking"></span></span>
+              <span class="cell_like">
+                <span>平均等级</span>&nbsp;<span class="fleet_avg_lv"></span>
+              </span>              
+              <span class="cell_like">
+                <span>总等级</span>&nbsp;<span class="fleet_total_lv"></span>
+              </span>
+              <span class="cell_like fleet_speed">舰队速度</span>
+            </div>
+            <div class="panel-footer fleet_footer" style="display:none" id="fleet_footer_3">
+              <span class="cell_like">
+                <span>制空</span>&nbsp;<span class="fleet_anti_air"></span></span>
+              <span class="cell_like">
+                <span>索敌</span>&nbsp;<span class="fleet_tracking"></span></span>
+              <span class="cell_like">
+                <span>平均等级</span>&nbsp;<span class="fleet_avg_lv"></span>
+              </span>              
+              <span class="cell_like">
+                <span>总等级</span>&nbsp;<span class="fleet_total_lv"></span>
+              </span>
+              <span class="cell_like fleet_speed">舰队速度</span>
+            </div>
+            <div class="panel-footer fleet_footer" style="display:none" id="fleet_footer_4">
+              <span class="cell_like">
+                <span>制空</span>&nbsp;<span class="fleet_anti_air"></span></span>
+              <span class="cell_like">
+                <span>索敌</span>&nbsp;<span class="fleet_tracking"></span></span>
+              <span class="cell_like">
+                <span>平均等级</span>&nbsp;<span class="fleet_avg_lv"></span>
+              </span>              
+              <span class="cell_like">
+                <span>总等级</span>&nbsp;<span class="fleet_total_lv"></span>
+              </span>
+              <span class="cell_like fleet_speed">舰队速度</span>
+            </div>
           </div> <!-- fleet_panel -->
           </div>          
         </div>
@@ -989,6 +1050,21 @@
               + '</tr>'
       return res
     }
+
+    $('#tab_fleet a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      var target = $(e.target).attr("href")
+        , fleetNum = parseInt(target[target.length-1])
+        $('.fleet_footer').hide()
+      $footer = $('#fleet_footer_'+target[target.length-1])
+      $footer.show()
+
+      // if ((target == '#messages')) {
+      //   alert('ok')
+      // }else{
+      //  alert('not ok')
+      // }
+      // console.log($footer)
+    })
 
 
   </script>

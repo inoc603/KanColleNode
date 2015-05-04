@@ -47,10 +47,10 @@ router.all('/*', function (req, res) {
       })
       resp.on('end', function () {
         // parse request body
-        reqBody = querystring.parse(req.body)
+        var reqBody = querystring.parse(req.body)
         
-        // send the response data to dataHandler module
-        token = reqBody.api_token
+        // find admiral for the request
+        var token = reqBody.api_token
         if (adFinder.findByToken(token)) 
           ad = adFinder.findByToken(token)
         else
@@ -59,6 +59,7 @@ router.all('/*', function (req, res) {
         delete reqBody.api_token
         delete reqBody.api_verno
         console.log(reqBody)
+        // send the response data to dataHandler module
         dataHandler.process(reqBody, resp.body, req._parsedUrl.pathname, ad)
       })
     })

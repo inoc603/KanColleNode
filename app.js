@@ -10,6 +10,29 @@ var express = require('express')
   , events = require('events')
   , fs = require('fs')
   , config = require('./lib/config')
+  , os = require('os')
+  , ifaces = os.networkInterfaces()
+
+var IP_ADDR = []
+Object.keys(ifaces).forEach(function (ifname) {
+  ifaces[ifname].forEach(function (iface) {
+    if ('IPv4' !== iface.family || iface.internal !== false) {
+      // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+      return
+    }
+
+    IP_ADDR.push(iface.address)
+    // if (alias >= 1) {
+    //   // this single interface has multiple ipv4 addresses
+    //   console.log(ifname + ':' + alias, iface.address)
+    // } else {
+    //   // this interface has only one ipv4 adress
+    //   console.log(ifname, iface.address)
+    // }
+  })
+})
+console.log('IP:', IP_ADDR)
+
 
 var app = express()
 // app.disable('x-powered-by')
@@ -49,7 +72,8 @@ app.use('/kcsapi', kcsapiRoute)
 app.use('*', function (req, res, next) {
   var isLocal = ( req.hostname == '127.0.0.1' || 
                   req.hostname == 'localhost' ||
-                  req.hostname == 'localhost.'
+                  req.hostname == 'localhost.'||
+                  IP_ADDR.indexOf(req.hostname) != -1
                 )
     , isRightPort = (parseInt(req.headers.host.split(':')[1])==3000)
 

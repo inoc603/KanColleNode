@@ -1,4 +1,6 @@
-var socket = io.connect('http://127.0.0.1:3000')
+var socket = io.connect(( typeof SERVER!= 'undefined'
+                        ? SERVER
+                        : 'http://127.0.0.1:3000'))
 
 socket.on('bind_success', function (data) {
   is_bind_to_admiral = true

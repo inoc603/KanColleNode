@@ -20,5 +20,6 @@ CREATE TABLE IF NOT EXISTS build_log (
     ammo INT,
     steel INT,
     aluminium INT,
-    material INT
+    material INT,
+    is_complete BOOLEAN
 );

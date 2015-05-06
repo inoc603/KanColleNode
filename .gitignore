@@ -45,3 +45,7 @@ config
 
 # admiral data folder
 admiral
+
+#sublimetext project file
+*.sublime-project
+*.sublime-workspace

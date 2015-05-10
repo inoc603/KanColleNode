@@ -25,6 +25,7 @@
     "text": "~2.0.14",
     "bootstrap-contextmenu": "~0.3.3",
     "bootstrap-select": "~1.6.5",
-    "bootstrap-formhelpers": "~2.3.0"
+    "bootstrap-formhelpers": "~2.3.0",
+    "font-awesome": "~4.3.0"
   }
 }

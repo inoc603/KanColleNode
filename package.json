@@ -14,6 +14,17 @@
   "scripts": {
     "start": "node ./bin/www"
   },
+  "volo": {
+    "baseUrl": "public/js/vendor",
+    "dependencies": {
+      "jquery": "github:jquery/jquery/2.1.4",
+      "underscore": "github:jashkenas/underscore/1.8.3",
+      "backbone": "github:jashkenas/backbone/1.1.2",
+      "jquery-ui": "github:jquery/jquery-ui/1.11.4",
+      "require": "github:jrburke/requirejs/2.1.17",
+      "bootstrap": "github:twbs/bootstrap/v3.3.4"
+    }
+  },
   "user-agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
   "dependencies": {
     "async": "^0.9.0",
@@ -32,5 +43,8 @@
     "socks5-http-client": "^1.0.1",
     "sqlite3": "^3.0.5",
     "underscore": "^1.8.2"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5"
   }
 }

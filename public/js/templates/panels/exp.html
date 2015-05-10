@@ -1,0 +1,71 @@
+<div class="panel panel-default" id="exp-panel">
+  <div class="panel-heading">
+    <div class="panel-title">经验计算器</div>
+    <span class="glyphicon glyphicon-triangle-bottom minify-panel"
+          style="float:right;"></span>
+  </div>
+  <div class="panel-body">
+    <form style="display:inline-block;">
+      <span>舰娘</span>
+      <select class="selectpicker" id="ship-select-picker" data-size="5">
+        <option value="a">1</option>
+        <option value="a">2</option>
+        <option value="a">3</option>
+        <option value="a">4</option>
+        <option value="a">5</option>
+      </select>
+      
+    </form>
+    <button class="btn btn-default" id="update-ship">更新</button>
+    <form class="form-inline">
+      <span>现在等级</span>
+      <input id="exp-now-level" type="text" class="form-control bfh-number" data-min="1" data-max="150">
+      <span>exp</span>
+      <input type="text" class="form-control" id="exp-now">
+    </form>
+
+    <form class="form-inline">
+      <span>目标等级</span>
+      <input type="text" id="exp-target-level" class="form-control bfh-number" data-min="1" data-max="150">
+      <span>exp</span>
+      <input type="text" class="form-control" id="exp-target">
+    </form>
+    
+    <form class="form-inline">
+      <span>海域</span>
+      <select id="map-area">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected="true">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+      <span>-</span>
+      <select id="map">
+        <option value="1">1</option>
+        <option value="2" selected="true">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <span>评价</span>
+      <select id="rank">
+        <option value="s">S</option>
+        <option value="a">A</option>
+        <option value="b">B</option>
+        <option value="c">C</option>
+        <option value="d">D</option>
+      </select>
+      <input type="checkbox" aria-label="..." id="flagship">
+      <span>旗舰</span>
+      <input type="checkbox" aria-label="..." id="mvp">
+      <span>MVP</span>
+    </form>
+
+    <hr>
+    <span>单次经验</span>&nbsp;<span id="one-turn"></span>
+    <br>
+    <span>战斗次数</span>&nbsp;<span id="turns-left"></span>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+/* whole page */
+html * { font-family: 'Microsoft YaHei';}
+
+/* titlebar  */
+.frame-btn { padding: 6px 6px !important; }
+#frame-btns { float:right; }
+
+/* context menus */
+/*.context-menu {
+  position: absolute !important;
+}*/
+
+/* info-block */
+#add-pill { height: 100%;}
+
+/* panels */
+.my-panel {
+  display: block;
+  height: 100%;
+}
+.panel-title {
+  display:inline-block;
+}
+.panel-wrapper>.panel { height: 100%;}
+.panel-wrapper>.panel>.panel-footer {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  display: table;
+}
+
+/* exp panel */
+#exp-now-level,
+#exp-target-level {
+  width: 50px;
+}

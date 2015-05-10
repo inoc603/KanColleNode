@@ -22,23 +22,15 @@ Object.keys(ifaces).forEach(function (ifname) {
     }
 
     IP_ADDR.push(iface.address)
-    // if (alias >= 1) {
-    //   // this single interface has multiple ipv4 addresses
-    //   console.log(ifname + ':' + alias, iface.address)
-    // } else {
-    //   // this interface has only one ipv4 adress
-    //   console.log(ifname, iface.address)
-    // }
   })
 })
-console.log('IP:', IP_ADDR)
+console.log('IP:', IP_ADDR, 'PORT', config.config.port)
 
 
 var app = express()
-// app.disable('x-powered-by')
 
 // Get port from environment and store in Express.
-var port = normalizePort(process.env.PORT || '3000')
+var port = normalizePort(process.env.PORT || config.config.port)
 app.set('port', port)
 
 // Create HTTP server.
@@ -70,12 +62,12 @@ var viewRoute = require('./routes/index')
 
 app.use('/kcsapi', kcsapiRoute)
 app.use('*', function (req, res, next) {
-  var isLocal = ( req.hostname == '127.0.0.1' || 
+  var isLocal = ( req.hostname == '127.0.0.1' ||
                   req.hostname == 'localhost' ||
                   req.hostname == 'localhost.'||
                   IP_ADDR.indexOf(req.hostname) != -1
                 )
-    , isRightPort = (parseInt(req.headers.host.split(':')[1])==3000)
+    , isRightPort = (req.headers.host.split(':')[1]==config.config.port)
 
   if (isLocal && isRightPort && req.baseUrl != '/socket.io') {
     console.log(req.body)
@@ -89,7 +81,7 @@ app.use('*', function (req, res, next) {
     for (var i = 0; i < req.rawHeaders.length; i+=2) {
       option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
     }
-    option.headers['Host'] 
+    option.headers['Host']
       = option.headers['Host'].replace('localhost.', '127.0.0.1')
     // console.log(typeof req.body)
     if (typeof req.body == 'string')
@@ -132,11 +124,11 @@ app.use(function(err, req, res, next) {
   // log the error, treat it like a 500 internal server error
   // maybe also log the request so you have more debug information
   // log.error(err, req)
- 
-  // during development you may want to print 
+
+  // during development you may want to print
   // the errors to your console
   console.log(err.stack)
- 
+
   // send back a 500 with a generic message
   res.status(500)
   res.send('oops! something broke')
@@ -217,5 +209,5 @@ function onListening() {
   debug('Listening on ' + bind)
 }
 
-  
+
 module.exports = app

@@ -49,3 +49,6 @@ admiral
 #sublimetext project file
 *.sublime-project
 *.sublime-workspace
+
+# bower components
+bower_components

@@ -5,35 +5,85 @@
           style="float:right;"></span>
   </div>
   <div class="panel-body">
-    <form style="display:inline-block;">
-      <span>舰娘</span>
-      <select class="selectpicker" id="ship-select-picker" data-size="5">
-        <option value="a">1</option>
-        <option value="a">2</option>
-        <option value="a">3</option>
-        <option value="a">4</option>
-        <option value="a">5</option>
-      </select>
-      
-    </form>
-    <button class="btn btn-default" id="update-ship">更新</button>
-    <form class="form-inline">
-      <span>现在等级</span>
-      <input id="exp-now-level" type="text" class="form-control bfh-number" data-min="1" data-max="150">
-      <span>exp</span>
-      <input type="text" class="form-control" id="exp-now">
-    </form>
+    <div class="container exp-container">
+    <div class="select-wrapper">
+    <select class="selectpicker" id="ship-select-picker" data-size="5" title="请更新列表">
+    </select>  
+    </div>
 
-    <form class="form-inline">
-      <span>目标等级</span>
-      <input type="text" id="exp-target-level" class="form-control bfh-number" data-min="1" data-max="150">
-      <span>exp</span>
-      <input type="text" class="form-control" id="exp-target">
-    </form>
+    <button class="btn btn-default" id="update-ship">更新</button>
+    </div>
     
-    <form class="form-inline">
+
+    <div class="level-and-exp">
+      <div class="col-xs-7">
+        <input id="exp-now-level" type="text">
+      </div>
+      <div class="col-xs-5 input-group">
+        <span class="input-group-addon">exp</span>
+        <input type="text" class="form-control exp" id="exp-now">
+      </div>
+    </div>
+
+    <div class="level-and-exp">
+      <div class="col-xs-7">
+        <input id="exp-target-level" type="text">
+      </div>
+      <div class="col-xs-5 input-group">
+        <span class="input-group-addon">exp</span>
+        <input type="text" class="form-control exp" id="exp-target">
+      </div>
+    </div>
+
+    <div class="container exp-container">
+      <div class="input-wrapper col-xs-5">
+      <div class="input-group" id="map-select">
+        <span class="input-group-addon">海域</span>
+        <select id="map-area" class="selectpicker from-control" data-width="50px">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected="true">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+        <span class="input-group-addon">-</span>
+        <select id="map" class="selectpicker from-control" data-width="50px">
+          <option value="1">1</option>
+          <option value="2" selected="true">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>        
+      </div>
+      </div>
+
+      <div class="input-wrapper col-xs-7">
+      <div class="input-group" id="rank-select">
+        <span class="input-group-addon">评价</span>
+        <select id="rank" class="selectpicker from-control" data-width="50px">
+          <option value="s">S</option>
+          <option value="a">A</option>
+          <option value="b">B</option>
+          <option value="c">C</option>
+          <option value="d">D</option>
+        </select>
+        <span class="input-group-addon">
+          <input type="checkbox" id="flagship">
+          <span>旗舰</span>
+        </span>
+        <span class="input-group-addon">
+          <input type="checkbox" id="mvp">
+          <span>MVP</span>
+        </span>
+      </div>
+      </div>
+    </div>
+    
+    
+<!--     <form class="form-inline">
       <span>海域</span>
-      <select id="map-area">
+      <select id="map-area" class="selectpicker" data-width="50px">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3" selected="true">3</option>
@@ -42,7 +92,7 @@
         <option value="6">6</option>
       </select>
       <span>-</span>
-      <select id="map">
+      <select id="map" class="selectpicker" data-width="50px">
         <option value="1">1</option>
         <option value="2" selected="true">2</option>
         <option value="3">3</option>
@@ -50,7 +100,7 @@
         <option value="5">5</option>
       </select>
       <span>评价</span>
-      <select id="rank">
+      <select id="rank" class="selectpicker" data-width="50px">
         <option value="s">S</option>
         <option value="a">A</option>
         <option value="b">B</option>
@@ -61,7 +111,7 @@
       <span>旗舰</span>
       <input type="checkbox" aria-label="..." id="mvp">
       <span>MVP</span>
-    </form>
+    </form> -->
 
     <hr>
     <span>单次经验</span>&nbsp;<span id="one-turn"></span>

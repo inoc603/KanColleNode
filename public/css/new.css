@@ -30,7 +30,13 @@ html * { font-family: 'Microsoft YaHei';}
 }
 
 /* exp panel */
-#exp-now-level,
-#exp-target-level {
-  width: 50px;
+.level-and-exp>div {
+  padding-left: 5px;
 }
+.level-and-exp {
+  padding: 5px;
+}
+.input-wrapper {padding-left: 5px !important;}
+.exp-container {padding: 5px !important;}
+.ship-select-picker {padding-left: 5px !important;}
+.select-wrapper {padding-left: 5px; display: inline-block;}

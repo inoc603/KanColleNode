@@ -14,6 +14,7 @@ define(
         'click #save-fleet': 'saveFleet'
       , 'shown.bs.tab #tab-fleet a[data-toggle="tab"]': 'swapFooter'
       , 'shown.bs.tab .fleet-tab a[data-toggle="tab"]': 'swapFleetName'
+      , 'click .fleet-table>tbody': 'swapDisplay'
       }
     , initialize: function (display, globalCollection) {
         this.collection = globalCollection
@@ -25,12 +26,6 @@ define(
         this.setupAnimation()
       }
     , setupAnimation: function () {
-        $('.fleet-table>tbody').off().click(function () {
-          $('.ship-health', $(this)).parent().toggleClass('hidden-td')
-          $('.ship-condition', $(this)).toggleClass('hidden-td')
-          $('.ship-equipment', $(this)).toggleClass('hidden-td')
-        })
-
         $('#save-fleet').bstooltip()
       }
     , saveFleet: function () {
@@ -47,6 +42,11 @@ define(
         $('span:last-child', $(e.target)).attr('class', 'fleet-name-shown')
         $('span:last-child', $(e.relatedTarget)).attr( 'class'
                                                      , 'fleet-name-hidden')
+      }
+    , swapDisplay: function () {
+        $('.fleet-table .ship-health').parent().toggleClass('hidden-td')
+        $('.fleet-table .ship-condition').toggleClass('hidden-td')
+        $('.fleet-table .ship-equipment').toggleClass('hidden-td')
       }
     })
     return fleetPanelView

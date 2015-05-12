@@ -3,7 +3,7 @@ define([ 'jquery'
        , 'underscore'
        , 'views/title-bar'
        , 'views/blocks/info'
-       , 'views/context-menus/pill'
+       // , 'views/context-menus/pill'
        , 'jquery.ui'
        , 'bootstrap'
        ]
@@ -24,11 +24,11 @@ define([ 'jquery'
       }
 
       // load the info block
-      infoBlockView = new InfoBlockView()
+      var infoBlockView = new InfoBlockView()
       $('#main-container').css('height', '100%')
-      // infoBlockView.addPanel('fleet')
 
-      var pillContextMenuView = new PillMenuView()
+      // add
+      // var pillContextMenuView = new PillMenuView()
 
     }
     return { initialize: initialize }

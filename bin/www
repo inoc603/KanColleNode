@@ -1,90 +1,81 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
+/* seperate HTTP and HTTPS
+var net = require('net')
+  , httpPort = 5050
+  , httpsPort = 5051
+  , httpTarget = 3001
+  , httpsTarget = 8099
 
-var app = require('../app');
-// var debug = require('debug')('KanColleNode:server');
-// var http = require('http');
+var proxy = function (port) {
+  return function (socket) {
+    var client
+    var req = new Buffer('')
+    var resp = new Buffer('')
 
-// /**
-//  * Get port from environment and store in Express.
-//  */
+    socket.setKeepAlive(true)
+    // Create a new connection to the TCP server
+    client = net.connect(port)
 
-// var port = normalizePort(process.env.PORT || '3000');
-// app.set('port', port);
+    // 2-way pipe between client and TCP server
+    socket.pipe(client).pipe(socket)
 
-// /**
-//  * Create HTTP server.
-//  */
+    socket.on('error', function (err) {
+      console.log('socket', err)
+    })
 
-// var server = http.createServer(app);
+    client.on('error', function (err) {
+      console.log('client', err)
+    })
+  }
+}
 
-// /**
-//  * Listen on provided port, on all network interfaces.
-//  */
+var httpProxy = net.createServer(function (socket) {
+    var client
+    var req = new Buffer('')
+    var resp = new Buffer('')
 
-// server.listen(port);
-// server.on('error', onError);
-// server.on('listening', onListening);
+    socket.setKeepAlive(true)
+    // Create a new connection to the TCP server
+    client = net.connect(httpTarget)
 
-// /**
-//  * Normalize a port into a number, string, or false.
-//  */
+    // 2-way pipe between client and TCP server
+    socket.pipe(client).pipe(socket)
 
-// function normalizePort(val) {
-//   var port = parseInt(val, 10);
+    socket.on('error', function (err) {
+      // console.log('socket', err)
+    })
 
-//   if (isNaN(port)) {
-//     // named pipe
-//     return val;
-//   }
-
-//   if (port >= 0) {
-//     // port number
-//     return port;
-//   }
-
-//   return false;
-// }
-
-// *
-//  * Event listener for HTTP server "error" event.
+    client.on('error', function (err) {
+      // console.log('client', err)
+    })
+  })
  
+var httpsProxy = net.createServer(function (socket) {
+    var client
+    var req = new Buffer('')
+    var resp = new Buffer('')
 
-// function onError(error) {
-//   if (error.syscall !== 'listen') {
-//     throw error;
-//   }
+    socket.setKeepAlive(true)
+    // Create a new connection to the TCP server
+    client = net.connect(httpsTarget)
 
-//   var bind = typeof port === 'string'
-//     ? 'Pipe ' + port
-//     : 'Port ' + port;
+    // 2-way pipe between client and TCP server
+    socket.pipe(client).pipe(socket)
 
-//   // handle specific listen errors with friendly messages
-//   switch (error.code) {
-//     case 'EACCES':
-//       console.error(bind + ' requires elevated privileges');
-//       process.exit(1);
-//       break;
-//     case 'EADDRINUSE':
-//       console.error(bind + ' is already in use');
-//       process.exit(1);
-//       break;
-//     default:
-//       throw error;
-//   }
-// }
+    socket.on('error', function (err) {
+      // console.log('socket', err)
+    })
 
-// /**
-//  * Event listener for HTTP server "listening" event.
-//  */
+    client.on('error', function (err) {
+      // console.log('client', err)
+    })
+  })
 
-// function onListening() {
-//   var addr = server.address();
-//   var bind = typeof addr === 'string'
-//     ? 'pipe ' + addr
-//     : 'port ' + addr.port;
-//   debug('Listening on ' + bind);
-// }
+httpProxy.listen(httpPort)
+httpsProxy.listen(httpsPort)
+*/
+
+var app = require('../app')
+
+// the content of www is moved to app.js due to the use of socket.io

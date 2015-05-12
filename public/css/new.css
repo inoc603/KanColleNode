@@ -1,6 +1,14 @@
 /* whole page */
 html * { font-family: 'Microsoft YaHei';}
 .hidden-td {display: none;}
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
 /* titlebar  */
 .frame-btn { padding: 6px 6px !important; }

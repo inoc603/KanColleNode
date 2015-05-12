@@ -13,6 +13,8 @@ var express = require('express')
   , os = require('os')
   , ifaces = os.networkInterfaces()
 
+  , net = require('net')
+
 var IP_ADDR = []
 Object.keys(ifaces).forEach(function (ifname) {
   ifaces[ifname].forEach(function (iface) {
@@ -35,6 +37,7 @@ app.set('port', port)
 
 // Create HTTP server.
 var httpServer = http.createServer(app)
+// var httpServer = net.createServer(app)
 
 // socket.io used to push
 var io = require('./lib/socketio')(httpServer)
@@ -48,6 +51,7 @@ httpServer.on('listening', onListening)
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.enable('trust proxy')
+
 
 app.use(bodyParser.text({type: '*/*'}))
 app.use(cookieParser())
@@ -81,9 +85,11 @@ app.use('*', function (req, res, next) {
     for (var i = 0; i < req.rawHeaders.length; i+=2) {
       option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
     }
-    option.headers['Host']
-      = option.headers['Host'].replace('localhost.', '127.0.0.1')
-    // console.log(typeof req.body)
+
+    if (option.headers['Host'])
+      option.headers['Host']
+        = option.headers['Host'].replace('localhost.', '127.0.0.1')
+
     if (typeof req.body == 'string')
       option.body = req.body
     if (typeof req.body == 'object') {

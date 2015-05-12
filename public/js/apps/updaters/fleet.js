@@ -36,17 +36,19 @@ var fleetTableRowHtml = '<tr>'
                       +   '<span class="exp-next"></span>'
                       + '</td>'
                       + '<td>'
-                      + '<td>'
                       +   '<span class="ship-health-number"></span>'
                       +   '</br>'
                       +   '<span class="ship-health"></span>'
                       + '</td>'
                       + '<td class="ship-condition"></td>'
-                      + '<td class="ship-equipment hidden-td">equipment test</td>'
+                      + '<td class="ship-equipment hidden-td" id="slot-1">1</td>'
+                      + '<td class="ship-equipment hidden-td" id="slot-2">2</td>'
+                      + '<td class="ship-equipment hidden-td" id="slot-3">3</td>'
+                      + '<td class="ship-equipment hidden-td" id="slot-4">4</td>'
                       + '</tr>'
 
 function updateFleet (data) {
-  // console.log(data)
+  console.log(data)
   for (var i in data) {
     var fleet = data[i]
       , fleetNum = parseInt(i)+1
@@ -139,25 +141,37 @@ function updateFleet (data) {
     }
 
     for (var j in fleet.ships) {
-      var ship = parseInt(j)+1
-      $row = $('tr:nth-child('+ship+')', $fleetTable)
+      var ship = fleet.ships[j]
+      $row = $('tr:nth-child('+(parseInt(j)+1)+')', $fleetTable)
       // console.log($row, ship)
       if (fleet.ships[j]) {
-        $('.ship-name', $row).text(fleet.ships[j].name)
-        $('.ship-type', $row).text(fleet.ships[j].type)
-        $('.ship-level', $row).text('LV.'+fleet.ships[j].level)
-        $('.exp-next', $row).text('Next: '+fleet.ships[j].exp[1])
+        $('.ship-name', $row).text(ship.name)
+        $('.ship-type', $row).text(ship.type)
+        $('.ship-level', $row).text('LV.'+ship.level)
+        $('.exp-next', $row).text('Next: '+ship.exp[1])
         $('.ship-condition', $row).html(
-          getConditionLabel(fleet.ships[j].condition))
+          getConditionLabel(ship.condition))
         $('.ship-health-number', $row).text('HP: '
-                                           + fleet.ships[j].current_hp
-                                           + '/' +fleet.ships[j].max_hp)
+                                           + ship.current_hp
+                                           + '/' +ship.max_hp)
         $('.ship-health', $row).html(
-          getProgressBarHtml( fleet.ships[j].max_hp
-                            , fleet.ships[j].current_hp)
+          getProgressBarHtml( ship.max_hp
+                            , ship.current_hp)
         )
+
+        for (var k = 0; k < 4; k++) {
+          console.log(ship.equipment[k])
+          if (ship.equipment[k])
+            $('#slot-'+(k+1), $row).html('<i class="fa fa-question-circle equipment-icon" data-toggle="tooltip" data-placement="top" title="'
+              + ship.equipment[k].name
+              +'"></i>')
+          else
+            $('#slot-'+(k+1), $row).text(' ')
+          // console.log(ship.equipment[i])
+        }
       }
     }
+    $('.equipment-icon').bstooltip()
 
     $footer = $('#fleet-footer-'+fleetNum)
     $('.fleet-anti-air', $footer).text(fleet.anti_air)

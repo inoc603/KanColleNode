@@ -10,10 +10,12 @@ define(
   , 'views/panels/quest'
   , 'views/panels/battle'
   , 'views/panels/exp'
+  , 'views/context-menus/pill'
   , 'jquery.ui'
   ]
 , function ( $, _, Backbone, infoBlockTemplate, PanelCollection
-           , FleetView, TimersView, QuestView, BattleView, ExpView) {
+           , FleetView, TimersView, QuestView, BattleView, ExpView
+           , PillMenuView) {
     var panelCollection = new PanelCollection()
     var InfoBlockView = Backbone.View.extend({
       el: $('#main-container'),
@@ -27,6 +29,7 @@ define(
               , questView = new QuestView(true, panelCollection)
               , battleView = new BattleView(true, panelCollection)
               , exoView = new ExpView(true, panelCollection)
+              , pillContextMenuView = new PillMenuView()
 
             // set fleet view as default view
             $('#fleet-pill').addClass('active')

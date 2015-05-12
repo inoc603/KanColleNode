@@ -19,11 +19,9 @@ define(
         this.model.render(display)
         fleetUpdater.initialize()
         this.addTouchSpin()
-        // $('.selectpicker.select-wide').selectpicker({size: 5})
-        // $('.selectpicker.select-narrow').selectpicker({width: '50px'})
         $('.selectpicker').selectpicker()
-        // $('button[title="Nothing selected"]>span:first').text('请更新舰娘列表')
       },
+
       addTouchSpin: function () {
         $('input#exp-now-level').TouchSpin({
           min: 1,
@@ -44,6 +42,8 @@ define(
           postfix: '级',
           maxboostedstep: 10
         })
+
+        // $('input[type="checkbox"]').checkbox()
       }
     })
     return fleetPanelView

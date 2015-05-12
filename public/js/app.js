@@ -4,8 +4,8 @@ define([ 'jquery'
        , 'views/title-bar'
        , 'views/blocks/info'
        , 'views/context-menus/pill'
-       , 'bootstrap'
        , 'jquery.ui'
+       , 'bootstrap'
        ]
 , function ($, _, TitlebarView, InfoBlockView, PillMenuView) {
     var modes = { 'game': ['desktop']

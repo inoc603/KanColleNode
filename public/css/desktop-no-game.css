@@ -1,4 +1,9 @@
-﻿.nav_btn {
+﻿.panel-wrapper>.panel>.panel-heading {display:none;}
+
+
+
+/* legacy
+.nav_btn {
   -webkit-app-region: no-drag;
 }
 #page_nav>.container-fluid {
@@ -29,4 +34,4 @@ body {
 
 #game_panel {
   display: none;
-}
+}*/

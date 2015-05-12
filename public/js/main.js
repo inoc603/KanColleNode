@@ -11,11 +11,13 @@ require.config(
          , 'bootstrap-formhelpers': 'vendor/bootstrap-formhelpers'
          , 'data-tables': 'vendor/jquery.dataTables'
          , 'bootstrap-touchspin': 'vendor/jquery.bootstrap-touchspin'
+         , 'conflict': 'apps/common/conflict'
          }
 , shim: { 'socket.io': { exports: 'io' }
         , 'bootstrap': ['jquery']
-        , 'jquery.ui': ['jquery']
-        , 'bootstrap-select': ['jquery', 'bootstrap']
+        , 'jquery.ui': ['jquery', 'conflict']
+        , 'conflict': ['bootstrap']
+        , 'bootstrap-select': ['jquery']
         , 'bootstrap-formhelpers': ['jquery']
         , 'data-tables': ['jquery']
         }

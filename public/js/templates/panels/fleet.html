@@ -12,27 +12,30 @@
         <li class="fleet-tab active">
           <a href="#fleet-1" data-toggle="tab">
             <span class="fleet-num">1</span>&nbsp;
-            <span class="fleet-name-shown"></span>
+            <span class="fleet-name-shown" id="fleet-name-1"> </span>
           </a>
         </li>
         <li class="fleet-tab">
           <a href="#fleet-2" data-toggle="tab">
             <span class="fleet-num">2</span>&nbsp;
-            <span class="fleet-name-hidden"></span>
+            <span class="fleet-name-hidden" id="fleet-name-2"></span>
           </a>
         </li>
         <li class="fleet-tab">
           <a href="#fleet-3" data-toggle="tab">
             <span class="fleet-num">3</span>&nbsp;
-            <span class="fleet-name-hidden"></span>
+            <span class="fleet-name-hidden" id="fleet-name-3"></span>
           </a>
         </li>
         <li class="fleet-tab">
           <a href="#fleet-4" data-toggle="tab">
             <span class="fleet-num">4</span>&nbsp;
-            <span class="fleet-name-hidden"></span>
+            <span class="fleet-name-hidden" id="fleet-name-4"></span>
           </a>
         </li>
+        <span id="fleet-icons">
+          <i class="fa fa-floppy-o" id="save-fleet" data-toggle="tooltip" data-placement="top" title="保存配置"></i>
+        </span>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="fleet-1">
@@ -93,7 +96,7 @@
     </span>
     <span class="cell-like fleet-speed">舰队速度</span>
   </div>
-  <div class="panel-footer fleet-footer" style="display:none" id="fleet-footer-2">
+  <div class="panel-footer fleet-footer" style="display:none;" id="fleet-footer-2">
     <span class="cell-like">
       <span>制空</span>&nbsp;<span class="fleet-anti-air"></span></span>
     <span class="cell-like">
@@ -106,7 +109,7 @@
     </span>
     <span class="cell-like fleet-speed">舰队速度</span>
   </div>
-  <div class="panel-footer fleet-footer" style="display:none" id="fleet-footer-3">
+  <div class="panel-footer fleet-footer" style="display:none;" id="fleet-footer-3">
     <span class="cell-like">
       <span>制空</span>&nbsp;<span class="fleet-anti-air"></span></span>
     <span class="cell-like">
@@ -119,7 +122,7 @@
     </span>
     <span class="cell-like fleet-speed">舰队速度</span>
   </div>
-  <div class="panel-footer fleet-footer" style="display:none" id="fleet-footer-4">
+  <div class="panel-footer fleet-footer" style="display:none;" id="fleet-footer-4">
     <span class="cell-like">
       <span>制空</span>&nbsp;<span class="fleet-anti-air"></span></span>
     <span class="cell-like">

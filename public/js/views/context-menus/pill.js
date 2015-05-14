@@ -23,9 +23,7 @@ define(
       },
       bindEvent: function () {
         var $contextMenu = $("#pill-contextmenu")
-        console.log($contextMenu)
-
-        var targetPill
+          , targetPill
 
         $('#info-block>.nav li').contextmenu({
           target:'#pill-contextmenu',

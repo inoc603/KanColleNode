@@ -52,3 +52,31 @@ span.fleet-name-shown { display: inline;}
 .ship-select-picker { padding-left: 5px !important;}
 .select-wrapper { padding-left: 5px; display: inline-block;}
 #mvp, #flagship {vertical-align: bottom !important;}
+
+/* battle panel */
+.label-caution {background-color: yellow;}
+.battle-table { margin-bottom: 0 !important; font-size: small;}
+#battle-info { margin-top: 10px;}
+.battle-hp {
+  width: 100px;
+  padding-bottom: 2px !important;
+  padding-top: 2px !important;
+}
+.battle-table .name {
+  width: 150px;
+  padding-bottom: 2px !important; 
+  padding-top: 2px !important;
+}
+.battle-table>thead>tr>td {
+  padding-bottom: 2px !important;
+  padding-top: 2px !important;
+}
+.battle-table .status {
+  float:right;
+  display: inline-block !important;
+  margin-top: 2px !important;
+}
+.battle-table .status .hp-label {
+  padding-top: 1px !important;
+  padding-bottom: 1.5px !important;
+}

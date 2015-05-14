@@ -47,6 +47,95 @@ httpServer.listen(port)
 httpServer.on('error', onError)
 httpServer.on('listening', onListening)
 
+/* maybe handle connect event here?
+var debugging = 0
+var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
+function getHostPortFromString( hostString, defaultPort ) {
+  var host = hostString;
+  var port = defaultPort;
+
+  var result = regex_hostport.exec( hostString );
+  if ( result != null ) {
+    host = result[1];
+    if ( result[2] != null ) {
+      port = result[3];
+    }
+  }
+
+  return( [ host, port ] );
+}
+httpServer.on('connect', function ( req, resSocket, bodyhead ) {
+  // console.log(req.upgrade)
+  var url = req.url;
+  var httpVersion = req.httpVersion;
+
+  var hostport = getHostPortFromString( url, 443 );
+
+  if ( debugging )
+    console.log( '  = will connect to %s:%s', hostport[0], hostport[1] );
+
+  // set up TCP connection
+  var proxySocket = new net.Socket();
+  proxySocket.connect(
+    parseInt( hostport[1] )
+    , hostport[0]
+    // 8099
+    // , '127.0.0.1'
+    // 8099, 'localhost',
+    , function () {
+      if ( debugging )
+        console.log( '  < connected to %s/%s', hostport[0], hostport[1] );
+
+      if ( debugging )
+        console.log( '  > writing head of length %d', bodyhead.length );
+
+      var headers = ''
+      for (var i=0; i<req.rawHeaders.length; i++) {
+        if (i%2==0)
+          headers+=req.rawHeaders[i]
+        else
+          headers+=':'+req.rawHeaders[i]+'\r\n'
+      }
+
+      // console.log(req.method
+      //                  + ' ' + req.url
+      //                  + ' HTTP/' + req.httpVersion + '\r\n'
+      //                  + headers + '\r\n'
+      //                  + bodyhead.toString())
+
+      // proxySocket.write( req.method
+      //                  + ' ' + req.url
+      //                  + ' HTTP/' + req.httpVersion + '\r\n'
+      //                  + headers + '\r\n'
+      //                  + bodyhead.toString())
+      proxySocket.write( bodyhead )
+
+      // tell the caller the connection was successfully established
+      resSocket.write( "HTTP/" + httpVersion
+               + " 200 Connection established\r\n\r\n");
+    }
+  );
+  proxySocket.pipe(resSocket).pipe(proxySocket)
+  proxySocket.on('error', function (err) {
+    console.log(err)
+  })
+  // var data = new Buffer('')
+  // proxySocket.on('data', function (chunk) {
+  //   data+=chunk
+  // })
+  // proxySocket.on('end', function (chunk) {
+  //   // console.log(data.toString())
+  //   var str = data.toString()
+  //   console.log(str, str.length)
+  //   data = new Buffer('')
+  // })
+  resSocket.on('error', function (err) {
+    console.log(err)
+  })
+})
+
+*/
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')

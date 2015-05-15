@@ -152,7 +152,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 var viewRoute = require('./routes/index')
   , kcsapiRoute = require('./routes/kcsapi')(io)
   , restRoute = require('./routes/rest')
+  ,receiverRoute = require('./routes/receiver')(io)
 
+app.use('/drop', receiverRoute)
 app.use('/kcsapi', kcsapiRoute)
 app.use('*', function (req, res, next) {
   var isLocal = ( req.hostname == '127.0.0.1' ||

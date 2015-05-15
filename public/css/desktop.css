@@ -26,3 +26,7 @@ button {
   right:5px;
   top:60px;
 }
+
+body {
+  margin-top: 50px !important;
+}

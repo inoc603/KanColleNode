@@ -1,46 +1,74 @@
-#!/usr/bin/env node
-
-/* seperate HTTP and HTTPS
 var net = require('net')
   , httpPort = 5050
-  , httpsPort = 5051
-  , httpTarget = 3001
-  , httpsTarget = 8099
-
-var proxy = function (port) {
-  return function (socket) {
-    var client
-    var req = new Buffer('')
-    var resp = new Buffer('')
-
-    socket.setKeepAlive(true)
-    // Create a new connection to the TCP server
-    client = net.connect(port)
-
-    // 2-way pipe between client and TCP server
-    socket.pipe(client).pipe(socket)
-
-    socket.on('error', function (err) {
-      console.log('socket', err)
-    })
-
-    client.on('error', function (err) {
-      console.log('client', err)
-    })
-  }
-}
+  , httpTarget = 8099
+  , httpParser = require('http-string-parser')
+  , querystring = require('querystring')
+  , request = require('request')
 
 var httpProxy = net.createServer(function (socket) {
     var client
     var req = new Buffer('')
     var resp = new Buffer('')
+      , reqEnd = false
+      , respEnd = false
+      , passFlag = false
 
     socket.setKeepAlive(true)
     // Create a new connection to the TCP server
     client = net.connect(httpTarget)
 
     // 2-way pipe between client and TCP server
-    socket.pipe(client).pipe(socket)
+    // socket.pipe(client).pipe(socket)
+
+    socket.on('data', function (chunk) {
+      req += chunk
+      if (!passFlag) {
+        var str = chunk.toString()
+        if (str.search('User-Agent:\r\n') != -1) {
+          var newStr = str.replace('User-Agent:', 'User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36')
+          client.write(new Buffer(newStr))
+          passFlag = true
+        }
+        else {
+          passFlag = true
+          client.write(chunk)
+        }
+      }
+      else {
+        client.write(chunk)
+      }
+    })
+
+    socket.on('end', function () {
+      reqEnd = true
+      client.end()
+      if (respEnd) {
+        reqEnd = false
+        respEnd = false
+        var str = req.toString()
+        if (str.search('/kcsapi/')!=-1) {
+          sendToKCN(req, resp)
+        }
+      }
+    })
+
+    client.on('data', function (chunk) {
+      resp += chunk
+      socket.write(chunk)
+    })
+
+    client.on('end', function () {
+      respEnd = true
+      socket.end()
+      if (reqEnd) {
+        reqEnd = false
+        respEnd = false
+        var str = req.toString()
+        if (str.search('/kcsapi/')!=-1) {
+          sendToKCN(req, resp)
+        }
+      }
+    })
 
     socket.on('error', function (err) {
       // console.log('socket', err)
@@ -51,30 +79,17 @@ var httpProxy = net.createServer(function (socket) {
     })
   })
  
-var httpsProxy = net.createServer(function (socket) {
-    var client
-    var req = new Buffer('')
-    var resp = new Buffer('')
-
-    socket.setKeepAlive(true)
-    // Create a new connection to the TCP server
-    client = net.connect(httpsTarget)
-
-    // 2-way pipe between client and TCP server
-    socket.pipe(client).pipe(socket)
-
-    socket.on('error', function (err) {
-      // console.log('socket', err)
-    })
-
-    client.on('error', function (err) {
-      // console.log('client', err)
-    })
-  })
-
 httpProxy.listen(httpPort)
-httpsProxy.listen(httpsPort)
-*/
+
+function sendToKCN (req, resp) {
+  var send = {}
+    , reqObj = httpParser.parseRequest(req.toString())
+    , resObj = httpParser.parseResponse(resp.toString())
+  send.url = reqObj.uri
+  send.param = reqObj.body
+  send.data = resObj.body
+  request.post('http://127.0.0.1:3001/drop', {form: send})
+}
 
 var app = require('../app')
 

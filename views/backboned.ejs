@@ -18,6 +18,13 @@
   <div id="main-container"></div>
   <div id="app-mode" style="display:none;"><%= appMode %></div>
   <div id="context-menus" style="display:none;"></div>
+  <script>
+    window.requireNode = window.require;
+    window.require = undefined;
+    var SERVER = 'http://127.0.0.1:3001'
+    var gui = requireNode('nw.gui')
+    var win = gui.Window.get()
+  </script>
   <script src="js/vendor/require.js" data-main="js/main.js"></script>
 </body>
 </html>

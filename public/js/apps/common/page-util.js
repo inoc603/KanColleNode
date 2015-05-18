@@ -63,22 +63,3 @@ define(
     return util
   }
 )
-
-function setTimer ($timer, time) {
-  $timer.show()
-  var countdown = setInterval(function () {
-    d = new Date()
-    remaining = Math.floor((time - d.getTime())/1000)
-    if (remaining <= 0) {
-      clearInterval(countdown)
-      return
-    }
-    // make sure that h, m, s are all 2 digits
-    h = (Math.floor(remaining / 3600) + 100).toString().substr(-2, 2)
-    m = (Math.floor((remaining % 3600)/60) +100).toString().substr(-2, 2)
-    s = (remaining % 60 + 100).toString().substr(-2, 2)
-    remainStr = [h, m, s].join(':')
-    $timer.text(remainStr)
-  }, 500)
-  return countdown
-}

@@ -8,15 +8,50 @@ define(
 , function ($, _, Backbone, toolbarTemplate) {
     var ProjectListView = Backbone.View.extend({
       el: $('#title-bar'),
+      events: {
+        'click #close-window': 'closeWindow'
+      , 'click #maximize-window': 'maximizeWindow'
+      , 'click #refresh-window': 'refreshWindow'
+      , 'click #minimize-window': 'minimizeWindow'
+      , 'click #open-console': 'openConsole'
+      },
       initialize: function () {
         this.render()
+        this.maxed = false
+        win.on('maximize', function () {
+          $('#maximize-window>span').toggleClass( 'glyphicon-resize-full '
+                                                + 'glyphicon-resize-small')
+        })
+        win.on('minimize', function () {
+          $('#maximize-window>span').toggleClass( 'glyphicon-resize-full '
+                                                + 'glyphicon-resize-small')
+        })
       },
       render: function(){
-        // Using Underscore we can compile our template with data
         var data = {}
         var compiledTemplate = _.template( toolbarTemplate, data )
-        // Append our compiled template to this Views "el"
         this.$el.append( compiledTemplate )
+      },
+      minimizeWindow: function () {
+        win.minimize()
+      },
+      closeWindow: function () {
+        win.close()
+      },
+      maximizeWindow: function () {
+        if ($('#maximize-window>span').hasClass('glyphicon-resize-full'))
+          win.maximize()
+        else
+          win.unmaximize()
+        // $('#maximize-window>span').toggleClass( 'glyphicon-resize-full '
+        //                                       + 'glyphicon-resize-small')
+      },
+      refreshWindow: function () {
+        win.reload()
+      },
+      openConsole: function () {
+        win.showDevTools()
+        this.blur()
       }
     })
     // Our module now returns our view

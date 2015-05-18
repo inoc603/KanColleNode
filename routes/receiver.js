@@ -10,8 +10,12 @@ var express = require('express')
   , adFinder = new Admiral('finder')
 
 router.post('/*', function (req, res) {
-  var formData = querystring.parse(req.body)
-    , reqBody = querystring.parse(formData.param)
+  // console.log(req.body)
+  // var formData = querystring.parse(req.body)
+  // console.log(formData)
+  var formData = req.body
+  // console.log(_.keys(formData))
+  var reqBody = querystring.parse(formData.param)
     , token = reqBody.api_token
     , url = formData.url.split('/kcsapi')[1]
     , ad = ( adFinder.findByToken(token)

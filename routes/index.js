@@ -40,6 +40,10 @@ router.get('/backboned', function (req, res) {
   res.render('backboned', { appMode: 'desktop-no-game'})
 })
 
+router.get('/standalone', function (req, res) {
+  res.render('backboned', {appMode: 'game-only'})
+})
+
 router.get('/mobile', function (req, res) {
   res.render('debug',{ listener_num: (client_served+=1)
                       , version_css_path: 'css/mobile.css'

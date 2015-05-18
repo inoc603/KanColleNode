@@ -17,11 +17,28 @@ define(
         }).on('night_battle_update', function (data) {
           updater.updateNightBattle(data)
           console.log('night battle')
+        }).on('day_combined_battle_update', function (data) {
+          updater.updateDayBattleCombined(data)
+        })
+
+        .on('combined_night_battle_update', function (data) {
+          updater.updateNightBattleCombined(data)
+        })
+        .on('map_start', function (data) {
+          updater.mapStart(data)
+        })
+        .on('clear_battle', function (data) {
+        })
+        .on('map_next', function (data) {
+          updater.mapNext(data)
         })
       }
     , updateDayBattle: function (data) {
-        clearBattleTable()
+        console.log(data)
+        // clearBattleTable()
         pageUtil.showBattleInfo(false)
+        fillFleetInfo('#battle-table-friendly', data.friendly)
+        fillFleetInfo('#battle-table-enemy', data.enemy)
         fleetDayBattle('#battle-table-friendly', data.friendly)
         fleetDayBattle('#battle-table-enemy', data.enemy)
 
@@ -32,7 +49,9 @@ define(
         console.log(data)
         if (data.special == true) {
           console.log('special night battle')
-          clearBattleTable()
+          // clearBattleTable()
+          fillFleetInfo('#battle-table-friendly', data.friendly)
+          fillFleetInfo('#battle-table-enemy', data.enemy)
           fillShipName('#battle-table-enemy', data.enemy)
           fillShipName('#battle-table-friendly', data.friendly)
           fillStart('#battle-table-enemy', data.enemy)
@@ -41,7 +60,113 @@ define(
         fleetNightBattle('#battle-table-friendly', data.friendly)
         fleetNightBattle('#battle-table-enemy', data.enemy)
       }
+    , updateDayBattleCombined: function (data) {
+        pageUtil.showBattleInfo(true)
+        // clearBattleTable()
+        console.log(data)
+        fleetDayBattle('#battle-table-friendly', data.friendly.back)
+        fleetDayBattle('#battle-table-combined', data.friendly.front)
+        fleetDayBattle('#battle-table-enemy', data.enemy)
+        $('#battle-table-friendly .fleet-name')
+          .text(data.friendly.back.name+' & '+data.friendly.front.name)
+        $('#battle-table-friendly .formation')
+          .text(getFormation(data.friendly.formation))
 
+        $('#stance').text(getStance(data.stance))
+      }
+    , updateNightBattleCombined: function (data) {
+        if (data.special == true) {
+          console.log('special night battle')
+          pageUtil.showBattleInfo(true)
+          // clearBattleTable()
+          fillShipName('#battle-table-enemy', data.enemy)
+          fillShipName('#battle-table-friendly', data.friendly.back)
+          fillShipName('#battle-table-combined', data.friendly.front)
+          fillStart('#battle-table-enemy', data.enemy)
+          fillStart('#battle-table-friendly', data.friendly.back)
+          fillStart('#battle-table-combined', data.friendly.front)
+        }
+        fleetNightBattle('#battle-table-combined', data.friendly.front)
+        fleetNightBattle('#battle-table-enemy', data.enemy)
+
+        var $fTable = $('#battle-table-friendly')
+
+        if (data.special) {
+          // copy the status from day start for the back fleet
+          for (var i = 2; i <= 7; i++) {
+            $row = $('tbody>tr:nth-child('+i+')', $fTable)
+            var dayStartHp = $('td.day-start>span.hp', $row).text()
+              , dayStartStatus = $('td.day-start>span.status', $row).html()
+            // console.log(dayStartHp, dayStartStatus)
+
+            $('td.night-end>span.hp', $row).text(dayStartHp)
+            $('td.night-end>span.status', $row).html(dayStartStatus)
+
+          }
+        }
+        // copy the status from day end for the back fleet
+        else {
+          for (var i = 2; i <= 7; i++) {
+            $row = $('tbody>tr:nth-child('+i+')', $fTable)
+            var dayEndHp = $('td.day-end>span.hp', $row).text()
+              , dayEndStatus = $('td.day-end>span.status', $row).html()
+            // console.log(dayEndHp, dayEndStatus)
+
+            $('td.night-end>span.hp', $row).text(dayEndHp)
+            $('td.night-end>span.status', $row).html(dayEndStatus)
+          }
+        }
+      }
+    , mapStart: function (data) {
+        var battleEvents = ['battle', 'air_battle', 'night_battle']
+        console.log(data)
+        var map = data.map_area+'-'+data.map_num
+          // , fleet = data.enemy
+        $('#map-info').text(map)
+        clearBattleTable()
+        pageUtil.showBattleInfo(typeof data.fleet_combined != 'undefined')
+        $('#battle-info>span').text(' ')
+
+        this.neta('#battle-table-friendly', data.fleet)
+
+        if (data.fleet_combined) {
+          this.neta('#battle-table-combined', data.fleet_combined)
+          $('#battle-table-friendly .fleet-name')
+            .text( data.fleet.name
+                 + ' & ' + data.fleet_combined.name
+                 + ' 联合舰队')
+        }
+
+        if (_.contains(battleEvents, data.event))
+          this.neta('#battle-table-enemy', data.enemy)
+
+      }
+    , mapNext: function (data) {
+        var battleEvents = ['battle', 'air_battle', 'night_battle']
+        console.log(data)
+        clearBattleTable()
+        pageUtil.showBattleInfo(typeof data.fleet_combined != 'undefined')
+        $('#battle-info>span').text(' ')
+        this.neta('#battle-table-friendly', data.fleet)
+
+        if (data.fleet_combined) {
+          this.neta('#battle-table-combined', data.fleet_combined)
+          $('#battle-table-friendly .fleet-name')
+            .text( data.fleet.name
+                 + ' & ' + data.fleet_combined.name
+                 + ' 联合舰队')
+        }
+
+        if (_.contains(battleEvents, data.event))
+          this.neta('#battle-table-enemy', data.enemy)
+
+      }
+    , neta: function (table, fleet) {
+        var $table = $(table)
+        fillFleetInfo(table, fleet)
+        fillShipName(table, fleet)
+        fillStart(table, fleet)
+      }
     }
     return updater
   }
@@ -59,8 +184,6 @@ function fillFleetInfo (table, fleet) {
 }
 
 function fillShipName (table, fleet) {
-  console.log(fleet)
-
   var isEnemy = (table == '#battle-table-enemy')
   var $table = $(table)
   for (var i in fleet.ships) {
@@ -82,8 +205,11 @@ function fillStart (table, fleet) {
       // in a special night battle, there's no day battle
       , dayStartHp = ( fleet.ships[i].day_start_hp
                      ? fleet.ships[i].day_start_hp
-                     : fleet.ships[i].night_start_hp)
-    $('.day-start>.hp', $row).text(dayStartHp + '/' + maxHp)
+                     : (fleet.ships[i].night_start_hp
+                       ?fleet.ships[i].night_start_hp
+                       :fleet.ships[i].current_hp))
+    if (maxHp && dayStartHp)
+      $('.day-start>.hp', $row).text(dayStartHp + '/' + maxHp)
     if (!isEnemy)
       $('.day-start>.status', $row).html(getHpLabel(dayStartHp, maxHp))
   }
@@ -94,7 +220,7 @@ function fillDayEnd (table, fleet) {
   for (var i in fleet.ships) {
     var $row = $('#ship-'+(parseInt(i)+1), $table)
       , maxHp = fleet.ships[i].max_hp
-      , dayEndHp = fleet.ships[i].day_end_hp
+      , dayEndHp = Math.round(fleet.ships[i].day_end_hp)
     $('.day-end>.hp', $row).text(dayEndHp + '/' + maxHp)
     $('.day-end>.status', $row).html(getHpLabel(dayEndHp, maxHp))
   }
@@ -105,7 +231,7 @@ function fillNightEnd (table, fleet) {
   for (var i in fleet.ships) {
     var $row = $('#ship-'+(parseInt(i)+1), $table)
       , maxHp = fleet.ships[i].max_hp
-      , nightEndHp = fleet.ships[i].night_end_hp
+      , nightEndHp = Math.round(fleet.ships[i].night_end_hp)
     $('.night-end>.hp', $row).text(nightEndHp + '/' + maxHp)
     $('.night-end>.status', $row).html(getHpLabel(nightEndHp, maxHp))
   }
@@ -157,10 +283,7 @@ function getFormation (num) {
 }
 
 function fleetDayBattle (table, fleet) {
-  $table = $(table)
-  if (typeof fleet.name != 'undefined')
-    $('.fleet-name', $table).text(fleet.name)
-  $('.formation', $table).text(getFormation(fleet.formation))
+  var $table = $(table)
   fillShipName(table, fleet)
   fillStart(table, fleet)
   fillDayEnd(table, fleet)
@@ -182,19 +305,7 @@ function getStance (num) {
 }
 
 function fleetNightBattle (table, fleet) {
-  $table = $(table)
-  if (fleet.name)
-    $('.fleet-name', $table).text(fleet.name)
-  if (fleet.formation)
-    $('.formation', $table).text(fleet.formation)
-  for (var i = 2; i <= fleet.ships.length+1; i++) {
-    $row = $('tbody>tr:nth-child('+i+')', $table)
-    var maxHp = fleet.ships[i-2].max_hp
-      , nightStartHp = fleet.ships[i-2].night_start_hp
-      , nightEndHp = Math.round(fleet.ships[i-2].night_end_hp)
-
-    $('td.night-end>span.hp', $row).text(nightEndHp)
-    $('td.night-end>span.status', $row).html(getHpLabel(nightEndHp, maxHp))
-
-  }
+  var $table = $(table)
+  fillShipName(table, fleet)
+  fillNightEnd(table, fleet)
 }

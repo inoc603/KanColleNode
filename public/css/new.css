@@ -9,6 +9,10 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+button {-webkit-app-region: no-drag;}
+/*.btn:focus {
+  outline: none !important;
+}*/
 
 /* titlebar  */
 .frame-btn { padding: 6px 6px !important; }
@@ -57,6 +61,7 @@ span.fleet-name-shown { display: inline;}
 .label-caution {background-color: yellow;}
 .battle-table { margin-bottom: 0 !important; font-size: small;}
 #battle-info { margin-top: 10px;}
+#map-info { margin-bottom: 10px;}
 .battle-hp {
   width: 100px;
   padding-bottom: 2px !important;

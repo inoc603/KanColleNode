@@ -20,9 +20,11 @@ define(
     , fleetTimers: {}
     , expeditionTimers: {}
     , updateFleet: function (data) {
+        console.log('updating fleet')
         for (var i in data) {
           var fleet = data[i]
             , fleetNum = parseInt(i)+1
+          console.log('update fleet', fleetNum)
           // write fleet name
           $('#fleet-name-'+fleetNum).text(fleet.name)
 
@@ -143,6 +145,8 @@ define(
             }
           }
           $('.equipment-icon').bstooltip()
+
+          // console.log(fleet)
 
           $footer = $('#fleet-footer-'+fleetNum)
           $('.fleet-anti-air', $footer).text(fleet.anti_air)

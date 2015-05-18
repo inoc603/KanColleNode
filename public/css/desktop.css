@@ -1,0 +1,32 @@
+.nav_btn {
+  -webkit-app-region: no-drag;
+}
+#page_nav>.container-fluid {
+  background-color: red !important;
+}
+#page_nav {
+  border-color: red !important;
+}
+#disp_main_panel {
+  height:　100%;
+  width: 100%;
+  background-color: white;
+}
+.panel_wrapper {
+  height: 100%;
+}
+button {
+  -webkit-app-region: no-drag;
+}
+
+#disp_main_panel {
+  background-color:white;
+  width:530px;
+  position:absolute;
+  right:5px;
+  top:60px;
+}
+
+body {
+  margin-top: 50px !important;
+}

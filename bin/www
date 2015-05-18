@@ -1,0 +1,156 @@
+var net = require('net')
+  , httpPort = 5050
+  , httpParser = require('http-string-parser')
+  , querystring = require('querystring')
+  , request = require('request')
+  , config = require('../lib/config')
+  , _ = require('underscore')
+  , http = require('http')
+
+  , simpleProxy = false
+  , proxyHost
+  , proxyPort
+  , debugging = 0
+
+  , app = require('../app')
+
+
+
+
+
+var regex_hostport = /^([^:]+)(:([0-9]+))?$/
+ 
+function getHostPortFromString( hostString, defaultPort ) {
+  var host = hostString
+  var port = defaultPort
+ 
+  var result = regex_hostport.exec( hostString )
+  if ( result != null ) {
+    host = result[1]
+    if ( result[2] != null ) {
+      port = result[3]
+    }
+  }
+ 
+  return( [ host, port ] )
+}
+
+if (config.config.proxy) {
+  console.log('simple')
+  simpleProxy = true
+  var proxy = config.config.proxy.split(':')
+  proxyHost = proxy[0]
+  proxyPort = (proxy[1]?parseInt(proxy[1]):80)
+}
+else {
+  simpleProxy = false
+  proxyHost = '127.0.0.1'
+  proxyPort = 3001
+}
+
+console.log(proxyHost, proxyPort)
+
+var httpProxy = net.createServer(function (socket) {
+  var req = new Buffer('')
+    , resp = new Buffer('')
+    , reqEnd = false
+    , respEnd = false
+    , passFlag = false
+    // Create a new connection to the TCP server
+    , client = net.connect(proxyPort, proxyHost)
+
+  socket.setKeepAlive(true)
+
+  // 2-way pipe between client and TCP server
+  // socket.pipe(client).pipe(socket)
+
+  socket.on('data', function (chunk) {
+    req += chunk
+    if (!passFlag) {
+      var str = chunk.toString()
+      // check for empty user-agent header caused by a bug of nwjs
+      // probably related to flash
+      if (str.search('User-Agent:\r\n') != -1) {
+        var newStr = str.replace('User-Agent:', 'User-Agent: Mozilla/5.0 (Windows NT 6.3 WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36')
+        client.write(new Buffer(newStr))
+        passFlag = true
+      }
+      else {
+        passFlag = true
+        client.write(chunk)
+      }
+    }
+    else {
+      client.write(chunk)
+    }
+  })
+
+  socket.on('end', function () {
+    reqEnd = true
+    client.end()
+    if (respEnd) {
+      reqEnd = false
+      respEnd = false
+      var str = req.toString()
+      if (str.search('/kcsapi/')!=-1) {
+        sendToKCN(req, resp)
+      }
+    }
+  })
+
+  socket.on('error', function (err) {
+    // console.log('socket', err)
+  })
+
+  client.on('data', function (chunk) {
+    resp += chunk
+    socket.write(chunk)
+  })
+
+  client.on('end', function () {
+    respEnd = true
+    socket.end()
+    if (reqEnd) {
+      reqEnd = false
+      respEnd = false
+      var str = req.toString()
+      if (str.search('/kcsapi/')!=-1) {
+        sendToKCN(req, resp)
+      }
+    }
+  })
+
+  client.on('error', function (err) {
+    // console.log('client', err)
+  })
+})
+
+httpProxy.listen(httpPort)
+
+function sendToKCN (req, resp) {
+  var send = {}
+    , reqObj = httpParser.parseRequest(req.toString())
+    , resObj = httpParser.parseResponse(resp.toString())
+
+  send.url = reqObj.uri
+  send.param = reqObj.body
+  send.data = resObj.body
+  // console.log('sending', send)
+  // console.log('sending')
+  request.post('http://127.0.0.1:3001/drop', {form: send})
+}
+
+
+
+// the content of www is moved to app.js due to the use of socket.io
+
+// var util = require("util")
+// var events = require("events")
+// var startEmitter = function () {
+//   events.EventEmitter.call(this)
+// }
+// util.inherits(startEmitter, events.EventEmitter)
+// var start = new startEmitter()
+// start.emit('ready') 
+
+// module.exports.start = start

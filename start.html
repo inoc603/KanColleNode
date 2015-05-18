@@ -1,0 +1,39 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>mirigation</title>
+</head>
+<body>
+<script>
+  var gui = require('nw.gui')
+    , win = gui.Window.get()
+  gui.App.setProxyConfig('localhost:5050')
+  gui.App.clearCache()
+
+  var tray = new gui.Tray({ title: 'Tray', icon: 'public/img/idol.png' })
+
+  // Give it a menu
+  var menu = new gui.Menu()
+  menu.append(new gui.MenuItem({ type: 'checkbox'
+                               , label: 'quit' 
+                               , click: function () {
+                                   gui.App.quit()
+                                 }
+                               }))
+  tray.menu = menu
+
+  // setTimeout(function() {
+  //   location.href="http://127.0.0.1:3001/backboned"
+  //   // win.open("http://127.0.0.1:3001/standalone")
+  //   gui.Window.open('http://127.0.0.1:3001/standalone'
+  //     , { frame: false
+  //       , toolbar: false
+  //       , width: 800
+  //       , height: 510  
+  //       })
+  //   // win.showDevTools()
+  // }, 1000)
+
+</script>
+</body>
+</html>	

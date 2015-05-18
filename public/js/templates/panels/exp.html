@@ -1,0 +1,88 @@
+<div class="panel panel-default" id="exp-panel">
+  <div class="panel-heading">
+    <div class="panel-title">经验计算器</div>
+    <span class="glyphicon glyphicon-triangle-bottom minify-panel"
+          style="float:right;"></span>
+  </div>
+  <div class="panel-body">
+    <div class="container exp-container">
+    <div class="select-wrapper">
+    <select class="selectpicker" id="ship-select-picker" data-size="5" title="请更新列表">
+    </select>  
+    </div>
+
+    <button class="btn btn-default" id="update-ship">更新</button>
+    </div>
+    
+
+    <div class="level-and-exp">
+      <div class="col-xs-7">
+        <input id="exp-now-level" type="text">
+      </div>
+      <div class="col-xs-5 input-group">
+        <span class="input-group-addon">exp</span>
+        <input type="text" class="form-control exp" id="exp-now">
+      </div>
+    </div>
+
+    <div class="level-and-exp">
+      <div class="col-xs-7">
+        <input id="exp-target-level" type="text">
+      </div>
+      <div class="col-xs-5 input-group">
+        <span class="input-group-addon">exp</span>
+        <input type="text" class="form-control exp" id="exp-target">
+      </div>
+    </div>
+
+    <div class="container exp-container">
+      <div class="input-wrapper col-xs-5">
+      <div class="input-group" id="map-select">
+        <span class="input-group-addon">海域</span>
+        <select id="map-area" class="selectpicker from-control" data-width="50px">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected="true">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+        <span class="input-group-addon">-</span>
+        <select id="map" class="selectpicker from-control" data-width="50px">
+          <option value="1">1</option>
+          <option value="2" selected="true">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>        
+      </div>
+      </div>
+
+      <div class="input-wrapper col-xs-7">
+      <div class="input-group" id="rank-select">
+        <span class="input-group-addon">评价</span>
+        <select id="rank" class="selectpicker from-control" data-width="50px">
+          <option value="s">S</option>
+          <option value="a">A</option>
+          <option value="b">B</option>
+          <option value="c">C</option>
+          <option value="d">D</option>
+        </select>
+        <span class="input-group-addon">
+          <input type="checkbox" id="flagship">
+          <span>旗舰</span>
+        </span>
+        <span class="input-group-addon">
+          <input type="checkbox" id="mvp">
+          <span>MVP</span>
+        </span>
+      </div>
+      </div>
+    </div>
+
+    <hr>
+    <span>单次经验</span>&nbsp;<span id="one-turn"></span>
+    <br>
+    <span>战斗次数</span>&nbsp;<span id="turns-left"></span>
+  </div>
+</div>

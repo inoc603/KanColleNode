@@ -1,0 +1,32 @@
+{
+  "name": "KanColleNode",
+  "version": "0.0.0",
+  "homepage": "https://github.com/inoc603/KanColleNode",
+  "authors": [
+    "Eddie Huang <inoc603@gmail.com>"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.4",
+    "jquery-ui": "~1.11.4",
+    "backbone": "~1.1.2",
+    "requirejs": "~2.1.17",
+    "text": "~2.0.14",
+    "bootstrap-contextmenu": "~0.3.3",
+    "bootstrap-select": "~1.6.5",
+    "bootstrap-formhelpers": "~2.3.0",
+    "font-awesome": "~4.3.0",
+    "datatables": "~1.10.7"
+  }
+}

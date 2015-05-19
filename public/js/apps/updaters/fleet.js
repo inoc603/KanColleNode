@@ -20,11 +20,9 @@ define(
     , fleetTimers: {}
     , expeditionTimers: {}
     , updateFleet: function (data) {
-        console.log('updating fleet')
         for (var i in data) {
           var fleet = data[i]
             , fleetNum = parseInt(i)+1
-          console.log('update fleet', fleetNum)
           // write fleet name
           $('#fleet-name-'+fleetNum).text(fleet.name)
 
@@ -44,8 +42,9 @@ define(
             if (fleet.mission[0] == 1) {
               $('.status-info', $fleetStatus).text('远征中')
               $fleetStatus.attr('class', 'fleet-status alert alert-info')
-              updater.fleetTimers[i] = pageUtil.setTimer( $('.status-timer', $fleetStatus)
-                                       , fleet.mission[2])
+              updater.fleetTimers[i] = pageUtil.setTimer( $('.status-timer'
+                                                           , $fleetStatus)
+                                                        , fleet.mission[2])
 
               $eTime = $( '.expedition-table>tbody>tr:nth-child('
                                 + (fleetNum-1)+')>.time')
@@ -169,27 +168,27 @@ define(
   }
 )
 var fleetTableRowHtml = '<tr>'
-                      + '<td>'
-                      +   '<span class="ship-name"></span>'
-                      +   '</br>'
-                      +   '<span class="ship-type"></span>'
-                      + '</td>'
-                      + '<td>'
-                      +   '<span class="ship-level"></span>'
-                      +   '</br>'
-                      +   '<span class="exp-next"></span>'
-                      + '</td>'
-                      + '<td>'
-                      +   '<span class="ship-health-number"></span>'
-                      +   '</br>'
-                      +   '<span class="ship-health"></span>'
-                      + '</td>'
-                      + '<td class="ship-condition"></td>'
-                      + '<td class="ship-equipment hidden-td" id="slot-1">1</td>'
-                      + '<td class="ship-equipment hidden-td" id="slot-2">2</td>'
-                      + '<td class="ship-equipment hidden-td" id="slot-3">3</td>'
-                      + '<td class="ship-equipment hidden-td" id="slot-4">4</td>'
-                      + '</tr>'
+                    + '<td>'
+                    +   '<span class="ship-name"></span>'
+                    +   '</br>'
+                    +   '<span class="ship-type"></span>'
+                    + '</td>'
+                    + '<td>'
+                    +   '<span class="ship-level"></span>'
+                    +   '</br>'
+                    +   '<span class="exp-next"></span>'
+                    + '</td>'
+                    + '<td>'
+                    +   '<span class="ship-health-number"></span>'
+                    +   '</br>'
+                    +   '<span class="ship-health"></span>'
+                    + '</td>'
+                    + '<td class="ship-condition"></td>'
+                    + '<td class="ship-equipment hidden-td" id="slot-1"></td>'
+                    + '<td class="ship-equipment hidden-td" id="slot-2"></td>'
+                    + '<td class="ship-equipment hidden-td" id="slot-3"></td>'
+                    + '<td class="ship-equipment hidden-td" id="slot-4"></td>'
+                    + '</tr>'
 
 
 function getConditionLabel (cond) {

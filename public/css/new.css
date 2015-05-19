@@ -85,3 +85,13 @@ span.fleet-name-shown { display: inline;}
   padding-top: 1px !important;
   padding-bottom: 1.5px !important;
 }
+
+/* quest panel */
+.quest-table {font-size: small;}
+
+/* timers panel */
+#expedition-panel-wrapper,
+#build-panel-wrapper,
+#repair-panel-wrapper {
+  
+}

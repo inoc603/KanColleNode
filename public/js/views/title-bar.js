@@ -51,7 +51,6 @@ define(
       },
       openConsole: function () {
         win.showDevTools()
-        this.blur()
       }
     })
     // Our module now returns our view

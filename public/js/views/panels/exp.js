@@ -45,6 +45,12 @@ define(
 
         // $('input[type="checkbox"]').checkbox()
       }
+    , updateShipList: function () {
+        console.log('update ship list')
+      }
+    , caulculate: function () {
+
+      }
     })
     return fleetPanelView
   }

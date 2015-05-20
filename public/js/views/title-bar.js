@@ -19,12 +19,10 @@ define(
         this.render()
         this.maxed = false
         win.on('maximize', function () {
-          $('#maximize-window>span').toggleClass( 'glyphicon-resize-full '
-                                                + 'glyphicon-resize-small')
+          $('#maximize-window').toggleClass( 'fa-expand fa-compress')
         })
-        win.on('minimize', function () {
-          $('#maximize-window>span').toggleClass( 'glyphicon-resize-full '
-                                                + 'glyphicon-resize-small')
+        win.on('unmaximize', function () {
+          $('#maximize-window').toggleClass( 'fa-expand fa-compress')
         })
       },
       render: function(){
@@ -39,7 +37,7 @@ define(
         win.close()
       },
       maximizeWindow: function () {
-        if ($('#maximize-window>span').hasClass('glyphicon-resize-full'))
+        if ($('#maximize-window').hasClass('fa-expand'))
           win.maximize()
         else
           win.unmaximize()

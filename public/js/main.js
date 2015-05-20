@@ -9,9 +9,10 @@ require.config(
          , 'bootstrap-contextmenu': 'vendor/bootstrap-contextmenu'
          , 'bootstrap-select': 'vendor/bootstrap-select'
          , 'bootstrap-formhelpers': 'vendor/bootstrap-formhelpers'
-         , 'data-tables': 'vendor/jquery.dataTables'
+         , 'datatables': 'vendor/jquery.dataTables'
          , 'bootstrap-touchspin': 'vendor/jquery.bootstrap-touchspin'
          , 'conflict': 'apps/common/conflict'
+         , 'dynatable': 'vendor/jquery.dynatable'
          }
 , shim: { 'socket.io': { exports: 'io' }
         , 'bootstrap': ['jquery']
@@ -19,7 +20,8 @@ require.config(
         , 'conflict': ['bootstrap']
         , 'bootstrap-select': ['jquery']
         , 'bootstrap-formhelpers': ['jquery']
-        , 'data-tables': ['jquery']
+        // , 'data-tables': ['jquery']
+        // , 'models/share': {exports: 'ShareFleet'}
         }
 })
 

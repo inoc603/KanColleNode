@@ -5,9 +5,11 @@ define(
   , 'backbone'
   , 'text!templates/panels/fleet.html'
   , 'apps/updaters/fleet'
+  , 'apps/common/globals'
+  , 'models/share-fleet'
   , 'bootstrap'
   ]
-, function ( $, _, Backbone, fleetTpl, fleetUpdater) {
+, function ( $, _, Backbone, fleetTpl, fleetUpdater, globals, ShareFleet) {
     var fleetPanelView = Backbone.View.extend({
       el: '#info-block'
     , events: {
@@ -29,7 +31,15 @@ define(
         $('#save-fleet').bstooltip()
       }
     , saveFleet: function () {
-        console.log('save')
+        // console.log('save')
+        // console.log()
+        var activeFleet = parseInt($('.fleet-tab.active>a').attr('href')
+                                                           .slice(-1))-1
+        // console.log(globals.fleets[activeFleet])
+        var share = new ShareFleet(globals.fleets[activeFleet], 'test', ['test'])
+        console.log(share)
+        $.post('http://127.0.0.1:3001/rest/share_fleet/'+globals.mixId
+              , share)
       }
     , swapFooter: function (e) {
         var target = $(e.target).attr("href")

@@ -23,7 +23,7 @@ define(
 )
 
 function questUpdate (data) {
-  console.log(data)
+  // console.log(data)
   $fTable = $('.quest-table')
   len = data.quests.length
   pos = 1
@@ -58,7 +58,7 @@ function getQuestType (category) {
                   ,'补给', '工厂', '改修']
     , res = '<span class="label" style="background-color:'
           + questColors[category] + ';">' + questType[category] + '</span>'
-  console.log(category, res)
+  // console.log(category, res)
   return res
 }
 

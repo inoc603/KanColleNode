@@ -11,25 +11,29 @@ define(
   , 'views/panels/battle'
   , 'views/panels/exp'
   , 'views/context-menus/pill'
+  , 'views/panels/list'
+  , 'views/panels/share-fleet'
   , 'jquery.ui'
   ]
 , function ( $, _, Backbone, infoBlockTemplate, PanelCollection
            , FleetView, TimersView, QuestView, BattleView, ExpView
-           , PillMenuView) {
+           , PillMenuView, ListView, ShareFleetView) {
     var panelCollection = new PanelCollection()
     var InfoBlockView = Backbone.View.extend({
       el: $('#main-container'),
       initialize: function () {
         $.when(this.render())
          .then(function () {
-            console.log('render finish')
+            // console.log('render finish')
             // load panels
             var fleetView = new FleetView(true, panelCollection)
               , timersView = new TimersView(true, panelCollection)
               , questView = new QuestView(true, panelCollection)
               , battleView = new BattleView(true, panelCollection)
-              , exoView = new ExpView(true, panelCollection)
+              , expView = new ExpView(true, panelCollection)
               , pillContextMenuView = new PillMenuView()
+              , listView = new ListView(true, panelCollection)
+              , shareFleetView = new ShareFleetView(true, panelCollection)
 
             // set fleet view as default view
             $('#fleet-pill').addClass('active')

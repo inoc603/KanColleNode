@@ -13,14 +13,13 @@ define(
         this.collection.add({name: 'battle'})
         socket.on('day_battle_update', function (data) {
           updater.updateDayBattle(data)
-          console.log('day battle')
-        }).on('night_battle_update', function (data) {
+        })
+        .on('night_battle_update', function (data) {
           updater.updateNightBattle(data)
-          console.log('night battle')
-        }).on('day_combined_battle_update', function (data) {
+        })
+        .on('day_combined_battle_update', function (data) {
           updater.updateDayBattleCombined(data)
         })
-
         .on('combined_night_battle_update', function (data) {
           updater.updateNightBattleCombined(data)
         })
@@ -33,7 +32,6 @@ define(
           updater.mapNext(data)
         })
         .on('battle_result', function (data) {
-
           updater.updateResult(data)
         })
       }

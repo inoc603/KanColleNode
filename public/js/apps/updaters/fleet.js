@@ -7,8 +7,9 @@ define(
   , 'collections/updater'
   , 'apps/common/page-util'
   , 'apps/common/socket'
+  , 'apps/common/globals'
   ]
-, function($, _, Backbone, UpdaterCollection, pageUtil, socket){
+, function($, _, Backbone, UpdaterCollection, pageUtil, socket, globals){
     var updater = {
       initialize: function () {
         this.collection = new UpdaterCollection()
@@ -20,9 +21,12 @@ define(
     , fleetTimers: {}
     , expeditionTimers: {}
     , updateFleet: function (data) {
+        console.log(data)
         for (var i in data) {
           var fleet = data[i]
             , fleetNum = parseInt(i)+1
+
+          globals.fleets[i] = data[i]
           // write fleet name
           $('#fleet-name-'+fleetNum).text(fleet.name)
 

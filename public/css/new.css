@@ -17,6 +17,13 @@ button {-webkit-app-region: no-drag;}
 /* titlebar  */
 .frame-btn { padding: 6px 6px !important; }
 #frame-btns { float:right; }
+#frame-btns * {-webkit-app-region: no-drag;}
+.title-btn {padding: 7px 5px !important;}
+
+#page-nav{min-height: 30px !important; height: 30px !important;}
+#page-nav>div.container-fluid{height: 30px !important;}
+#page-nav .navbar-header{height: 30px !important;}
+#page-nav .navbar-brand{height: 30px !important;padding-top: 5px !important;padding-bottom: 5px !important;}
 
 /* info-block */
 #add-pill { height: 100%;}
@@ -95,3 +102,6 @@ span.fleet-name-shown { display: inline;}
 #repair-panel-wrapper {
   
 }
+
+/* list panel */
+#ship-table {font-size: small !important;}

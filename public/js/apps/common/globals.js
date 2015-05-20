@@ -7,6 +7,7 @@ define(
   ]
 , function($, _, Backbone){
     var globals = {}
+    globals.fleets = []
 
     return globals
   }

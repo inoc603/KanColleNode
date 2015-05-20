@@ -4,11 +4,13 @@ define([ 'jquery'
        , 'views/title-bar'
        , 'views/blocks/info'
        , 'views/blocks/game'
+       , 'apps/updaters/basic'
        // , 'views/context-menus/pill'
        , 'jquery.ui'
        , 'bootstrap'
+
        ]
-, function ($, _, TitlebarView, InfoBlockView, GameBlockView) {
+, function ($, _, TitlebarView, InfoBlockView, GameBlockView, basicUpdater) {
     var modes = { 'game': ['desktop', 'game-only']
                 , 'titlebar': ['desktop', 'desktop-no-game', 'game-only']
                 , 'info': ['desktop', 'desktop-no-game']
@@ -19,7 +21,7 @@ define([ 'jquery'
       // load title bar for nw.js if it's used
       if (_.contains(modes.titlebar, mode)) {
         var titlebarView = new TitlebarView()
-        $('body').css('margin-top', '50px')
+        $('body').css('margin-top', '30px')
                  .css('overflow', 'hidden')
       }
 
@@ -33,6 +35,8 @@ define([ 'jquery'
         var gameBlockView = new GameBlockView()
         // $('#game-container')
       }
+
+      basicUpdater.initialize()
 
 
       // add

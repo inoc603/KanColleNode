@@ -125,7 +125,7 @@ var httpProxy = net.createServer(function (socket) {
   })
 })
 
-httpProxy.listen(httpPort)
+httpProxy.listen(httpPort, 'localhost')
 
 function sendToKCN (req, resp) {
   var send = {}

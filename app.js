@@ -43,7 +43,7 @@ var httpServer = http.createServer(app)
 var io = require('./lib/socketio')(httpServer)
 
 // Listen on provided port, on all network interfaces.
-httpServer.listen(port)
+httpServer.listen(port, 'localhost')
 
 var regex_hostport = /^([^:]+)(:([0-9]+))?$/
 

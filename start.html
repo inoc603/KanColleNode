@@ -7,8 +7,14 @@
 <script>
   var gui = require('nw.gui')
     , win = gui.Window.get()
+     
   gui.App.setProxyConfig('localhost:5050')
   gui.App.clearCache()
+  var os = require('os')
+    , systemInfo = '(' + os.hostname() + ')'
+                 + '(' + os.type() + ')'
+                 + '(' + os.arch() + ')'
+                 + '(' + os.release() + ')'
 
   var tray = new gui.Tray({ title: 'Tray', icon: 'public/img/idol.png' })
 

@@ -13,6 +13,9 @@ var express = require('express')
   , os = require('os')
   , ifaces = os.networkInterfaces()
 
+  , net = require('net')
+  , simpleProxy
+
 var IP_ADDR = []
 Object.keys(ifaces).forEach(function (ifname) {
   ifaces[ifname].forEach(function (iface) {
@@ -22,23 +25,15 @@ Object.keys(ifaces).forEach(function (ifname) {
     }
 
     IP_ADDR.push(iface.address)
-    // if (alias >= 1) {
-    //   // this single interface has multiple ipv4 addresses
-    //   console.log(ifname + ':' + alias, iface.address)
-    // } else {
-    //   // this interface has only one ipv4 adress
-    //   console.log(ifname, iface.address)
-    // }
   })
 })
-console.log('IP:', IP_ADDR)
+console.log('IP:', IP_ADDR, 'PORT', config.config.port)
 
 
 var app = express()
-// app.disable('x-powered-by')
 
 // Get port from environment and store in Express.
-var port = normalizePort(process.env.PORT || '3000')
+var port = normalizePort(process.env.PORT || config.config.port)
 app.set('port', port)
 
 // Create HTTP server.
@@ -48,7 +43,62 @@ var httpServer = http.createServer(app)
 var io = require('./lib/socketio')(httpServer)
 
 // Listen on provided port, on all network interfaces.
-httpServer.listen(port)
+httpServer.listen(port, 'localhost')
+
+var regex_hostport = /^([^:]+)(:([0-9]+))?$/
+
+function getHostPortFromString( hostString, defaultPort ) {
+  var host = hostString
+  var port = defaultPort
+
+  var result = regex_hostport.exec( hostString )
+  if ( result != null ) {
+    host = result[1]
+    if ( result[2] != null ) {
+      port = result[3]
+    }
+  }
+
+  return( [ host, port ] )
+}
+// add connect listener to the server so it can handle https proxy requests
+httpServer.addListener('connect', function (req, socketRequest, bodyhead) {
+    var url = req.url
+      , httpVersion = req.httpVersion
+      , pHost
+      , pPort
+
+    //
+    if (simpleProxy) {
+      pHost = proxyHost
+      pPort = proxyPort
+
+    }
+    else {
+      var hostport = getHostPortFromString( url, 443 )
+      pHost = hostport[0]
+      pPort = parseInt( hostport[1] )
+    }
+
+    // set up tcp connection with the server
+    var proxySocket = net.connect(pPort, pHost, function () {
+      proxySocket.write(bodyhead)
+      // tell the caller the connection was successfully established
+      socketRequest.write( "HTTP/"+ httpVersion
+                         + " 200 Connection established\r\n\r\n" )
+      socketRequest.pipe(proxySocket).pipe(socketRequest)
+      }
+    )
+
+    proxySocket.on('error', function (err) {
+      console.log(err)
+    })
+
+    socketRequest.on('error', function (err) {
+      console.log(err)
+    })
+  }
+)
 httpServer.on('error', onError)
 httpServer.on('listening', onListening)
 
@@ -57,6 +107,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
 app.enable('trust proxy')
 
+app.use(bodyParser({limit: '50mb'}))
 app.use(bodyParser.text({type: '*/*'}))
 app.use(cookieParser())
 app.use(logger('dev'))
@@ -65,55 +116,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // Routers setup
 var viewRoute = require('./routes/index')
-  , kcsapiRoute = require('./routes/kcsapi')(io)
   , restRoute = require('./routes/rest')
+  , receiverRoute = require('./routes/receiver')(io)
+  , proxyRoute = require('./routes/proxy')
 
-app.use('/kcsapi', kcsapiRoute)
-app.use('*', function (req, res, next) {
-  var isLocal = ( req.hostname == '127.0.0.1' || 
-                  req.hostname == 'localhost' ||
-                  req.hostname == 'localhost.'||
-                  IP_ADDR.indexOf(req.hostname) != -1
-                )
-    , isRightPort = (parseInt(req.headers.host.split(':')[1])==3000)
-
-  if (isLocal && isRightPort && req.baseUrl != '/socket.io') {
-    console.log(req.body)
-    next()
-  }
-  else {
-    var option = {}
-    option.url = req.originalUrl.replace('localhost.', '127.0.0.1')
-    option.method = req.method
-    option.headers = {}
-    for (var i = 0; i < req.rawHeaders.length; i+=2) {
-      option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
-    }
-    option.headers['Host'] 
-      = option.headers['Host'].replace('localhost.', '127.0.0.1')
-    // console.log(typeof req.body)
-    if (typeof req.body == 'string')
-      option.body = req.body
-    if (typeof req.body == 'object') {
-      if (Object.keys(req.body).length > 0)
-        option.body = JSON.stringify(req.body)
-    }
-    else {
-      if (typeof req.body != 'string')
-        console.log('new type', typeof req.body)
-    }
-
-    if (config.config.proxy)
-      option.proxy = config.config.proxy
-
-    request(option)
-      .on('error', function (err) {
-        console.log(req.method, req.rawHeaders)
-        console.log('proxy error', err)
-      })
-      .pipe(res)
-  }
-})
+app.use('/drop', receiverRoute)
+app.use('*', proxyRoute)
 app.use('/rest', restRoute)
 app.use('/', viewRoute)
 
@@ -132,11 +140,11 @@ app.use(function(err, req, res, next) {
   // log the error, treat it like a 500 internal server error
   // maybe also log the request so you have more debug information
   // log.error(err, req)
- 
-  // during development you may want to print 
+
+  // during development you may want to print
   // the errors to your console
   console.log(err.stack)
- 
+
   // send back a 500 with a generic message
   res.status(500)
   res.send('oops! something broke')
@@ -217,5 +225,5 @@ function onListening() {
   debug('Listening on ' + bind)
 }
 
-  
+
 module.exports = app

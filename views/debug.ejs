@@ -192,13 +192,13 @@
       }
     </style>
     <link rel="stylesheet" href=<%=version_css_path%>>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.css">
     <link rel="stylesheet" href="css/bootstrap-formhelpers.min.css">
     <link rel="stylesheet" href="css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="css/jquery-ui.min.css">
-    <link rel="stylesheet" href="css/jquery-ui.structure.min.css">
-    <link rel="stylesheet" href="css/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <link rel="stylesheet" href="css/jquery-ui.structure.css">
+    <link rel="stylesheet" href="css/jquery-ui.theme.css">
     <link rel="stylesheet" href="css/jquery.dynatable.css">
     <link rel="stylesheet" href="css/jquery.tablescroll.css">
   </head>
@@ -244,7 +244,7 @@
         </span>
       </div>
       <div class="panel-body" id="game_wrapper">
-        <iframe id="game_frame" scrolling="no" width = "1200" height = "1200">
+        <iframe id="game_frame" scrolling="no" width = "1200" height = "1200"  nwUserAgent="Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36" nwdisable nwfaketop>
         </iframe>
       </div>
     </div>
@@ -866,15 +866,13 @@
 
   </body>
 
-  <script src="js/jquery-2.1.3.min.js"></script>
-  <script src="js/jquery-ui.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/bootstrap-formhelpers.js"></script>
-  <script src="js/socket.io.js"></script>
-  <script src="js/bootstrap-select.min.js"></script>
-  <script src="js/purl.js"></script>
-  <script src="js/jquery.dynatable.js"></script>
-  <script src="js/jquery.tablescroll.js"></script>
+  <script src="js/vendor/jquery.js"></script>
+  <script src="js/vendor/jquery-ui.js"></script>
+  <script src="js/vendor/bootstrap.js"></script>
+  <script src="js/vendor/bootstrap-formhelpers.js"></script>
+  <script src="socket.io/socket.io.js"></script>
+  <script src="js/vendor/bootstrap-select.js"></script>
+  <script src="js/vendor/jquery.dynatable.js"></script>
   <script src=<%=version_js_path%>></script>
   <script>
     var listener_num = <%= listener_num%>

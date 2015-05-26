@@ -5,6 +5,12 @@ var express = require('express')
 
 var client_served = 0
 
+var os = require('os')
+    , osInfo = '(' + os.hostname() + ')'
+             + '(' + os.type() + ')'
+             + '(' + os.arch() + ')'
+             + '(' + os.release() + ')'
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'KanColleNode' })
@@ -34,6 +40,15 @@ router.get('/desktop-no-game', function (req, res) {
   res.render('debug',{ listener_num: (client_served+=1)
                       , version_css_path: 'css/desktop-no-game.css'
                       , version_js_path: 'js/desktop-no-game.js'})
+})
+
+router.get('/backboned', function (req, res) {
+  res.render('backboned', { appMode: 'desktop-no-game'
+                          , osInfo: osInfo})
+})
+
+router.get('/standalone', function (req, res) {
+  res.render('backboned', {appMode: 'game-only'})
 })
 
 router.get('/mobile', function (req, res) {

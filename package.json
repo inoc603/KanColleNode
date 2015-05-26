@@ -4,16 +4,19 @@
   "private": true,
   "window": {
     "frame": false,
-    "toolbar": false
+    "toolbar": true,
+    "show": false
   },
   "main": "start.html",
   "webkit": {
     "plugin": true
   },
+  "node-main":"./bin/www",
   "node-remote": "127.0.0.1",
   "scripts": {
     "start": "node ./bin/www"
   },
+  "single-instance":true,
   "user-agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
   "dependencies": {
     "async": "^0.9.0",
@@ -21,16 +24,18 @@
     "cookie-parser": "~1.3.4",
     "debug": "~2.1.1",
     "ejs": "~2.3.1",
+    "encoding": "^0.1.11",
     "express": "~4.12.0",
     "express-http-proxy": "^0.3.1",
+    "http-string-parser": "0.0.5",
     "morgan": "~1.5.1",
     "nedb": "^1.1.2",
-    "pac-proxy-agent": "^0.2.0",
     "request": "~2.53.0",
     "serve-favicon": "~2.2.0",
     "socket.io": "~1.3.5",
-    "socks5-http-client": "^1.0.1",
-    "sqlite3": "^3.0.5",
     "underscore": "^1.8.2"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5"
   }
 }

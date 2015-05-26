@@ -1,0 +1,36 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>mirigation</title>
+</head>
+<body>
+<script>
+  var gui = require('nw.gui')
+    , win = gui.Window.get()
+  gui.App.setProxyConfig('localhost:5050')
+  // gui.App.clearCache()
+
+  // console.log( process.mainModule.exports.start)
+  // var start = process.mainModule.exports.start
+  // start.on('ready', function () {
+  //   console.log('ready')
+  // })
+  // process.mainModule.exports.start()
+  setTimeout(function() {
+    
+    
+    location.href="http://127.0.0.1:3001/backboned"
+    // win.open("http://127.0.0.1:3001/standalone")
+    gui.Window.open('http://127.0.0.1:3001/standalone'
+      , { frame: false
+        , toolbar: false
+        , width: 800
+        , height: 510  
+        })
+    // win.showDevTools()
+
+  }, 1000);
+
+</script>
+</body>
+</html>	

@@ -49,3 +49,17 @@ admiral
 #sublimetext project file
 *.sublime-project
 *.sublime-workspace
+
+# bower components
+bower_components
+
+#nwjs components
+icudtl.dat
+libEGL.dll
+libGLESv2.dll
+nw.exe
+nw.pak
+nwjc.exe
+pdf.dll
+d3dcompiler_47.dll
+ffmpegsumo.dll

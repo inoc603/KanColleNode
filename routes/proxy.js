@@ -6,6 +6,7 @@ var express = require('express')
   , _ = require('underscore')
   , router = express.Router()
   , adFinder = new Admiral('finder')
+  , request = require('request')
 
 router.all('/*', function (req, res, next) {
   var isLocal = ( req.hostname == '127.0.0.1' ||

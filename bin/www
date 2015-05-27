@@ -57,7 +57,8 @@ var httpProxy = net.createServer(function (socket) {
     , respEnd = false
     , passFlag = false
     // Create a new connection to the TCP server
-    , client = net.connect(proxyPort, proxyHost)
+    // , client = net.connect(proxyPort, proxyHost)
+    , client
 
   socket.setKeepAlive(true)
 
@@ -68,6 +69,48 @@ var httpProxy = net.createServer(function (socket) {
     req += chunk
     if (!passFlag) {
       var str = chunk.toString()
+      if (str.search('Host: 127.0.0.1:3001') != -1) {
+        client = net.connect(3001, '127.0.0.1')
+      }
+      else {
+        client = net.connect(proxyPort, proxyHost)
+      }
+
+      client.on('data', function (chunk) {
+        resp += chunk
+        socket.write(chunk)
+      })
+
+      socket.on('end', function () {
+        reqEnd = true
+        client.end()
+        if (respEnd) {
+          reqEnd = false
+          respEnd = false
+          var str = req.toString()
+          if (str.search('/kcsapi/')!=-1) {
+            sendToKCN(req, resp)
+          }
+        }
+      })
+
+      client.on('end', function () {
+        respEnd = true
+        socket.end()
+        if (reqEnd) {
+          reqEnd = false
+          respEnd = false
+          var str = req.toString()
+          if (str.search('/kcsapi/')!=-1) {
+            sendToKCN(req, resp)
+          }
+        }
+      })
+
+      client.on('error', function (err) {
+        // console.log('client', err)
+      })
+
       // check for empty user-agent header caused by a bug of nwjs
       // probably related to flash
       if (str.search('User-Agent:\r\n') != -1) {
@@ -85,44 +128,13 @@ var httpProxy = net.createServer(function (socket) {
     }
   })
 
-  socket.on('end', function () {
-    reqEnd = true
-    client.end()
-    if (respEnd) {
-      reqEnd = false
-      respEnd = false
-      var str = req.toString()
-      if (str.search('/kcsapi/')!=-1) {
-        sendToKCN(req, resp)
-      }
-    }
-  })
+  
 
   socket.on('error', function (err) {
     // console.log('socket', err)
   })
 
-  client.on('data', function (chunk) {
-    resp += chunk
-    socket.write(chunk)
-  })
-
-  client.on('end', function () {
-    respEnd = true
-    socket.end()
-    if (reqEnd) {
-      reqEnd = false
-      respEnd = false
-      var str = req.toString()
-      if (str.search('/kcsapi/')!=-1) {
-        sendToKCN(req, resp)
-      }
-    }
-  })
-
-  client.on('error', function (err) {
-    // console.log('client', err)
-  })
+  
 })
 
 httpProxy.listen(httpPort, 'localhost')

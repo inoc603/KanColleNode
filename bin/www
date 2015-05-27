@@ -69,7 +69,7 @@ var httpProxy = net.createServer(function (socket) {
     req += chunk
     if (!passFlag) {
       var str = chunk.toString()
-      if (str.search('Host: 127.0.0.1:3001') != -1) {
+      if (str.search('Host: 127.0.0.1') != -1) {
         client = net.connect(3001, '127.0.0.1')
       }
       else {

@@ -63,3 +63,7 @@ nwjc.exe
 pdf.dll
 d3dcompiler_47.dll
 ffmpegsumo.dll
+libffmpegsumo.so
+nw
+nwjc
+*.pak

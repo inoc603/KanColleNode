@@ -48,7 +48,8 @@ router.get('/backboned', function (req, res) {
 })
 
 router.get('/standalone', function (req, res) {
-  res.render('backboned', {appMode: 'game-only'})
+  res.render('backboned', {appMode: 'game-only'
+                          , osInfo: osInfo})
 })
 
 router.get('/mobile', function (req, res) {

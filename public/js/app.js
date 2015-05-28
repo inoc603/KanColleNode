@@ -6,11 +6,15 @@ define([ 'jquery'
        , 'views/blocks/game'
        , 'apps/updaters/basic'
        // , 'views/context-menus/pill'
+       , 'views/modals/register'
+       , 'views/modals/login'
        , 'jquery.ui'
        , 'bootstrap'
 
+
        ]
-, function ($, _, TitlebarView, InfoBlockView, GameBlockView, basicUpdater) {
+, function ( $, _, TitlebarView, InfoBlockView, GameBlockView, basicUpdater
+           , RegisterView, LoginView) {
     var modes = { 'game': ['desktop', 'game-only']
                 , 'titlebar': ['desktop', 'desktop-no-game', 'game-only']
                 , 'info': ['desktop', 'desktop-no-game']
@@ -35,6 +39,9 @@ define([ 'jquery'
         var gameBlockView = new GameBlockView()
         // $('#game-container')
       }
+
+      var registerVire = new RegisterView()
+        , loginView = new LoginView()
 
       basicUpdater.initialize()
 

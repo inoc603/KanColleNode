@@ -13,6 +13,7 @@ require.config(
          , 'bootstrap-touchspin': 'vendor/jquery.bootstrap-touchspin'
          , 'conflict': 'apps/common/conflict'
          , 'dynatable': 'vendor/jquery.dynatable'
+         , 'hashes': 'vendor/hashes'
          }
 , shim: { 'socket.io': { exports: 'io' }
         , 'bootstrap': ['jquery']

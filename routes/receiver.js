@@ -17,7 +17,6 @@ router.post('/*', function (req, res) {
     , ad = ( adFinder.findByToken(token)
            ? adFinder.findByToken(token)
            : new Admiral(token))
-  console.log(_.keys(formData), formData.url, formData.param)
   dataHandler.process(reqBody, formData.data, url, ad)
   res.send('OK')
 })

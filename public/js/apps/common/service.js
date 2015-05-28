@@ -31,13 +31,15 @@ define(
 
     }
 
-    user.register = function (options) {
-      var endpoint = '/login'
-        , protocol = 'htpp://'
+    user.register = function (options, callback) {
+      var endpoint = '/reg'
+        , protocol = 'http://'
         , url = protocol + host + this.path + endpoint
 
       $.post(url, options, function (data) {
         console.log(data)
+        if (typeof callback == 'function')
+          callback(data)
       })
     }
 

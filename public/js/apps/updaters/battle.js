@@ -189,6 +189,9 @@ define(
         send.shipid = res.get_ship_id
         send.shiptype = res.get_ship_type
         send.rank = res.rank
+        service.ship.uploadShipGet(send, function (uploadRes) {
+          console.log(uploadRes)
+        })
         console.log(send)
       }
 

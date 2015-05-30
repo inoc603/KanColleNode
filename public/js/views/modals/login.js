@@ -45,17 +45,16 @@ define(
       }
     , startLogin: function () {
         var $modal = $('#login-modal')
-          , password = $('#input-password', $modal).val()
-          , username = $('#input-username', $modal).val()
-          , email = $('#input-email', $modal).val()
-          , verifyCode = $('#input-verify-code', $modal).val()
+          , password = $('#input-login-password', $modal).val()
+          , username = $('#input-login-username', $modal).val()
+          , verifyCode = $('#input-login-verify-code', $modal).val()
 
         password = new Hashes.SHA1().hex(password)
 
         var send = { user: username
                    , passwd: password
-                   , email: email
                    , check: verifyCode
+                   , guestinfo: $('#os-info').text()
                    }
         console.log(send)
         service.user.login(send, function (res) {

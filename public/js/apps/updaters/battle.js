@@ -5,8 +5,11 @@ define(
   , 'collections/updater'
   , 'apps/common/socket'
   , 'apps/common/page-util'
+  , 'apps/common/service'
+  , 'apps/common/globals'
   ]
-, function ($, _, Backbone, UpdaterCollection, socket, pageUtil){
+, function ($, _, Backbone, UpdaterCollection, socket, pageUtil, service
+           , globals){
     var updater = {
       initialize: function () {
         this.collection = new UpdaterCollection()
@@ -170,15 +173,23 @@ define(
         fillStart(table, fleet)
       }
     , updateResult: function (res) {
-        console.log('battle result', res)
-          $('#battle-result>#mvp').text(res.mvp_name)
-          $('#battle-result #ship-get').text(res.get_ship_name)
-          var oldRank = $('#battle-result>#rank').text()
-          if (oldRank != res.rank) {
-            if (oldRank != 'SS') {
-              $('#battle-result>#rank').text(res.rank)
-            }
+        // console.log('battle result', res)
+        $('#battle-result>#mvp').text(res.mvp_name)
+        $('#battle-result #ship-get').text(res.get_ship_name)
+        var oldRank = $('#battle-result>#rank').text()
+        if (oldRank != res.rank) {
+          if (oldRank != 'SS') {
+            $('#battle-result>#rank').text(res.rank)
           }
+        }
+        var send = {}
+        send.code = globals.user.code
+        send.place = res.map_area + '-' + res.map_number
+        send.point = res.map_point
+        send.shipid = res.get_ship_id
+        send.shiptype = res.get_ship_type
+        send.rank = res.rank
+        console.log(send)
       }
 
     }

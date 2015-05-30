@@ -21,7 +21,7 @@ define(
     , fleetTimers: {}
     , expeditionTimers: {}
     , updateFleet: function (data) {
-        console.log(data)
+        // console.log(data)
         for (var i in data) {
           var fleet = data[i]
             , fleetNum = parseInt(i)+1

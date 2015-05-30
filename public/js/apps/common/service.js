@@ -5,21 +5,26 @@ define(
   ]
 , function($, _, Backbone){
     var service = {}
-      , host = 'api.aghost.cn'
+      , host = 'http://api.aghost.cn'
 
       , user = {}
-      , data = {}
+      , ship = {}
 
     user.path = '/api/user'
 
-    user.login = function (username, password) {
+    user.login = function (options) {
+      // console.log(options)
+      var endpoint = '/login'
+        , url = host + this.path + endpoint
 
+      $.post(url, options, function (data) {
+        console.log(data)
+      })
     }
 
     user.checkName = function (username, callback) {
       var endpoint = '/checkname'
-        , protocol = 'http://'
-        , url = protocol + host + this.path + endpoint
+        , url = host + this.path + endpoint
 
       $.get(url, {user: username}, function (data) {
         // console.log(data)
@@ -33,8 +38,7 @@ define(
 
     user.register = function (options, callback) {
       var endpoint = '/reg'
-        , protocol = 'http://'
-        , url = protocol + host + this.path + endpoint
+        , url = host + this.path + endpoint
 
       $.post(url, options, function (data) {
         console.log(data)
@@ -48,9 +52,8 @@ define(
     }
 
     user.getVerifyCode = function (imgSelector) {
-      var protocol = 'http://'
-        , endpoint = '/verifycode'
-        , url = protocol + host + this.path + endpoint
+      var endpoint = '/verifycode'
+        , url = host + this.path + endpoint
       // $.get(url, function (data) {
       //   // console.log(data)
       //   $('#verify').attr
@@ -58,7 +61,18 @@ define(
       $(imgSelector).attr('src', url)
     }
 
+    ship.path = '/api/ship'
+    ship.uploadShipGet = function (rec) {
+      var endpoint = '/shipget'
+        , url = host + this.path + endpoint
+
+      $.post(url, rec, function (res) {
+        console.log(res)
+      })
+    }
+
     service.user = user
+    service.ship = ship
 
     return service
   }

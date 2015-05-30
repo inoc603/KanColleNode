@@ -22,6 +22,9 @@ define(
           // console.log()
           $('#register-modal').modal('show')
         })
+        $('#user-login').click(function () {
+          $('#login-modal').modal('show')
+        })
       }
     })
     return testPanelView

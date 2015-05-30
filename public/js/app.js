@@ -8,19 +8,22 @@ define([ 'jquery'
        // , 'views/context-menus/pill'
        , 'views/modals/register'
        , 'views/modals/login'
+       , 'apps/common/user'
+
        , 'jquery.ui'
        , 'bootstrap'
 
 
        ]
 , function ( $, _, TitlebarView, InfoBlockView, GameBlockView, basicUpdater
-           , RegisterView, LoginView) {
+           , RegisterView, LoginView, User) {
     var modes = { 'game': ['desktop', 'game-only']
                 , 'titlebar': ['desktop', 'desktop-no-game', 'game-only']
                 , 'info': ['desktop', 'desktop-no-game']
                 }
     var initialize = function () {
       var mode = $('#app-mode').text()
+
 
       // load title bar for nw.js if it's used
       if (_.contains(modes.titlebar, mode)) {

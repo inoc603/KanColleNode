@@ -29,6 +29,13 @@ Object.keys(ifaces).forEach(function (ifname) {
 })
 console.log('IP:', IP_ADDR, 'PORT', config.config.port)
 
+fs.exists('admiral', function (exists) {
+  if (!exists)
+    fs.mkdir('admiral', function (err) {
+      if (err) console.log(err)
+    })
+})
+
 
 var app = express()
 

@@ -6,28 +6,29 @@ define(
   , 'text!templates/modals/login.html'
   , 'collections/modal'
   , 'apps/common/service'
+  , 'apps/common/globals'
   , 'hashes'
   , 'jquery.ui'
   ]
 , function ( $, _, Backbone, loginModalTpl, ModalCollection, service
-           , Hashes) {
+           , globals, Hashes) {
     var modalCollection = new ModalCollection()
     var loginModalView = Backbone.View.extend({
-      el: '#modals',
-      events: {
+      el: '#modals'
+    , events: {
         'show.bs.modal #login-modal': 'reloadVerifyCode'
       , 'click #confirm-login': 'startLogin'
-      },
-      initialize: function () {
+      , 'change #input-login-anonymous': 'changeAnonmynus'
+      }
+    , initialize: function () {
         var SHA1 = new Hashes.SHA1
-        console.log(SHA1.hex('hello world'))
         this.render()
-      },
-      render: function(){
+      }
+    , render: function(){
         var compiledTemplate = _.template(loginModalTpl)
         $(this.el).append( compiledTemplate )
-      },
-      reloadVerifyCode: function () {
+      }
+    , reloadVerifyCode: function () {
         service.user.getVerifyCode('#login-verify-code')
       }
     , verifyPassword: function () {
@@ -45,24 +46,55 @@ define(
       }
     , startLogin: function () {
         var $modal = $('#login-modal')
-          , password = $('#input-login-password', $modal).val()
-          , username = $('#input-login-username', $modal).val()
-          , verifyCode = $('#input-login-verify-code', $modal).val()
+          , anonymous = $('#input-login-anonymous').is(':checked')
 
-        password = new Hashes.SHA1().hex(password)
+        if (anonymous) {
+          console.log('anonymous')
+          var verifyCode = $('#input-login-verify-code', $modal).val()
+            , guestinfo = $('#os-info').text()
+            , send = { check: verifyCode
+                     , guestinfo: guestinfo}
+          service.user.anonymousLogin(send)
+        }
+        else {
+          var password = $('#input-login-password', $modal).val()
+            , username = $('#input-login-username', $modal).val()
+            , verifyCode = $('#input-login-verify-code', $modal).val()
+            , remember = $('#input-remember-me', $modal).is(':checked')
 
-        var send = { user: username
-                   , passwd: password
-                   , check: verifyCode
-                   , guestinfo: $('#os-info').text()
-                   }
-        console.log(send)
-        service.user.login(send, function (res) {
-          console.log(res)
-        })
+          password = new Hashes.SHA1().hex(password)
+
+          var send = { user: username
+                     , passwd: password
+                     , check: verifyCode
+                     , guestinfo: $('#os-info').text()
+                     }
+          console.log(send)
+
+          globals.user.login(send, function (res) {
+            // console.log(res)
+          })
+        }
+
       }
-    , anomynousLogin: function () {
+    , anonymousLogin: function () {
+        var osInfoReg = /\((\S+)\)\((\S+)\)\((\S+)\)\((\S+)\)/
+          , osInfoStr = $('#os-info').text()
+          , osInfo = _.rest(osInfoStr.match(osInfoReg))
 
+        service.user.anonymousLogin()
+      }
+    , changeAnonmynus: function () {
+        if ($('#input-login-anonymous').is(':checked')) {
+          $('#input-login-username').attr('disabled', true)
+          $('#input-login-password').attr('disabled', true)
+          $('#input-remember-me').attr('disabled', true)
+        }
+        else {
+          $('#input-login-username').attr('disabled', false)
+          $('#input-login-password').attr('disabled', false)
+          $('#input-remember-me').attr('disabled', false)
+        }
       }
     })
     return loginModalView

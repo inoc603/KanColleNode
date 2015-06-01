@@ -24,7 +24,6 @@ define(
       },
       initialize: function () {
         var SHA1 = new Hashes.SHA1
-        console.log(SHA1.hex('hello world'))
         this.render()
       },
       render: function(){

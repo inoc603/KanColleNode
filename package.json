@@ -11,12 +11,12 @@
   "webkit": {
     "plugin": true
   },
-  "node-main":"./bin/www",
+  "node-main": "./bin/www",
   "node-remote": "127.0.0.1",
   "scripts": {
     "start": "node ./bin/www"
   },
-  "single-instance":true,
+  "single-instance": true,
   "user-agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
   "dependencies": {
     "async": "^0.9.0",
@@ -26,7 +26,6 @@
     "ejs": "~2.3.1",
     "encoding": "^0.1.11",
     "express": "~4.12.0",
-    "express-http-proxy": "^0.3.1",
     "http-string-parser": "0.0.5",
     "morgan": "~1.5.1",
     "nedb": "^1.1.2",
@@ -36,6 +35,10 @@
     "underscore": "^1.8.2"
   },
   "devDependencies": {
-    "grunt": "^0.4.5"
+    "grunt": "^0.4.5",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-node-webkit-builder": "^1.0.2",
+    "node-webkit-builder": "^1.0.11",
+    "shelljs": "^0.5.0"
   }
 }

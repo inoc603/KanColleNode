@@ -12,5 +12,10 @@
     "plugin": true
   },
   "node-remote": "127.0.0.1",
-  "user-agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36"
+  "user-agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
+  "platformOverrides": {
+    "linux": {
+      "chromium-args": "--ppapi-flash-path=./plugins/libpepflashplayer.so --ppapi-flash-version=16.0.0.305"
+    }
+  }
 }

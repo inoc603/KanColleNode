@@ -54,7 +54,10 @@ define(
             , guestinfo = $('#os-info').text()
             , send = { check: verifyCode
                      , guestinfo: guestinfo}
-          service.user.anonymousLogin(send)
+          // service.user.anonymousLogin(send)
+          globals.user.anonymousLogin(send, function (res) {
+            console.log(res)
+          })
         }
         else {
           var password = $('#input-login-password', $modal).val()

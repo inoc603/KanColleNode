@@ -15,7 +15,6 @@ define(
     user.path = '/api/user'
 
     user.login = function (options, callback) {
-      // console.log(options)
       var endpoint = '/login'
         , url = host + this.path + endpoint
 
@@ -25,18 +24,22 @@ define(
       })
     }
 
+    user.checkExpire = function (code) {
+      var endpoint = '/chkcode'
+        , url = host + this.path + endpoint
+
+      $.post(url, {code: code}, function (res) {
+        console.log('check', res)
+      })
+    }
+
     user.checkName = function (username, callback) {
       var endpoint = '/checkname'
         , url = host + this.path + endpoint
 
       $.get(url, {user: username}, function (data) {
-        // console.log(data)
         if (typeof callback == 'function') callback(data)
       })
-    }
-
-    user.getToken = function () {
-
     }
 
     user.register = function (options, callback) {
@@ -50,7 +53,7 @@ define(
       })
     }
 
-    user.anonymousLogin = function (options) {
+    user.anonymousLogin = function (options, callback) {
       var osInfoReg = /\((\S+)\)\((\S+)\)\((\S+)\)\((\S+)\)/
         , osInfo = _.rest(options.guestinfo.match(osInfoReg))
         , secret = SHA1.hex(osInfo.join(salt))
@@ -64,23 +67,19 @@ define(
 
       $.post(url, send, function (data) {
         console.log(data)
+        if (typeof callback == 'function')
+          callback(data)
       })
-
-      console.log(send)
-
     }
 
     user.getVerifyCode = function (imgSelector) {
       var endpoint = '/verifycode'
         , url = host + this.path + endpoint
-      // $.get(url, function (data) {
-      //   // console.log(data)
-      //   $('#verify').attr
-      // })
       $(imgSelector).attr('src', url)
     }
 
     ship.path = '/api/ship'
+
     ship.uploadShipGet = function (rec) {
       var endpoint = '/shipget'
         , url = host + this.path + endpoint

@@ -31,7 +31,7 @@ define(
       service.user.login(options, function (res) {
         console.log(res, res.errcode)
         if (res.errcode == 0) {
-          console.log('right')
+          console.log('login succeed')
           user.code = res.content.code
           user.expire = new Date().getTime() + 2*24*60*60*1000
           user.online = true
@@ -41,12 +41,24 @@ define(
       })
     }
 
+    User.prototype.anonymousLogin = function (options, callback) {
+      var user = this
+      service.user.anonymousLogin(options, function (res) {
+        if (res.errcode == 0) {
+          if (user.username) delete user.username
+          if (user.password) delete user.password
+          user.code = res.content.code
+          user.expire = new Date().getTime() + 2*24*60*60*1000
+          user._save()
+        }
+        if (typeof callback == 'function') callback(res)
+      })
+    }
+
     User.prototype._save = function () {
       console.log(this)
       var store = _.pick(this, 'username', 'password', 'code', 'expire')
-      store = JSON.stringify(store)
-      console.log(store)
-      localStorage.setItem('kcnuser', store)
+      localStorage.setItem('kcnuser', JSON.stringify(store))
     }
 
     return User

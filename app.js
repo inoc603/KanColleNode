@@ -132,6 +132,12 @@ app.use('*', proxyRoute)
 app.use('/rest', restRoute)
 app.use('/', viewRoute)
 
+var modules = fs.readdirSync('./plugins')
+// load the api handlers
+for (var i in modules) {
+  require('./plugins/' + modules[i])(io)
+}
+
 
 
 // app.use(favicon(__dirname + '/public/favicon.ico'))

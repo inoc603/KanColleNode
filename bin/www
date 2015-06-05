@@ -6,6 +6,7 @@ var net = require('net')
   , config = require('../lib/config')
   , _ = require('underscore')
   , http = require('http')
+  , fs = require('fs')
 
   , simpleProxy = false
   , proxyHost
@@ -69,5 +70,7 @@ var httpProxy = net.createServer(function (socket) {
 })
 
 httpProxy.listen(httpPort, 'localhost')
+
+
 
 // the content of www is moved to app.js due to the use of socket.io

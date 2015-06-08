@@ -15,17 +15,17 @@ define(
         this.render()
         this.collection = new ContextMenuCollection()
         this.collection.add({name: 'pill'})
-        this.bindEvent()
+        this.bindEvent('#info-block>.nav li a')
       },
       render: function(){
         var compiled = _.template(pillTpl)()
         this.el.append(compiled)
       },
-      bindEvent: function () {
+      bindEvent: function (selector) {
         var $contextMenu = $("#pill-contextmenu")
           , targetPill
 
-        $('#info-block>.nav li').contextmenu({
+        $(selector).parent().contextmenu({
           target:'#pill-contextmenu',
           before: function(e,context) {
             targetPill = $(e.target)

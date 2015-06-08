@@ -8,12 +8,12 @@ define(
   ]
 , function ( $, _, Backbone, testTpl, service ) {
     var testPanelView = Backbone.View.extend({
-      initialize: function (display, globalCollection) {
+      initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'test'
                                          , title:'测试'
                                          , template: testTpl})
-        this.model.render(display)
+        this.model.render(display, globalCollection, pillMenuView)
         this.render()
       }
     , el: '#info-block'

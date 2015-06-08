@@ -132,10 +132,16 @@ app.use('*', proxyRoute)
 app.use('/rest', restRoute)
 app.use('/', viewRoute)
 
-var modules = fs.readdirSync('./plugins')
+var plugins = fs.readdirSync('./plugins')
+  , regJs = /.*\.js$/
+
+plugins = plugins.reduce(function (pv, cv) {
+  if (regJs.test(cv)) pv.push(cv)
+  return pv
+}, [])
 // load the api handlers
-for (var i in modules) {
-  require('./plugins/' + modules[i])(io)
+for (var i in plugins) {
+  require('./plugins/' + plugins[i])(io)
 }
 
 

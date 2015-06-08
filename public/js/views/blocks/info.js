@@ -23,20 +23,32 @@ define(
     var InfoBlockView = Backbone.View.extend({
       el: $('#main-container'),
       initialize: function () {
+        var pillMenuView
         $.when(this.render())
          .then(function () {
             // console.log('render finish')
             // load panels
-            var fleetView = new FleetView(true, panelCollection)
-              , timersView = new TimersView(true, panelCollection)
-              , questView = new QuestView(true, panelCollection)
-              , battleView = new BattleView(true, panelCollection)
-              , expView = new ExpView(false, panelCollection)
-              , listView = new ListView(false, panelCollection)
-              , shareFleetView = new ShareFleetView(false, panelCollection)
+            pillMenuView = new PillMenuView()
 
-              , testView = new TestView(true, panelCollection)
-              , pillContextMenuView = new PillMenuView()
+            new FleetView(true, panelCollection, pillMenuView)
+            new TimersView(true, panelCollection, pillMenuView)
+            new QuestView(true, panelCollection, pillMenuView)
+            new BattleView(true, panelCollection, pillMenuView)
+            new ExpView(false, panelCollection, pillMenuView)
+            new ListView(false, panelCollection, pillMenuView)
+            new ShareFleetView(false, panelCollection, pillMenuView)
+            new TestView(true, panelCollection, pillMenuView)
+
+            // load plugin panels
+            var plugins = $('#plugins').text().split(',')
+            for (var i in plugins) {
+              console.log(plugins[i])
+              if (plugins[i] == '') continue
+              require(['plugins/'+plugins+'/index'], function (PluginView) {
+                new PluginView(false, panelCollection, pillMenuView)
+              })
+            }
+
 
             // set fleet view as default view
             $('#fleet-pill').addClass('active')
@@ -45,14 +57,8 @@ define(
             // make the pills sortable
             $('.nav-pills').sortable({ revert: true
                                      , containment: '.nav-pills'})
-          })
-         .then(function () {
-            // set up add pill menu
-            $('li' ,$('#add-pill').next()).click(function () {
-              var panelName = $(this).attr('id').split('-')[0]
-              panelCollection.where({name: panelName})[0].addTab(true)
-              $(this).hide()
-            })
+
+            pillMenuView.bindEvent('#info-block>.nav li a')
           })
       },
       render: function(){

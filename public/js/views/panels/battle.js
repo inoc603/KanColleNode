@@ -10,12 +10,12 @@ define(
   ]
 , function ( $, _, Backbone, battleTpl, TabelTpl, battleUpdater, pageUtil) {
     var fleetPanelView = Backbone.View.extend({
-      initialize: function (display, globalCollection) {
+      initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'battle'
                                          , title:'出击'
                                          , template: battleTpl})
-        $.when(this.model.render(display))
+        $.when(this.model.render(display, globalCollection, pillMenuView))
          .then(this.render())
 
         battleUpdater.initialize()

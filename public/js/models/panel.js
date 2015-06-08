@@ -38,20 +38,30 @@ define(
       return this
     }
 
-    PanelModel.prototype.addItem = function (display) {
+    PanelModel.prototype.addItem = function (display, panelCollection, pillMenuView) {
       var itemSelector = '#' + this.attributes.name + '-item'
         , item = _.template(itemTpl)({ id: this.attributes.name
                                      , content: this.attributes.title})
 
       $('#add-pill').next().append(item)
+      var itemReg = /(.*)\-item$/
+      // set up add pill menu
+      // console.log($('li', $('#add-pill').next()))
+      $(itemSelector).click(function () {
+        var panelName = $(this).attr('id').match(itemReg)[1]
+        console.log(panelName)
+        panelCollection.where({name: panelName})[0].addTab(true)
+        $(this).hide()
+        pillMenuView.bindEvent('#info-block>.nav li a[href=#'+panelName+'-pill]')
+      })
       // if the panel is displayed, hide the menu item
       if (display == true) $(itemSelector).hide()
 
       return this
     }
 
-    PanelModel.prototype.render = function (display) {
-      this.addPanel().addTab(display).addItem(display)
+    PanelModel.prototype.render = function (display, panelCollection, pillMenuView) {
+      this.addPanel().addTab(display).addItem(display, panelCollection, pillMenuView)
 
       return this
     }

@@ -8,12 +8,12 @@ define(
   ]
 , function ( $, _, Backbone, timersTpl, timersUpdater) {
     var timersPanelView = Backbone.View.extend({
-      initialize: function (display, globalCollection) {
+      initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'timers'
                                          , title:'综合'
                                          , template: timersTpl})
-        this.model.render(display)
+        this.model.render(display, globalCollection, pillMenuView)
         timersUpdater.initialize()
       }
     })

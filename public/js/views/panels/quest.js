@@ -8,12 +8,12 @@ define(
   ]
 , function ( $, _, Backbone, questTpl, questUpdater) {
     var questPanelView = Backbone.View.extend({
-      initialize: function (display, globalCollection) {
+      initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'quest'
                                          , title:'任务'
                                          , template: questTpl})
-        this.model.render(display)
+        this.model.render(display, globalCollection, pillMenuView)
         questUpdater.initialize()
       }
     })

@@ -12,12 +12,12 @@ define(
     var listPanelView = Backbone.View.extend({
       el: '#info-block'
     , events: { 'click #update-ship-list': 'updateShipList'}
-    , initialize: function (display, globalCollection) {
+    , initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'list'
                                          , title:'一览'
                                          , template: listTpl})
-        this.model.render(display)
+        this.model.render(display, globalCollection, pillMenuView)
         // $('#ship-table').DataTable()
 
         this.table = $('table#ship-table').DataTable({

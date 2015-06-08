@@ -11,12 +11,12 @@ define(
     var ShareFleetView = Backbone.View.extend({
       el: '#info-block'
     , events: { 'click #get-share-fleet': 'shareFleet'}
-    , initialize: function (display, globalCollection) {
+    , initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'share-fleet'
                                          , title:'配置'
                                          , template: shareFleetTpl})
-        this.model.render(display)
+        this.model.render(display, globalCollection, pillMenuView)
         // shareFleetUpdater.initialize()
       }
     , shareFleet: function () {

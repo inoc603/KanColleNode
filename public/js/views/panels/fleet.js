@@ -18,12 +18,12 @@ define(
       , 'shown.bs.tab .fleet-tab a[data-toggle="tab"]': 'swapFleetName'
       , 'click .fleet-table>tbody': 'swapDisplay'
       }
-    , initialize: function (display, globalCollection) {
+    , initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'fleet'
                                          , title:'舰队'
                                          , template: fleetTpl})
-        this.model.render(display)
+        this.model.render(display, globalCollection, pillMenuView)
         fleetUpdater.initialize()
         this.setupAnimation()
       }

@@ -11,12 +11,12 @@ define(
   ]
 , function ( $, _, Backbone, expTpl, fleetUpdater) {
     var fleetPanelView = Backbone.View.extend({
-      initialize: function (display, globalCollection) {
+      initialize: function (display, globalCollection, pillMenuView) {
         this.collection = globalCollection
         this.model = this.collection.add({ name: 'exp'
                                          , title:'经验'
                                          , template: expTpl})
-        this.model.render(display)
+        this.model.render(display, globalCollection, pillMenuView)
         fleetUpdater.initialize()
         this.addTouchSpin()
         $('.selectpicker').selectpicker()

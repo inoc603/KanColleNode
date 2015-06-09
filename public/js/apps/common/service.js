@@ -6,7 +6,7 @@ define(
   ]
 , function ($, _, Backbone, Hashes){
     var service = {}
-      , host = 'http://api.aghost.cn'
+      , host = 'http://kcnapi.sinaapp.com/'
       , SHA1 = new Hashes.SHA1
       , user = {}
       , ship = {}

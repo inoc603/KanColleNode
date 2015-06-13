@@ -1,33 +1,46 @@
 # KanColleNode
 
-A KanColle viewer written in Node.js and runs in your browser.
-Works as a HTTP proxy, also compatible with [ShimakazeGo][1].
+A KanColle viwer written in Node.js.
+
+Currently the app is wrapped as a cross-platform desktop application using (nw.js)[nwjs-home], working on Windows, OSX and Linux.
+
+## FEATURES
 
 This Project is currently under heavy development.
 
-Functionality
---------------
+Full description will be here soon.
 
-- [x] show game screen
-- [x] show fleet information
-- [x] show construciton
-- [x] show expeditions
-- [x] show repair
-- [x] show tasks
-- [ ] show ship and equipment list
-- [x] show battle information
-- [ ] activity logging
-- [x] experience calculator
-- [ ] game data query
+## INSTALL
 
-TODO
-----
+```bash
+git clone https://github.com/inoc603/KanColleNode.git
+cd KanColleNode
+npm i
+```
 
-- front end style improvment
-- update flee change in all circumstances
-- build game database
-- more detailed task recorder
-- store & share all sorts of stuff
-- local cache
+After the install, a script using (install-nw)[install-nw] will start to download (nw.js)[nwjs-home] to *./nw-cache*, which can fail or take a long time. In that case you can press `ctrl + c` to stop the download, then manully download it from (this link)[nwjs-download].
 
-[1]: http://unlockacgweb.galstars.net/
+When download is finished, due to bugs in install-nw, the script will end in error. However the download is finished. Extract *./nw-cache/nwjs-v0.12.1-\*.zip*, and copy its content to *./* and *./game-viewr*
+
+## USAGE
+
+For debugging, run `node ./bin/www` to start the background program, where you can see debug output on console. Then navigate to *game-viwer* folder, run `nw`, or just click `nw.exe` to open up the graphic interface.
+
+## BUILD
+
+To build the app for distribution, run:
+
+```bash
+grunt prepare
+grunt build --platforms=win,osx,linux
+```
+
+After a while, you should get the built app under *build* folder.
+
+To clean up temp files for building, just run `grunt clean`.
+
+[nwjs-home]: http://nwjs.io/
+[nwjs-download]: http://dl.nwjs.io/v0.12.1
+[install-nw]: https://github.com/davidmarkclements/install-nw
+
+

@@ -17,29 +17,53 @@
                  + '(' + os.release() + ')'
 
   var tray = new gui.Tray({ title: 'Tray', icon: 'public/img/idol.png' })
+    , menu = new gui.Menu()
+    , item = {}
 
-  // Give it a menu
-  var menu = new gui.Menu()
-  menu.append(new gui.MenuItem({ type: 'checkbox'
-                               , label: 'quit' 
-                               , click: function () {
-                                   gui.App.quit()
-                                 }
-                               }))
+  function startGame () {
+    gui.Window.open(
+      'http://127.0.0.1:3001/standalone'
+    , { frame: false
+      , toolbar: false
+      , width: 800
+      , height: 510  
+      }
+    )
+  }
+
+  function startInfo () {
+    gui.Window.open(
+      'http://127.0.0.1:3001/backboned'
+    , { frame: false
+      , toolbar: false
+      , width: 400
+      , height: 600
+      }
+    )
+  }
+
+  item.quit = new gui.MenuItem(
+    { label: 'quit' 
+    , click: function () {
+        gui.App.quit()
+      }
+    }
+  )
+
+  item.start = new gui.MenuItem(
+    { label: 'start'
+    , click: function () {
+        startGame()
+        startInfo()
+      }
+    }
+  )
+
+  for (var i in item) {
+    menu.append(item[i])
+  }
+
   tray.menu = menu
-
-  // setTimeout(function() {
-  //   location.href="http://127.0.0.1:3001/backboned"
-  //   // win.open("http://127.0.0.1:3001/standalone")
-  //   gui.Window.open('http://127.0.0.1:3001/standalone'
-  //     , { frame: false
-  //       , toolbar: false
-  //       , width: 800
-  //       , height: 510  
-  //       })
-  //   // win.showDevTools()
-  // }, 1000)
-
 </script>
 </body>
 </html>	

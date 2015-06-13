@@ -68,3 +68,6 @@ nw
 nwjc
 *.pak
 cache
+
+# you don't want to know
+*banme*

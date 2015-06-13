@@ -31,7 +31,7 @@ router.all('/*', function (req, res, next) {
                 )
     , isRightPort = (req.headers.host.split(':')[1]==config.config.port)
 
-  if (isLocal && isRightPort && req.baseUrl != '/socket.io') {
+  if (isLocal && isRightPort) {
     // console.log(req.body)
     next()
   }
@@ -48,11 +48,20 @@ router.all('/*', function (req, res, next) {
     //   option.headers['Host']
     //     = option.headers['Host'].replace('localhost.', '127.0.0.1')
     option.headers = req.headers
-    option.body = (req.body).toString()
+    // option.body = (req.body).toString()
+    if (_.isObject(req.body)) {
+      console.log(_.keys(req.body).length)
+      if (_.keys(req.body).length > 0)
+        option.body = JSON.stringify(req.body)
+    }
+    else
+      option.body = req.body
 
     if (config.config.proxy && !isLocal) {
       option.proxy = 'http://'+ config.config.proxy
     }
+
+    console.log(option)
 
     request(option)
       .on('error', function (err) {

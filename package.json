@@ -5,7 +5,7 @@
   "window": {
     "frame": false,
     "toolbar": true,
-    "show": false
+    "show": true
   },
   "main": "start.html",
   "webkit": {

@@ -13,8 +13,9 @@ define(
       initialize: function () {
         this.collection = new UpdaterCollection()
         this.collection.add({name: 'basic'})
+        console.log(socket)
         socket.on('basic_update', function (data) {
-          // console.log(data)
+          console.log(data)
           if (data.mix_id)
             globals.mixId = data.mix_id
         })

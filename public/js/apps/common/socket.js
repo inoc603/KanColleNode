@@ -7,9 +7,13 @@ define(
   , 'socket.io'
   ]
 , function($, _, Backbone, io){
-    var socket = io.connect('http://127.0.0.1:3001')
+  console.log(io.connect)
+    var socket = io.connect('http://localhost:3001')
     socket.on('connect', function () {
       console.log('socket connected')
+    })
+    .on('error', function (err) {
+      console.log(err)
     })
     return socket
   }

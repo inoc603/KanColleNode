@@ -7,9 +7,14 @@
 <script>
   var gui = require('nw.gui')
     , win = gui.Window.get()
+    // , config = require('config/config')
+    , config = {}
+
+    // console.log(config)
+    , port = config.port || 3001
      
   gui.App.setProxyConfig('localhost:5050')
-  gui.App.clearCache()
+  // gui.App.clearCache()
   var os = require('os')
     , systemInfo = '(' + os.hostname() + ')'
                  + '(' + os.type() + ')'
@@ -22,24 +27,32 @@
 
   function startGame () {
     gui.Window.open(
-      'http://127.0.0.1:3001/standalone'
+      'http://127.0.0.1:'+port+'/standalone'
     , { frame: false
       , toolbar: false
       , width: 800
-      , height: 510  
+      , height: 510
+      , min_width: 800
+      , min_height: 510
       }
     )
   }
 
-  function startInfo () {
-    gui.Window.open(
-      'http://127.0.0.1:3001/backboned'
+  function startInfo (gameWin) {
+    var infoWin = gui.Window.open(
+      'http://127.0.0.1:'+port+'/backboned'
     , { frame: false
       , toolbar: false
       , width: 400
       , height: 600
       }
     )
+    if (gameWin) {
+      var x = gameWin.x + gameWin.width
+        , y = gameWin.y + gameWin.height
+
+      infoWin.moveTo(x, y)
+    }
   }
 
   item.quit = new gui.MenuItem(

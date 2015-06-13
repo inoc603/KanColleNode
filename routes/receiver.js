@@ -8,6 +8,7 @@ var express = require('express')
   , dataHandler = null
   , router = express.Router()
   , adFinder = new Admiral('finder')
+  , globals = require('../lib/globals')
 
 router.post('/*', function (req, res) {
   var formData = req.body
@@ -24,5 +25,7 @@ router.post('/*', function (req, res) {
 module.exports = function (socket) {
   io = socket
   dataHandler = require('../lib/data-handler')(io)
+  globals.dataHandler = dataHandler
+  dataHandler.init()
   return router
 }

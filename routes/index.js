@@ -43,6 +43,13 @@ router.get('/standalone', function (req, res) {
                           })
 })
 
+router.get('/react', function (req, res) {
+  res.render('react', { appMode: 'desktop-no-game'
+                      , osInfo: osInfo
+                      , plugins: plugins
+                      })
+})
+
 router.post('/setting', function (req, res) {
 
   console.log('[SETTING]', req.body)

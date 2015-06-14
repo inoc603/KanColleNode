@@ -28,6 +28,7 @@
     "bootstrap-formhelpers": "~2.3.0",
     "font-awesome": "~4.3.0",
     "datatables": "~1.10.7",
-    "jshashes": "~1.0.5"
+    "jshashes": "~1.0.5",
+    "requirejs-react-jsx": "~0.14.2"
   }
 }

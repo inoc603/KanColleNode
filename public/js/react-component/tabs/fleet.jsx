@@ -2,11 +2,12 @@ define(
   [ 'jquery'
   , 'underscore'
   , 'react'
+  , 'react-bs'
   , 'apps/common/socket'
   , 'apps/common/globals'
   , 'bootstrap'
   ]
-, function ($, _, React, socket) {
+, function ($, _, React, ReactBs, socket) {
     var R = React.DOM
 
     var InsideTab = React.createClass({
@@ -42,12 +43,79 @@ define(
             <br />
             <span className="ship-health"></span>
           </td>
+          <td>
+            <span className="ship-fuel-number"></span>
+            <span className="ship-fuel"></span>
+            <br />
+            <span className="ship-ammo-number"></span>
+            <span className="ship-ammo"></span>
+          </td>
           <td className="ship-condition"></td>
           <td className="ship-equipment hidden-td" id="slot-1"></td>
           <td className="ship-equipment hidden-td" id="slot-2"></td>
           <td className="ship-equipment hidden-td" id="slot-3"></td>
           <td className="ship-equipment hidden-td" id="slot-4"></td>
           </tr>
+        )
+      }
+    })
+
+    var ConditionLabel = React.createClass({
+      render: function () {
+        var cond = this.props.cond
+        if (cond > 49)
+          color = 'yellow'
+        else if (cond > 39)
+          color = 'grey'
+        else if (cond > 29)
+          color = '#F5DEB3'
+        else if (cond > 19)
+          color = 'orange'
+        else
+          color = 'red'
+
+        if (color == 'yellow')
+          textColor = 'orange'
+        else
+          textColor = 'white'
+
+        return (
+          <span className='label'
+                style={{ backgroundColor: color
+                       , color: textColor
+                       }}>
+             {cond}
+          </span>
+        )
+      }
+    })
+
+    var ProgressBar = React.createClass({
+      render: function () {
+        var max = this.props.max
+          , now = this.props.now
+          , percentage = now/max*100
+          , color
+
+        if (percentage > 75)
+          color = "green"
+        else if (percentage > 50)
+          color = "yellow"
+        else if (percentage > 25)
+          color = "orange"
+        else
+          color = "red"
+        var extra = (this.props.extra?this.props.extra:'')
+        return (
+          <div className={["progress health_bar", extra].join(' ')}>
+             <div className="progress-bar" role="progressbar"
+                  aria-valuemax={max} aria-valuemin="0" aria-valuenow={now}
+                  style={{ width:percentage+'%'
+                         , 'background-image': 'none'
+                         , 'background-color': color
+                         }}>
+             </div>
+          </div>
         )
       }
     })
@@ -59,6 +127,7 @@ define(
           return <TableRow key={cv} ref={'fleet-table-row-'+cv} />
         })
         this.props.update = function (data) {
+          console.log(data)
           var shipNum = 1
           for (var ship of data.ships) {
             $row = $(React.findDOMNode(self.refs['fleet-table-row-'+shipNum]))
@@ -66,6 +135,38 @@ define(
             $('.ship-type', $row).text(ship.type)
             $('.ship-level', $row).text('LV.'+ship.level)
             $('.exp-next', $row).text('Next: '+ship.exp[1])
+            $('.ship-health-number', $row).text('HP: '
+                                               + ship.current_hp
+                                               + '/' +ship.max_hp)
+            $('.ship-fuel-number', $row).text('fuel: '
+                                               + ship.fuel
+                                               + '/' +ship.max_fuel)
+            $('.ship-ammo-number', $row).text('ammo: '
+                                               + ship.ammo
+                                               + '/' +ship.max_ammo)
+            React.render(
+              <ConditionLabel cond={ship.condition} />
+            , $('.ship-condition', $row)[0]
+            )
+
+            React.render(
+              <ProgressBar max={ship.max_hp} now={ship.current_hp} />
+            , $('.ship-health', $row)[0]
+            )
+
+            React.render(
+              <ProgressBar max={ship.max_ammo} now={ship.ammo}
+                           extra='inline-bar' />
+            , $('.ship-ammo', $row)[0]
+            )
+
+            React.render(
+              <ProgressBar max={ship.max_fuel} now={ship.fuel}
+                           extra='inline-bar' />
+            , $('.ship-fuel', $row)[0]
+            )
+
+
             shipNum++
           }
         }
@@ -78,9 +179,7 @@ define(
               <span className="status-timer"></span>
             </div>
             <table className="table fleet-table">
-              <tbody>
-              {this.props.rows}
-              </tbody>
+              <tbody>{this.props.rows}</tbody>
             </table>
           </div>
         )

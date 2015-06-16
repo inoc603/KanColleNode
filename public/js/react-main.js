@@ -17,6 +17,9 @@ require.config(
          , 'react': 'vendor/react'
          , 'JSXTransformer': 'vendor/JSXTransformer'
          , 'jsx': 'vendor/jsx'
+         , 'react-bs': 'vendor/react-bootstrap'
+         , 'es6': "vendor/es6"
+         , 'babel': "vendor/babel-4.6.6.min"
          }
 , shim: { 'socket.io': { exports: 'io' }
         , 'bootstrap': ['jquery']

@@ -14,7 +14,8 @@
   "node-main": "./bin/www",
   "node-remote": "127.0.0.1",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "postinstall": "install-nw 0.12.1 --cache nw-cache"
   },
   "single-instance": true,
   "user-agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.101 Safari/537.36",
@@ -39,6 +40,7 @@
     "grunt-bower-task": "^0.4.0",
     "grunt-node-webkit-builder": "^1.0.2",
     "node-webkit-builder": "^1.0.11",
-    "shelljs": "^0.5.0"
+    "shelljs": "^0.5.0",
+    "install-nw": "^1.1.4"
   }
 }

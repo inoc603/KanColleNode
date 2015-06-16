@@ -70,6 +70,8 @@ nw
 nwjc
 *.pak
 cache
+nwjs.app
+nw-cache
 
 # you don't want to know
 *banme*

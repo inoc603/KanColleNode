@@ -28,6 +28,7 @@
     "encoding": "^0.1.11",
     "express": "~4.12.0",
     "http-string-parser": "0.0.5",
+    "install-nw": "^1.1.4",
     "morgan": "~1.5.1",
     "nedb": "^1.1.2",
     "request": "~2.53.0",

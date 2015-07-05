@@ -7,7 +7,7 @@
 <script>
   var gui = require('nw.gui')
     , win = gui.Window.get()
-  gui.App.setProxyConfig('localhost:5050')
+  gui.App.setProxyConfig('127.0.0.1:3002')
   // gui.App.clearCache()
 
   // console.log( process.mainModule.exports.start)
@@ -17,15 +17,15 @@
   // })
   // process.mainModule.exports.start()
   setTimeout(function() {
-    
-    
+
+
     location.href="http://127.0.0.1:3001/backboned"
     // win.open("http://127.0.0.1:3001/standalone")
     gui.Window.open('http://127.0.0.1:3001/standalone'
-      , { frame: false
-        , toolbar: false
+      , { frame: true
+        , toolbar: true
         , width: 800
-        , height: 510  
+        , height: 510
         })
     // win.showDevTools()
 
@@ -33,4 +33,4 @@
 
 </script>
 </body>
-</html>	
+</html>

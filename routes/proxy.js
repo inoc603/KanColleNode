@@ -7,6 +7,8 @@ var express = require('express')
   , router = express.Router()
   , adFinder = new Admiral('finder')
   , request = require('request')
+  , SocksHttpAgent = require('socks5-http-client/lib/Agent')
+  , socks5 = require('socks5-client')
 
   , os = require('os')
   , ifaces = os.networkInterfaces()
@@ -39,16 +41,9 @@ router.all('/*', function (req, res, next) {
     var option = {}
     option.url = req.originalUrl.replace('localhost.', '127.0.0.1')
     option.method = req.method
-    // option.headers = {}
-    // for (var i = 0; i < req.rawHeaders.length; i+=2) {
-    //   option.headers[req.rawHeaders[i]] = req.rawHeaders[i+1]
-    // }
-
-    // if (option.headers['Host'])
-    //   option.headers['Host']
-    //     = option.headers['Host'].replace('localhost.', '127.0.0.1')
-    option.headers = req.headers
-    // option.body = (req.body).toString()
+    option.headers = _.omit(req.headers, 'proxy-connection')
+    option.headers.conection = 'close'
+    
     if (_.isObject(req.body)) {
       console.log(_.keys(req.body).length)
       if (_.keys(req.body).length > 0)
@@ -58,7 +53,20 @@ router.all('/*', function (req, res, next) {
       option.body = req.body
 
     if (config.config.proxy && !isLocal) {
-      option.proxy = 'http://'+ config.config.proxy
+      switch (config.get('proxy-type')) {
+        case 'socks5':
+          option.agentClass = SocksHttpAgent
+          option.agentOptions = {
+            socksHost: 'localhost'
+          , socksPort: 1080
+          }
+          break
+        case 'http':
+          option.proxy = 'http://' + config.get('proxy')
+          break
+        default:
+          break
+      }
     }
 
     console.log(option)
@@ -71,5 +79,14 @@ router.all('/*', function (req, res, next) {
       .pipe(res)
   }
 })
+
+function newProxyImplement(req, res, next) {
+  if (util.toThisServer(req.hostname, req.port)) next()
+  else {
+    if (util.isGameContent(req.path)) {
+
+    }
+  }
+}
 
 module.exports = router

@@ -1,0 +1,29 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/new.css">
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="css/bootstrap-formhelpers.min.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="css/jquery.bootstrap-touchspin.min.css">
+  <link rel="stylesheet" href="css/bootstrap-checkbox.css">
+  <link rel="stylesheet" href="css/jquery.dynatable.css">
+  <link rel="stylesheet" href="css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="css/<%= appMode %>.css">
+  <title><%= title%></title>
+</head>
+<body>
+  <div id="title-bar"></div>
+  <div id="game-container"></div>
+  <div id="main-container"></div>
+  <div id="app-mode" style="display:none;"><%= appMode %></div>
+  <div id="os-info" style="display:none;"><%= osInfo %></div>
+  <div id="plugins" style="display:none;"><%= plugins %></div>
+  <div id="context-menus" style="display:none;"></div>
+  <div id="modals"></div>
+
+  <script src="js/vendor/require.js" data-main="js/web-main.js"></script>
+</body>
+</html>

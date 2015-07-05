@@ -1,0 +1,1 @@
+./nwjs.app/Contents/MacOS/nwjs --ppapi-flash-path="/Applications/Google Chrome.app/Contents/Versions/43.0.2357.124/Google Chrome Framework.framework/Internet Plug-Ins/PepperFlash/PepperFlashPlayer.plugin" --ppapi-flash-version=18.0.0.161

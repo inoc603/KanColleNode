@@ -8,6 +8,8 @@ var net = require('net')
   , http = require('http')
   , fs = require('fs')
   , debug = require('debug')('KanColleNode:server')
+  , SocksHttpAgent = require('socks5-http-client/lib/Agent')
+  , socks5 = require('socks5-client')
 
   , simpleProxy = false
   , proxyHost
@@ -122,18 +124,53 @@ server.addListener('connect', function (req, socketRequest, bodyhead) {
     }
 
     // set up tcp connection with the server
-    var proxySocket = net.connect(pPort, pHost, function () {
-      proxySocket.write(bodyhead)
-      // tell the caller the connection was successfully established
-      socketRequest.write( "HTTP/"+ httpVersion
-                         + " 200 Connection established\r\n\r\n" )
-      socketRequest.pipe(proxySocket).pipe(socketRequest)
-      }
-    )
 
-    proxySocket.on('error', function (err) {
-      console.log(err)
-    })
+
+    switch (config.get('proxy-type')) {
+      case 'http':
+        var options = _.omit(req, 'proxy-connection')
+        break
+      case 'socks5':
+        var remote = socks5.createConnection({
+          socksHost: 'localhost'
+        , socksPort: 1080
+        , host: req.headers.host
+        , port: 443
+        })
+        remote.on('connect', function () {
+          socketRequest.write('HTTP/1.1 200 Connection Established\r\nConnection: close\r\n\r\n')
+          remote.write(bodyhead)
+          socketRequest.on('data', function (data) {
+            remote.write(data)
+          })
+          remote.on('data', function (data) {
+            socketRequest.write(data)
+          })
+          remote.on('end', function () {
+            socketRequest.end()
+          })
+          socketRequest.on('end', function () {
+            remote.end()
+          })
+        })
+        break
+      default:
+        var proxySocket = net.connect(pPort, pHost, function () {
+          proxySocket.write(bodyhead)
+          // tell the caller the connection was successfully established
+          socketRequest.write( "HTTP/"+ httpVersion
+                             + " 200 Connection established\r\n\r\n" )
+          socketRequest.pipe(proxySocket).pipe(socketRequest)
+          }
+        )
+        proxySocket.on('error', function (err) {
+          console.log(err)
+        })
+        break
+
+    }
+
+
 
     socketRequest.on('error', function (err) {
       console.log(err)
@@ -176,3 +213,6 @@ function onListening() {
     : 'port ' + addr.port
   debug('Listening on ' + bind)
 }
+
+var proxyServer = require('../lib/proxy')
+proxyServer.listen(3002)

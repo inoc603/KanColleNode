@@ -15,6 +15,7 @@ var express = require('express')
   , globals = require('./lib/globals')
   , io = globals.io
   , net = require('net')
+  , session = require('express-session')
   , simpleProxy
 
 var IP_ADDR = []
@@ -49,6 +50,7 @@ app.enable('trust proxy')
 app.use(bodyParser({limit: '50mb'}))
 app.use(bodyParser.text({type: '*/*'}))
 app.use(cookieParser())
+app.use(session({secret: '1234567890QWERTY'}))
 app.use(logger('dev'))
 
 app.use(express.static(path.join(__dirname, 'public')))
@@ -59,17 +61,26 @@ app.use('*', require('./routes/proxy'))
 app.use('/rest', require('./routes/rest'))
 app.use('/', require('./routes/index'))
 
-var plugins = fs.readdirSync('./plugins')
-  , regJs = /.*\.js$/
+try {
+  var plugins = fs.readdirSync('./plugins')
+    , regJs = /.*\.js$/
 
-plugins = plugins.reduce(function (pv, cv) {
-  if (regJs.test(cv)) pv.push(cv)
-  return pv
-}, [])
-// load the api handlers
-for (var i in plugins) {
-  require('./plugins/' + plugins[i])(io)
+  plugins = plugins.reduce(function (pv, cv) {
+    if (regJs.test(cv)) pv.push(cv)
+    return pv
+  }, [])
+  // load the api handlers
+  for (var i in plugins) {
+    require('./plugins/' + plugins[i])(io)
+  }
 }
+catch(e) {
+  if (e.code == 'ENOENT') {
+    console.log('[INFO] No plugins')
+  }
+}
+
+
 
 // app.use(favicon(__dirname + '/public/favicon.ico'))
 

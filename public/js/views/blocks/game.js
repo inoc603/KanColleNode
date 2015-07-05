@@ -14,14 +14,14 @@ define(
       initialize: function () {
         $.when(this.render())
          .then(function () {
-            var gameSrc="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"
+            var gameSrc="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/?kcnid=1111"
             $("#refresh-game").click(function () {
               $("#game-frame").attr("src", gameSrc)
               $('#game-panel>.panel-heading').hide()
             })
           })
       },
-      render: function(){
+      render: function(webview){
         var compiledTemplate = _.template(gameBlockTpl)
         this.$el.append( compiledTemplate )
       }

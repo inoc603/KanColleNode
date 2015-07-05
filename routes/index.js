@@ -3,28 +3,44 @@ var express = require('express')
   , config = require('../lib/config')
   , async = require('async')
   , fs = require('fs')
+  , util = require('../lib/util')
+  , format = require('string-template')
 
 var client_served = 0
 
 var os = require('os')
-    , osInfo = '(' + os.hostname() + ')'
-             + '(' + os.type() + ')'
-             + '(' + os.arch() + ')'
-             + '(' + os.release() + ')'
+  , osInfo = format('({hostname})({type})({arch})({release})'
+                   , { hostname: os.hostname()
+                     , type: os.type()
+                     , arch: os.arch()
+                     , release: os.release()
+                     })
 
-var plugins = fs.readdirSync('plugins')
-  , regJs = /(.*)\.js$/
+var plugins
+try {
+  var regJs = /(.*)\.js$/
+  plugins = fs.readdirSync('plugins')
+  plugins = plugins.reduce(function (pv, cv) {
+    if (regJs.test(cv)) pv.push(cv.match(regJs)[1])
+    return pv
+  }, [])
 
-plugins = plugins.reduce(function (pv, cv) {
-  if (regJs.test(cv)) pv.push(cv.match(regJs)[1])
-  return pv
-}, [])
+  console.log(JSON.stringify(plugins))
+}
+catch(e) {
+  if (e.code == 'ENOENT') {
+    plugins = ''
+  }
+}
 
-console.log(JSON.stringify(plugins))
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'KanColleNode' })
+  if (util.toThisServer(req.hostname, req.port)) {
+    res.session.id = 'I LIKE ID'
+    res.render('index', { title: 'KanColleNode' })
+  }
+
 })
 
 router.get('/backboned', function (req, res) {
@@ -48,6 +64,15 @@ router.get('/react', function (req, res) {
                       , osInfo: osInfo
                       , plugins: plugins
                       })
+})
+
+router.get('/web', function (req, res) {
+  req.session.kcnid = 'SEEME'
+  res.render('web', { appMode: 'game-only'
+                    , osInfo: osInfo
+                    , title: 'kcn-standalone'
+                    , plugins: plugins
+                    })
 })
 
 router.post('/setting', function (req, res) {

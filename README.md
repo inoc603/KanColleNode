@@ -2,6 +2,10 @@
 
 A KanColle viwer written in Node.js.
 
+# Deprecated
+
+# 已弃坑。 
+
 Currently the app is wrapped as a cross-platform desktop application using [nwjs], working on Windows, OSX and Linux.
 
 ## FEATURES
@@ -42,5 +46,3 @@ To clean up temp files for building, just run `grunt clean`.
 [1]: http://dl.nwjs.io/v0.12.1
 [nwjs]: http://nwjs.io/
 [install-nw]: https://github.com/davidmarkclements/install-nw
-
-
